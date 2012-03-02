@@ -1,1 +1,8 @@
 currently in the process of moving the code from my private repo to this public repo so people can use the melody composer and give feedback.
+
+this is a genetic algorithm that composes melodies. it builds a markov model to spawn the initial population to a) slightly reduce the search space,
+and b) act as an influencer. the user has the ability to select <i>x</i> differnt artists, <i>y</i> different songs, and/or <i>z</i> different genres.
+this web-app uses web.py as the framework, jquery for the interactive fitness function, and sqlite3 as the database. this is only a prototype right now, so my 
+primary concern for the time being is to have this application compose melodies that are based on the user's taste. 
+
+if you have any questions and/or comments please feel free to contact me.
