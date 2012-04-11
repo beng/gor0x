@@ -9,8 +9,7 @@ is then processed by the markov model.
 fitness:
 for the time being, i am leaving this as an interactive fitness function (i.e. the user has to rate the each song), but i have added some witchcraft to 
 reduce the amount of work the user needs to do. i also have plans for adding a neural network to act as an auto-rater. the current rating system uses 
-jquery to add interaction to the listening part of the application. the user can move the pitches around to modify the melody to his/her liking. the number of 
-changes as well as the euclidean distance is used to calculate the fitness value.
+jquery to add interaction to the listening part of the application. the user can move the pitches around to modify the melody to his/her liking. the euclidean distance is used to calculate the fitness value.
 
 selection:
 rates are adjustable by the user on the front-end
