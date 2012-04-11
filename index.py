@@ -2,12 +2,14 @@ import web
 import model 
 import random
 from markov import markov
-
+from music21 import *
 urls = (
         '/', 'index',
+        '/fitness/(.*)', 'fitness',
         )
 
 render = web.template.render('templates/', base='layout')
+
 
 
 #===============================================================================
@@ -96,6 +98,84 @@ class spawn_pop():
     def create_trait(self, indi_id, generation, pitch, duration):
         model.insert_trait(indi_id, generation, pitch, duration)
 
+class fitness():
+    fitness_form = web.form.Form(
+                             web.form.Textbox('rating', description='Rating:'),
+                             web.form.Textbox('indi_id'),
+                             )
+    
+    def to_list(self, q):
+        ret = []
+        for i in q:
+            ret += [(i.pitch, i.duration)]
+        return ret
+    
+    def create_pheno(self, indi):
+        gene = self.to_list(model.get_indi_traits(indi))
+        partupper = stream.Part()
+        m = stream.Measure()
+        for _note, _duration in gene:
+            print "note    :", _note
+            print "duration    :", _duration
+            n = note.Note(_note)
+            n.duration.type = _duration
+            m.append(n)
+        partupper.append(m)    
+        return partupper
+    
+    def convert_midi(self, mfile, indi_id):
+        mf = mfile.midiFile
+        name = str(indi_id) + 'song.mid'
+        mf.open('static/' + name, 'wb')
+        mf.write()
+        mf.close()
+        return name
+    
+    def GET(self, indi):
+        title = 'Fitness'
+        ff = self.fitness_form()
+        ff.indi_id.set_value(indi)
+        song_name = self.convert_midi(self.create_pheno(indi), indi)
+        l = model.get_num_indi(0)[0].id
+        cur_gen = model.get_cur_gen(indi)
+        all_indi = model.get_all_indi_id_by_gen(cur_gen)
+        song_names = []
+        for i in all_indi:
+            song_names += [self.convert_midi(self.create_pheno(i.indi_id), i.indi_id)]
+        return render.fitness(title, ff, song_name, l)
+    
+    def POST(self, indi):
+        post = web.input()
+        print post.fv
+        model.insert_fitness(indi, post.fv)
+        
+        # check to see what to do next
+        helper().check(int(indi))
+
+#===============================================================================
+# HELPER
+"""
+the oracle; this controller decides the fate of where the ga goes next
+"""
+#===============================================================================   
+class helper():
+    def check(self, indi): 
+        # is the individual that was just evaluated the last in the generation?
+        if int(indi) == model.get_max_indi_id_by_gen(model.get_cur_gen(int(indi))):
+            # check if termination requirements are met
+            if model.get_cur_gen(indi) >= model.get_max_num_gen():
+                # they are, end ga
+                raise web.seeother('/terminate')
+            else:
+                # they are not, move onto selection
+                select().select(int(indi))
+        # are there more to evaluate?
+        elif int(indi) <= model.get_max_indi_id_by_gen(model.get_cur_gen(int(indi))):
+            raise web.seeother('/fitness/' + str(int(indi) + 1))
+        # just in case exit condition
+        else:
+            raise web.seeother('/terminate')       
+        
 if __name__ == "__main__":
    app = web.application(urls, globals())
    app.internalerror = web.debugerror
