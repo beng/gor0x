@@ -5,7 +5,7 @@ import fnmatch
 this class goes through the specified path and 
 extracts the artist name from the pitch_artistname.txt file
 so the artist names can be dynamically loaded into the 
-markov selection dropdwon on the index page
+markov selection dropdown on the index page
 '''
 def parse_name(p):
     path = p
