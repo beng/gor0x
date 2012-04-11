@@ -1,6 +1,7 @@
 import web
 import model 
 import random
+import song_name
 from markov import markov
 from music21 import *
 urls = (
@@ -25,11 +26,13 @@ this controller is used to:
 """
 #===============================================================================
 class index():
+    song_selection = list(song_name.parse_name('static/pitches/'))
+
     init_form = web.form.Form(
                             web.form.Textbox('num_traits', web.form.notnull, web.form.regexp('^-?\d+$', 'Not a number.'), description='Number of Traits: '),
                             web.form.Textbox('pop_size', web.form.notnull, web.form.regexp('^-?\d+$', 'Not a number.'), description='Population Size: '),
                             web.form.Textbox('num_gen', web.form.notnull, web.form.regexp('^-?\d+$', 'Not a number.'), description='Number of Generations: '),
-                            web.form.Dropdown('markov_selection', ['beatles', 'beethovan', 'bach', 'handel', 'essenFolksong', 'haydn', 'josquin']),
+                            web.form.Dropdown('markov_selection', [i for i in song_selection]),
                             )
 
     setting_form = web.form.Form(
