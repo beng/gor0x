@@ -1,4 +1,4 @@
 ** Helper Class
-*** There is a counting error when checking for termination requirements
-*** Make sure that all places start with generation 0 OR generation 1, doesnt matter
+1. There is a counting error when checking for termination requirements
+2. Make sure that all places start with generation 0 OR generation 1, doesnt matter
 
