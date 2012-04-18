@@ -2,3 +2,7 @@
 1. There is a counting error when checking for termination requirements
 2. Make sure that all places start with generation 0 OR generation 1, doesnt matter
 
+** All Classes
+1. If the class isnt a controller for a webpage and only handles logic, start 
+   porting the classes over to new files to organize the index controller
+
