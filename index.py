@@ -36,7 +36,7 @@ python
 html/css/jquery
 sql
 
-if you have any questions and/or comments please feel free to contact me beg5670@gmail.com
+if you have any questions and/or comments please feel free to contact me.
 """
 
 import web
