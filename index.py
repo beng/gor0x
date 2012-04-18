@@ -255,16 +255,17 @@ class select():
         '''
         num_rounds = 2
         k = 2
-        winner = []
+        winner = [] # id of winner returned by tournament
         # need to make sure num_rounds is an even number
         for i in range(0, num_rounds):
             winner += [self.tournament(k, indi)]
         
         # call crossover on winner        
-        crossover().crossover(random.choice(winner), random.choice(winner), 1)
+        child_id = crossover().crossover(random.choice(winner), random.choice(winner), 1)   # returns id of child that was just created
         
         # mutate
-        mutate().mutate(random.choice(winner))
+        #mutate().mutate(random.choice(winner))
+        self.mutate(child_id)
         
         raise web.seeother('/fitness/' + str(int(indi) + 1))
     
@@ -305,6 +306,9 @@ class select():
         '''
         # todo
         return 0
+
+    def mutate(self, id):
+        
     
     
 #===============================================================================
@@ -337,6 +341,8 @@ class crossover():
              
         for i in c2:
             model.insert_trait(tmp_id + 1, tmp_gen, i[0], i[1])
+    
+        return tmp_id
     
     def to_list(self, q):
         ''' 
