@@ -1,4 +1,8 @@
 """
+@author   Ben Gelb
+@email    beg5670@gmail.com
+@website  http://github.com/beng
+  
 this is a genetic algorithm that composes melodies. 
 
 initial population:
