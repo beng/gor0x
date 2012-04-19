@@ -45,11 +45,15 @@ import random
 import song_name
 from markov import markov
 from music21 import *
-import selection
+
+import select
+import crossover
 
 urls = (
         '/', 'index',
         '/fitness/(.*)', 'fitness',
+        '/terminate', 'terminate',
+        
         )
 
 render = web.template.render('templates/', base='layout')
@@ -137,13 +141,13 @@ class spawn_pop():
             indi_id += 1
         
         raise web.seeother('/fitness/0')
-    
+        
     def markov_pitch(self):
         return self.markov.generate_music(model.get_num_traits())            
     
     def create_trait(self, indi_id, generation, pitch, duration):
         model.insert_trait(indi_id, generation, pitch, duration)
-
+        
 class fitness():
     fitness_form = web.form.Form(
                              web.form.Textbox('rating', description='Rating:'),
@@ -308,7 +312,7 @@ class select():
         return 0
 
     def mutate(self, id):
-        
+        return 0
     
     
 #===============================================================================
@@ -354,7 +358,11 @@ class crossover():
         for i in q:
             ret += [(str(i.pitch), str(i.duration))]
         return ret
-        
+
+class terminate():
+    def GET(self):
+        title = 'Terminate'
+        return render.terminate(title)        
 if __name__ == "__main__":
    app = web.application(urls, globals())
    app.internalerror = web.debugerror
