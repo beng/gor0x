@@ -6,8 +6,6 @@ from markov import markov
 
 
 """
-WHEN YOU WAKE UP
-
 have already started porting each of the genetic operators to individual files, HOWEVER
 have yet to test what i ported over there are probably a significant amount of errors
 
