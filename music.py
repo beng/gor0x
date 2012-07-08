@@ -1,4 +1,7 @@
 import sys
+from markov import markov
+import individual
+import random
 
 """
 initial population
@@ -13,20 +16,32 @@ fitness
     -winners of round =  30%similar, 30%X middle, and 60% different children depending on desired number of children.       this will be useful to ensure that the population doesnt converge 
     -use case:
         the 2 songs supplied on the cmd line are "billy joel - we didnt start the fire" and "jay-z - hard knock life". 
-        take the euclidean distance between those 2 songs and use that to compare against the SUM of the euclidean distance between the child and billy joel, and the euclidean distance between the child and jay-z.       
+        take the euclidean distance between those 2 songs and use that to compare against the SUM of the euclidean distance between the child and billy joel, and the euclidean distance between the child and jay-z.     
+
+implement opts, args = getopt.getopt to allow flags and args 
+	e.g. python music.py -a <artist> -s1 <song_1> -s2 <song_2>
 """
 
+PITCH_DIR = './pitches/pitches_'
+NUM_TRAITS = 4
+POP_SIZE = 2
+NUM_GEN = 5
+DURATION = ['whole', 'half', 'quarter', 'eighth', '16th']
 
-def run():
-	pass
+def individual(m):
+	return (m.generate_music(NUM_TRAITS), random.choice(DURATION))
 
-def main(args):
-    try:
-    	run()
-        # implement opts, args = getopt.getopt to allow flags and args
-        # e.g. python music.py -a <artist> -s1 <song_1> -s2 <song_2>
-    except ValueError:
-		pass
-    
-if __name__ == '__main__':	
-	main(sys.argv[1:])
+def population(m):
+	return [individual(m) for i in range(POP_SIZE)]
+
+def run(artist):
+	# create markov object
+	m = markov(open(PITCH_DIR + artist + '.txt'))	
+	pop = population(m)
+	print pop,'\n'
+
+run('biggie')
+
+"""
+
+"""
