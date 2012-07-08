@@ -29,6 +29,7 @@ NUM_GEN = 5
 DURATION = ['whole', 'half', 'quarter', 'eighth', '16th']
 
 def individual(m):
+	# returns tuple -- ([pitches], duration)
 	return (m.generate_music(NUM_TRAITS), random.choice(DURATION))
 
 def population(m):
