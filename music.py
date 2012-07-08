@@ -1,6 +1,8 @@
 """
 initial population
-    -select subset of pitches from each song of length num_traits
+    -supply either artist name or 2 songs 
+    -select subset of pitches from each song OR if artist supplied, take 2 random subsets of pitch file of length num_traits
+        -EXPERIMENT WITH -- when getting pitches, do i want to select a subset of same pitches (e.g. [C# C# C# C# C#] or do i want diversity?) 
     -take euclidean distance between 2 subsets -- this becomes the fitness comparator
     -build markov model with the traits selected above
 
