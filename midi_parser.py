@@ -7,6 +7,8 @@ parses a midi file for the pitch and octave
 
 p = path
 od = output directory
+
+CAN CHANGE note.Note to chord.Chord to get a list of chords! but then need
 '''
 
 def parse(p):
