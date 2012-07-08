@@ -27,7 +27,9 @@ class test_case():
         print 'p1 is ',p1
         print 'p2 is ',p2
         print 'child is ',child        
-        
+        # store fitness value
+        # go to next round
+
         # select
         #print select.helper(1,pop,4)
             
