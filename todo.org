@@ -1,3 +1,12 @@
+** GOAL
+create new melody that is the combination of 2 songs -- winner of each round is the child whos most different from parents
+
+** Fitness 
+1. Remove user fitness and change to automatic
+2. allow user to only select 2 songs
+3. take sum(euclidean distance from selected songs) -- will actually need to take the euclid dist of a subset of each song = to the length of the individual
+4. take sum(euclid distance between child and each parent) then the highest one gets selected
+
 ** Helper Class
 1. There is a counting error when checking for termination requirements
 2. Make sure that all places start with generation 0 OR generation 1, doesnt matter
