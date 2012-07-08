@@ -9,19 +9,23 @@ import random
 """
 THIS WILL THROW AN ERROR IF THE NUMBER OF SONGS IN THE FILE IS < SPECIFIED VALUE
 """
-_number_of_songs = 2    # how many songs to go through in the entire file, -1 = random amount
+_number_of_songs = -1    # how many songs to go through in the entire file, -1 = random amount
 
-class markov(object):
-    def __init__(self, open_file):
+#class markov(object):
+class markov():
+    #def __init__(self, open_file):
+    def __init__(self, pitches):
         self.cache = {}
-        self.open_file = open_file
-        self.pitches = self.file_to_pitches()
+        #self.open_file = open_file
+        #self.pitches = self.file_to_pitches()
+        self.pitches = pitches
         self.pitches_size = len(self.pitches)
         self.pitch_set = []
         self.database()
-        
+    '''
     def file_to_pitches(self):
         self.open_file.seek(0)
+        print self.open_file.read()
         #data = self.open_file.read()
         data = {}
         data[0] = self.open_file.readline()
@@ -41,8 +45,9 @@ class markov(object):
             for p in data[n[-1]].split():
                 ret_data.append(p)
             number_of_songs -= 1
+        print "RET DATA :: ", ret_data
         return ret_data
-        
+    '''   
     def triples(self):
         if len(self.pitches) < 3:
             return
