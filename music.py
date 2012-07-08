@@ -65,9 +65,17 @@ def population(m):
 
 def run(influencers):
 	data = parse_songs(influencers)
+	subset_data = []
 	for d in data:
-		print subset(d)
-	
+		subset_data += [subset(d)]
+
+	print 'subset data :: ', subset_data,'\n'
+	pitch_data = [item for sublist in subset_data for item in sublist]
+	print 'pitch data :: ', pitch_data, '\n'
+	m = markov(pitch_data)
+	markov_music = m.generate_music(NUM_TRAITS)
+	print 'm MUSIC : : ', markov_music,'\n'
+
 
 influencers = ['I_Aint_Mad_Atcha.txt', 'Nothing_To_Lose.txt']
 run(influencers)
