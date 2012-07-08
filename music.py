@@ -33,6 +33,9 @@ NUM_GEN = 5
 DURATION = ['whole', 'half', 'quarter', 'eighth', '16th']
 
 def subset(song):
+	if len(song) < NUM_TRAITS:
+		NUM_TRAITS = len(song)
+			
 	start = random.randint(0, ((len(song) - NUM_TRAITS) + 1))
 	end = start + NUM_TRAITS
 	return song[start:end]
