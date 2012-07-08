@@ -13,9 +13,12 @@ def parse(p,od):
 	pattern = '*.mid'
 	name = ''
 	for root, dirs, files in os.walk(path):
-		for fname in fnmatch.filter(files,pattern):			
-			song_name = fname.replace('top100_', '')
-			song_name = song_name.replace('.mid', '')
+		for fname in fnmatch.filter(files,pattern):
+			if 'top100_' in fname:			
+				song_name = fname.replace('top100_', '')
+				song_name = song_name.replace('.mid', '')
+			else:
+				song_name = fname.replace('.mid', '')
 			print 'Parsing Song :: ', song_name
 			#artist_name = root.replace('/Users/pwzoii/Sites/ga/v10/midi/', '')
 			wf = open(root+'/'+song_name+'.txt', 'w')
