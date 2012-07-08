@@ -32,6 +32,11 @@ POP_SIZE = 2
 NUM_GEN = 5
 DURATION = ['whole', 'half', 'quarter', 'eighth', '16th']
 
+def subset(song):
+	start = random.randint(0, ((len(song) - NUM_TRAITS) + 1))
+	end = start + NUM_TRAITS
+	return song[start:end]
+
 def individual(m):
 	# returns tuple -- ([pitches], duration)
 	return (m.generate_music(NUM_TRAITS), random.choice(DURATION))
