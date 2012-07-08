@@ -1,7 +1,8 @@
+from __future__ import with_statement
 import sys
 from markov import markov
-import individual
 import random
+
 
 """
 initial population
@@ -35,10 +36,25 @@ DURATION = ['whole', 'half', 'quarter', 'eighth', '16th']
 def subset(song):
 	if len(song) < NUM_TRAITS:
 		NUM_TRAITS = len(song)
-			
+
 	start = random.randint(0, ((len(song) - NUM_TRAITS) + 1))
 	end = start + NUM_TRAITS
 	return song[start:end]
+
+def parse_songs(songs):
+	'''
+	supply list of files --
+	for each file,
+		read in the pitches 
+		store in influencer list
+	'''
+	data = []
+	for song in songs:
+		with open("./midi_info/"+song,"r") as f: 
+			sentences = [elem for elem in f.read().split('\n') if elem] 
+			for sentence in sentences: 
+				data.append(sentence.split())
+	return data
 
 def individual(m):
 	# returns tuple -- ([pitches], duration)
@@ -47,11 +63,9 @@ def individual(m):
 def population(m):
 	return [individual(m) for i in range(POP_SIZE)]
 
-def run(artist):
-	# create markov object
-	m = markov(open(PITCH_DIR + artist + '.txt'))	
-	pop = population(m)
-	print pop,'\n'
+def run(influencers):
+	data = parse_songs(influencers)
+	print data
 
-
-run('biggie')
+influencers = ['I_Aint_Mad_Atcha.txt', 'Nothing_To_Lose.txt']
+run(influencers)
