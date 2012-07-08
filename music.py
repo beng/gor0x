@@ -41,8 +41,5 @@ def run(artist):
 	pop = population(m)
 	print pop,'\n'
 
+
 run('biggie')
-
-"""
-
-"""
