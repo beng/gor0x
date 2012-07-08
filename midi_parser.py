@@ -8,7 +8,8 @@ parses a midi file for the pitch and octave
 p = path
 od = output directory
 '''
-def parse(p,od):
+
+def parse(p):
 	path = p
 	pattern = '*.mid'
 	name = ''
@@ -20,7 +21,6 @@ def parse(p,od):
 			else:
 				song_name = fname.replace('.mid', '')
 			print 'Parsing Song :: ', song_name
-			#artist_name = root.replace('/Users/pwzoii/Sites/ga/v10/midi/', '')
 			wf = open(root+'/'+song_name+'.txt', 'w')
 			stream = converter.parse(root+'/'+fname)
 			idx = 0
@@ -37,6 +37,5 @@ def parse(p,od):
 						#wf.write(d.duration.type)
 			wf.close()
 
-od='/Users/pwzoii/Desktop/pitches/'
-path = '/Users/pwzoii/Sites/ga/v10/midi/'
-parse(path,od)
+path = './midi_info/'
+parse(path)
