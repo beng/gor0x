@@ -51,9 +51,9 @@ def parse_songs(songs):
 	data = []
 	for song in songs:
 		with open("./midi_info/"+song,"r") as f: 
-			sentences = [elem for elem in f.read().split('\n') if elem] 
-			for sentence in sentences: 
-				data.append(sentence.split())
+			pitches = [elem for elem in f.read().split('\n') if elem] 
+			for pitch in pitches: 
+				data.append(pitch.split())
 	return data
 
 def individual(m):
