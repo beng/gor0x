@@ -28,17 +28,17 @@ TODO: if size of song_file, i.e. number of pitches in the file is LESS THAN NUM_
 """
 
 PITCH_DIR = './pitches/pitches_'
-NUM_TRAITS = 4
+NUM_TRAITS = 50
 POP_SIZE = 2
 NUM_GEN = 5
 DURATION = ['whole', 'half', 'quarter', 'eighth', '16th']
 
 def subset(song):
-	if len(song) < NUM_TRAITS:
-		NUM_TRAITS = len(song)
-
-	start = random.randint(0, ((len(song) - NUM_TRAITS) + 1))
-	end = start + NUM_TRAITS
+	nt = NUM_TRAITS
+	if len(song) < nt:
+		nt = len(song)
+	start = random.randint(0, ((len(song) - nt) + 1))
+	end = start + nt
 	return song[start:end]
 
 def parse_songs(songs):
@@ -65,7 +65,9 @@ def population(m):
 
 def run(influencers):
 	data = parse_songs(influencers)
-	print data
+	for d in data:
+		print subset(d)
+	
 
 influencers = ['I_Aint_Mad_Atcha.txt', 'Nothing_To_Lose.txt']
 run(influencers)
