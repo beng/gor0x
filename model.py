@@ -2,7 +2,7 @@ import web
 import sqlite3
 
 dbn = 'sqlite'
-db = 'C:\\xampp\\htdocs\\database\\community.db'
+db = '/Users/pwzoii/Sites/db/community.db'
 db = web.database(dbn=dbn, db=db)
 
 def clear_tables():
