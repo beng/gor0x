@@ -30,5 +30,25 @@ python
 	web.py
 html/css/jquery
 sql
+---
+Structure
++ folder
+- file
 
-if you have any questions and/or comments please feel free to contact me.
+melody-composer
+	-controller
+	-model
+	-helper
+	+ga
+		-select
+		-crossover
+		-individual
+		-tournament
+		-markov
+	+static
+		+js
+		+pitches
+		+css
+		+melodies
+	+templates
+		-html files
