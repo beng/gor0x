@@ -1,31 +1,21 @@
-$def with (title, init_form, sf) 
+$def with (title, songs) 
 $var title:$title
 
-<form method="POST" action="">
-	<fieldset>
-		<div class="row">
-			<div class="span4">
-				<h2>Selection Initialization</h2>
-				<div class="clearfix">
-					$if not init_form.valid: Sorry, your input was invalid.</br>
-					$:init_form.render_css()
-				</div>
-			</div>	
-			
-			<div class="span4">
-				<h2>Setting Initialization</h2>
-				<div class="clearfix">
-					$if not init_form.valid: Sorry, your input was invalid.</br>
-					$:sf.render_css()
-				</div>
-			</div>
-			
-		</div> <!-- div row -->
-
-		<div class="actions">
-			<button class="btn primary" type="submit">Submit!</button>
-		</div>
-	</fieldset>
-
+<form method="POST" action="/" class="well">
+	<h2>GA Settings</h2>
+	<div class="form-inline">
+		<input type="text" class="input-large" placeholder="Population Size" style="height:30;" name="pop_size" />
+		<input type="text" class="input-large" placeholder="Number of Traits" style="height:30;" name="num_traits" />
+		<input type="text" class="input-large" placeholder="Number of Generations" style="height:30;" name="num_gen" />
+	</div>
+	<div class="form-inline">
+		<select class="input-large" name="influencers">
+			$for song in songs:
+				<option>$song</option>
+		</select>		
+	</div>
+	<div class="actions">
+		<button class="btn primary" type="submit">Submit!</button>
+	</div>
 </form>
 

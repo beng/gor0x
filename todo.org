@@ -1,3 +1,14 @@
+* TODO schema
+** TODO create tables
+
+* TODO interface
+** TODO controller
+*** TODO index
+**** TODO ga settings form
+**** TODO markov settings form
+*** TODO fitness
+**** TODO turn each trait into jquery sortable
+
 ** Helper Class
 1. There is a counting error when checking for termination requirements
 2. Make sure that all places start with generation 0 OR generation 1, doesnt matter

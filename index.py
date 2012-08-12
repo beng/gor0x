@@ -29,10 +29,49 @@ class Index:
         songs = [song for song in song_selection]
         return render.index(title, songs)
 
-    def POST(self):
-        params = web.input(influencers=[])
-        params.update(influencers='_'.join(params.influencers))
+    def POST(self):        
+        params = web.input()
         model.insert('params', params)
+        Spawn().create_pool(**params)
+
+class Spawn:
+    def create_pool(self,**kargs):        
+        if ('pop_size' and 'num_traits' and 'influencers') in kargs:
+            # slightly messy -- need to clean up
+            pitch = self.markov_pitch(**kargs)
+            for pop in range(0,int(kargs['pop_size'])):
+                for trait in range(0,int(kargs['num_traits'])):
+                    try:
+                        params = dict(
+                            indi_id=pop,
+                            generation=model.get_max_gen()+1,
+                            pitch=pitch[trait][0],
+                            octave=pitch[trait][1],
+                            modifier=pitch([trait][2]),
+                            duration='half',
+                            fitness=0,)
+                        model.insert('song',params)
+                    except IndexError:
+                        params = dict(
+                            indi_id=pop,
+                            generation=model.get_max_gen()+1,
+                            pitch=pitch[trait][0],
+                            octave=pitch[trait][1],
+                            modifier=random.choice('#',''],
+                            duration='half',
+                            fitness=0,)
+                        model.insert('song',params)
+
+                    #print pitch[trait][0]
+                    #print pitch[trait][1]
+            #model.insert('song', params)
+
+    def markov_pitch(self,**kargs):
+        if ('num_traits' and 'influencers') in kargs:
+            m = markov(open('./static/pitches/pitches_' + kargs['influencers'] + '.txt'))
+            return m.generate_music(int(kargs['num_traits']))
+
+        
 
 if __name__ == "__main__":
    app = web.application(urls, globals())
