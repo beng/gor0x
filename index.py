@@ -57,14 +57,10 @@ class Spawn:
                             generation=model.get_max_gen()+1,
                             pitch=pitch[trait][0],
                             octave=pitch[trait][1],
-                            modifier=random.choice('#',''],
+                            modifier=random.choice(['#','']),
                             duration='half',
                             fitness=0,)
                         model.insert('song',params)
-
-                    #print pitch[trait][0]
-                    #print pitch[trait][1]
-            #model.insert('song', params)
 
     def markov_pitch(self,**kargs):
         if ('num_traits' and 'influencers') in kargs:
