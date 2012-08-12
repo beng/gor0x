@@ -6,7 +6,7 @@ SMALL PORTION OF CODE TAKEN FROM
 """
 import random 
 
-_number_of_songs = 3    # how many songs to go through in the entire file, -1 = random amount
+_number_of_songs = 5   # how many songs to go through in the entire file, -1 = random amount
 
 class markov(object):
     def __init__(self, open_file):
