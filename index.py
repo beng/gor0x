@@ -14,7 +14,7 @@ import song_name
 
 from markov import markov
 from music21 import *
-from helper import Spawn
+import helper
 
 urls = (
     '/', 'Index',
@@ -34,7 +34,7 @@ class Index:
     def POST(self):        
         params = web.input()
         model.insert('params', params)
-        Spawn().create_pool(**params)
+        helper.Spawn().create_pool(**params)
         # will always be first individual since this is the beginning
         raise web.seeother('/fitness/0')
 
