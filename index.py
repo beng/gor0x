@@ -38,7 +38,7 @@ class Index:
         # will always be first individual since this is the beginning
         raise web.seeother('/fitness/0')
 
-class Fitness():
+class Fitness:
     def GET(self, indi_id):
         traits = [trait for trait in model.get_traits(dict(indi_id=indi_id))]
         return render.fitness(title, traits)
