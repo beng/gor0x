@@ -43,7 +43,9 @@ class Fitness():
         traits = [trait for trait in model.get_traits(dict(indi_id=indi_id))]
         return render.fitness(title, traits)
         
-
+    def POST(self):
+        pass
+        
 if __name__ == "__main__":
    app = web.application(urls, globals())
    app.internalerror = web.debugerror
