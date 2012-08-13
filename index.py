@@ -44,8 +44,9 @@ class Fitness():
         return render.fitness(title, traits)
         
     def POST(self):
+        """Need to save re-ordering of pitches"""
         pass
-        
+
 if __name__ == "__main__":
    app = web.application(urls, globals())
    app.internalerror = web.debugerror
