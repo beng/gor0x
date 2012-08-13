@@ -1,6 +1,7 @@
 from markov import markov
 import model
 import random
+import consts
 
 class Spawn:
     def create_pool(self,**kargs):          
@@ -9,8 +10,6 @@ class Spawn:
             pitch = self.markov_pitch(**kargs)
             for pop in range(0,int(kargs['pop_size'])):
                 for trait in range(0,int(kargs['num_traits'])):
-                    print 'pitch :: ', pitch
-                    print 'pitch :: ', pitch[trait]
                     params = dict(
                         indi_id=pop,
                         generation=0,
@@ -21,5 +20,5 @@ class Spawn:
 
     def markov_pitch(self,**kargs):
         if ('num_traits' and 'influencers') in kargs:
-            m = markov(open('./static/pitches/pitches_' + kargs['influencers'] + '.txt'))
+            m = markov(open(consts.pitch_dir + kargs['influencers'] + '.txt'))
             return m.generate_music(int(kargs['num_traits']))
