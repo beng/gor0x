@@ -1,0 +1,9 @@
+* TODO Markov Chain
+** Remove markov chain and replace with https://github.com/vedantk/markov-chain
+
+* TODO Music Analysis
+** Make use of multiple layers that music21 offers with the parse
+** Spits out json file
+** Make use of chords -- use data structure I created on laptop!
+
+
