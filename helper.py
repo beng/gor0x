@@ -22,7 +22,7 @@ class Spawn:
 class Markov:
     def markov_pitch(self,**kargs):
         if ('num_traits' and 'influencers') in kargs:
-            nr = 5000
+            nr = int(kargs['num_traits'])
             m = self.walk_corpus(consts.pitch_dir + kargs['influencers'] + '.txt')
             print ' '.join([next(m) for k in xrange(nr)])
 
