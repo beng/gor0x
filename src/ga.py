@@ -1,5 +1,6 @@
-from markov import MarkovChain
-import consts
+from helper.markov import MarkovChain
+import helper.consts as consts
+
 '''
 Generate an individual of size num_traits
 '''
