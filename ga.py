@@ -19,7 +19,7 @@ class Spawn:
     def create_pool(self, **kargs):
         """Create an initial population based 
         on the Markov chain"""
-        for indi in kargs['pop_size']:
+        for indi in range(kargs['pop_size']):
             Individual().genome(**{'num_traits' : kargs['num_traits'], 'influencers' : kargs['influencers']})
 
 '''
@@ -39,4 +39,3 @@ class Markov:
         chain.add_sequence(words)
         return chain.walk()
 
-Individual().genome(**{'num_traits' : 5, 'influencers' : 'jayz'})

@@ -5,7 +5,9 @@ import consts
 import sys
 
 class Spawn:
-    def create_pool(self,**kargs):          
+    def create_pool(self,**kargs):
+        """Generate a population of size pop_size and 
+        each individual of size num_traits"""                
         if ('pop_size' and 'num_traits' and 'influencers') in kargs:
             # slightly messy -- need to clean up
             pitch = Markov.markov_pitch(**kargs)
@@ -20,7 +22,7 @@ class Spawn:
                     model.insert('song',params)
 
 class Markov:
-    def markov_pitch(self,**kargs):
+    def markov_pitch(self,**kargs):        
         if ('num_traits' and 'influencers') in kargs:
             nr = int(kargs['num_traits'])
             m = self.walk_corpus(consts.pitch_dir + kargs['influencers'] + '.txt')
