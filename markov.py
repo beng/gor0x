@@ -1,97 +1,99 @@
-"""
-create a markov chain based off the user selected artist(s)
-   
-SMALL PORTION OF CODE TAKEN FROM 
-        http://agiliq.com/blog/2009/06/generating-pseudo-random-text-with-markov-chains-u/
-"""
-import random 
+#!/usr/bin/pypy
+# markov.py - Vedant Kumar <vsk@berkeley.edu>
 
-_number_of_songs = 5   # how many songs to go through in the entire file, -1 = random amount
+import random
+from collections import defaultdict, deque
 
-class markov(object):
-    def __init__(self, open_file):
-        self.cache = {}
-        self.open_file = open_file
-        self.pitches = self.file_to_pitches()
-        self.pitches_size = len(self.pitches)
-        self.pitch_set = []
-        self.database()
-        
-    def file_to_pitches(self):
-        self.open_file.seek(0)
-        #data = self.open_file.read()
-        data = {}
-        data[0] = self.open_file.readline()
-        i = 0
-        while len(data[i]) != 0:
-            i += 1
-            data[i] = self.open_file.readline()
-        
-        if _number_of_songs == -1:
-            number_of_songs = random.randint(0, i - 1)
-        else:
-            number_of_songs = _number_of_songs
-        ret_data = []
-        n = []
-        while number_of_songs > 0:
-            n.append(random.choice(range(0, i - 1)))
-            for p in data[n[-1]].split():
-                ret_data.append(p)
-            number_of_songs -= 1
-        return ret_data
-        
-    def triples(self):
-        if len(self.pitches) < 3:
-            return
-    
-        for i in range(len(self.pitches) - 2):
-            yield (self.pitches[i], self.pitches[i + 1], self.pitches[i + 2])
-            
-    def database(self):
-        for p1, p2, p3 in self.triples():
-            if p1 not in self.pitch_set:
-                self.pitch_set.append(p1)
-            if p2 not in self.pitch_set:
-                self.pitch_set.append(p2)
-            if p3 not in self.pitch_set:
-                self.pitch_set.append(p3)
-            key = (p1, p2)
-            if key in self.cache:
-                self.cache[key].append(p3)
-            else:
-                self.cache[key] = [p3]
-                
-    def get_next_pitch(self, p1, p2):
-        return random.choice(self.cache[(p1, p2)])
-    
-    def get_next_pitches(self, p1, p2, size=500):
-        n = len(self.cache)
-        while ((p1, p2) not in self.cache) and n > 0:
-            p2 = random.choice(self.pitch_set)
-            n -= 1
-        if n == 0:
-            (p1, p2) = random.choice(self.cache.keys())
-            
-        gen_pitches = []
-        for i in xrange(size):
-            gen_pitches.append(p1)
-            p1, p2 = p2, random.choice(self.cache[(p1, p2)])
-        gen_pitches.append(p2)
-        return gen_pitches
-                
-    def generate_music(self, size=500):
-        seed = random.randint(0, self.pitches_size - 3)
-        seed_pitch, next_pitch = self.pitches[seed], self.pitches[seed + 1]
-        p1, p2 = seed_pitch, next_pitch
-        gen_pitches = []
-        for i in xrange(size):
-            gen_pitches.append(p1)
-            n = len(self.cache)
-            while ((p1, p2) not in self.cache) and n > 0:
-                p2 = random.choice(self.pitch_set)
-                n -= 1
-            if n == 0:
-                (p1, p2) = random.choice(self.cache.keys())
-            p1, p2 = p2, random.choice(self.cache[(p1, p2)])
-        gen_pitches.append(p2)
-        return gen_pitches
+'''
+A node is some atomic, fundamental unit.
+A state is an ordered collection of nodes (a history).
+A branch contains a list of nodes that can follow a given state (the future).
+A Markov chain maps states to their branches.
+'''
+
+class Branch:
+        def __init__(self):
+                '''Node => Frequency'''
+                self.total = 0.0
+                self.counts = defaultdict(int)
+
+        def update(self, node):
+                '''Add a future node to this branch.'''
+                self.total += 1
+                self.counts[node] += 1
+
+        def merge_branch(self, branch):
+                '''Merge another branch into this one.'''
+                self.total += branch.total
+                for node, freq in branch.counts.iteritems():
+                        self.counts[node] += freq
+
+        def sample(self):
+                '''Randomly sample a node from this branch.'''
+                thresh = random.random()
+                for node, freq in self.counts.iteritems():
+                        probability = freq / self.total
+                        if probability >= thresh:
+                                return node
+                        thresh -= probability
+                return random.choice(list(self.counts.keys()))
+
+class MarkovChain:
+        def __init__(self, n_limit):
+                '''State => Branch
+                n_limit: Maximum history per node.'''
+                self.n_limit = n_limit
+                self.transitions = defaultdict(Branch)
+
+        def add_sequence(self, seq):
+                '''seq: List of hash-able information.'''
+                for state, node in self._find_transitions(seq):
+                        self.transitions[state].update(node)
+                self._update_state_list()
+
+        def random_state(self):
+                '''Pick a random state in the chain.'''
+                return random.choice(self._state_list)
+
+        def walk(self):
+                '''Generate a walk through the chain.'''
+                start = self.random_state()
+                history = deque(start, maxlen=self.n_limit)
+                while True:
+                        node = self.walk_from(tuple(history))
+                        history.append(node)
+                        yield node
+
+        def walk_from(self, state):
+                '''Take one random step in the chain.'''
+                while len(state):
+                        branch = self.transitions[state]
+                        if branch.total > 0:
+                                return branch.sample()
+                        state = tuple(state[1:])
+                return self.walk_from(self.random_state())
+
+        def merge_chain(self, chain):
+                '''Merge another chain into this one.'''
+                for state, branch in chain.transitions.iteritems():
+                        self.transitions[state].merge_branch(branch)
+                self._update_state_list()
+
+        def _find_transitions(self, seq):
+                '''Generate all states and their futures.'''
+                for i in xrange(len(seq)):
+                        for j in xrange(1, self.n_limit + 1):
+                                state = seq[i:i+j]
+                                if len(state) == j and (i + j) < len(seq):
+                                        yield tuple(state), seq[i + j]
+
+        def _update_state_list(self):
+                self._state_list = list(self.transitions.keys())
+ 
+class SparseMarkovChain(MarkovChain):
+        def _find_transitions(self, seq):
+                for i in xrange(len(seq)):
+                        state = seq[i:self.n_limit+i]
+                        if len(state) == self.n_limit and (i + self.n_limit) < len(seq):
+                                yield tuple(state), seq[i + self.n_limit]
+

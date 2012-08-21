@@ -1,13 +1,14 @@
-from markov import markov
+from markov import MarkovChain
 import model
 import random
 import consts
+import sys
 
 class Spawn:
     def create_pool(self,**kargs):          
         if ('pop_size' and 'num_traits' and 'influencers') in kargs:
             # slightly messy -- need to clean up
-            pitch = self.markov_pitch(**kargs)
+            pitch = Markov.markov_pitch(**kargs)
             for pop in range(0,int(kargs['pop_size'])):
                 for trait in range(0,int(kargs['num_traits'])):
                     params = dict(
@@ -18,7 +19,16 @@ class Spawn:
                         fitness=0,)
                     model.insert('song',params)
 
+class Markov:
     def markov_pitch(self,**kargs):
         if ('num_traits' and 'influencers') in kargs:
-            m = markov(open(consts.pitch_dir + kargs['influencers'] + '.txt'))
-            return m.generate_music(int(kargs['num_traits']))
+            nr = 5000
+            m = self.walk_corpus(consts.pitch_dir + kargs['influencers'] + '.txt')
+            print ' '.join([next(m) for k in xrange(nr)])
+
+    def walk_corpus(self, fname):
+        with open(fname, 'r') as f:
+            words = f.read().split()
+        chain = MarkovChain(5)
+        chain.add_sequence(words)
+        return chain.walk()
