@@ -1,7 +1,7 @@
 import web
 
 dbn = 'sqlite'
-db = '/Users/pwzoii/Sites/db/community.db'
+db = './db/community.db'
 db = web.database(dbn=dbn, db=db)
 
 def clear_tables():

@@ -12,13 +12,13 @@ import random
 import model
 import song_name
 
-from markov import markov
 from music21 import *
 import helper
 
 urls = (
     '/', 'Index',
-    '/fitness/(.+)', 'Fitness',)
+    '/fitness/(.+)', 'Fitness',
+    '/markov/(.+)/(.+)', 'Markov',)
 
 render = web.template.render('templates/', base='layout')
 song_selection = list(song_name.parse_name('static/pitches/'))
@@ -46,6 +46,12 @@ class Fitness:
     def POST(self):
         """Need to save re-ordering of pitches"""
         pass
+
+class Markov:
+    def GET(self, num_traits, influencers):
+        """Return Markov chain for requested influencer"""
+        kargs = dict(num_traits=num_traits, influencers=influencers)
+        return helper.Markov().markov_pitch(**kargs)
 
 if __name__ == "__main__":
    app = web.application(urls, globals())
