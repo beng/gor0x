@@ -3,15 +3,29 @@ import os
 import fnmatch
 import consts
 
+def get_parts(song):
+	return list(enumerate(part.id for part in song.parts))
+
+def get_mesaures(parts):
+	pass
+
 '''
-parses a midi file for the pitch and octave
-
-p = path
-od = output directory
-
-CAN CHANGE note.Note to chord.Chord to get a list of chords! but then need
+	json strucutre = score[ part [ measure [ note/chord [ duration type ] ] ] ]
+'''
+'''
+def create_genome():
+	midi = converter.parse(consts.name)
+	song = {
+		"score" : ,
+		"part" : , [midi.]
+		"measure" : ,
+		"note" : ,
+		"chord" : ,
+		"duration" ,
+	}
 '''
 
+### IGNORE EVERYTHING BELOW -- TESTING!
 def parse(p):
 	path = p
 	pattern = '*.mid'
@@ -45,42 +59,44 @@ def parse(p):
 
 def parse_file():
 	#print consts.name
-	#s = converter.parse(consts.name)
+	s = converter.parse(consts.name)
+	print get_parts(s)
+	#return s
 	#print s.show('text')
 	#print s.parts.show('text')
-	n1 = note.Note('e4')
-	n1.duration.type = 'whole'
-	n2 = note.Note('d4')
-	n2.duration.type = 'whole'
-	m1 = stream.Measure()
-	m2 = stream.Measure()
-	m1.append(n1)
-	m2.append(n2)
-	partLower = stream.Part()
-	partLower.append(m1)
-	partLower.append(m2)
-	partLower.show('text')
-	print '----------------'
-	data1 = [('g4', 'quarter'), ('a4', 'quarter'), ('b4', 'quarter'), ('c#5', 'quarter')]
-	data2 = [('d5', 'whole')]
-	data = [data1, data2]
-	partUpper = stream.Part()
-	for mData in data:
-		m = stream.Measure()
-		for pitchName, durType in mData:
-			n = note.Note(pitchName)
-			n.duration.type = durType
-			m.append(n)
-	partUpper.append(m)
-	partUpper.show('text')
-	print '----------------'
-	sCadence = stream.Score()
-	sCadence.insert(0, partUpper)
-	sCadence.insert(0, partLower)
-	sCadence.show('text')
-	print '----------------'
-	print sCadence
-	return partUpper
+	# n1 = note.Note('e4')
+	# n1.duration.type = 'whole'
+	# n2 = note.Note('d4')
+	# n2.duration.type = 'whole'
+	# m1 = stream.Measure()
+	# m2 = stream.Measure()
+	# m1.append(n1)
+	# m2.append(n2)
+	# partLower = stream.Part()
+	# partLower.append(m1)
+	# partLower.append(m2)
+	# partLower.show('text')
+	# print '----------------'
+	# data1 = [('g4', 'quarter'), ('a4', 'quarter'), ('b4', 'quarter'), ('c#5', 'quarter')]
+	# data2 = [('d5', 'whole')]
+	# data = [data1, data2]
+	# partUpper = stream.Part()
+	# for mData in data:
+	# 	m = stream.Measure()
+	# 	for pitchName, durType in mData:
+	# 		n = note.Note(pitchName)
+	# 		n.duration.type = durType
+	# 		m.append(n)
+	# partUpper.append(m)
+	# partUpper.show('text')
+	# print '----------------'
+	# sCadence = stream.Score()
+	# sCadence.insert(0, partUpper)
+	# sCadence.insert(0, partLower)
+	# sCadence.show('text')
+	# print '----------------'
+	# print sCadence
+	# return partUpper
 
 def export(mfile):
 	#mf = mfile.midiFile
@@ -90,4 +106,4 @@ def export(mfile):
 	mf.write()
 	mf.close() 
 
-export(parse_file())
+parse_file()
