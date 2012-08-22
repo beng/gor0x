@@ -1,6 +1,7 @@
 from music21 import *
 import os
 import fnmatch
+import consts
 
 '''
 parses a midi file for the pitch and octave
@@ -39,5 +40,54 @@ def parse(p):
 						#wf.write(d.duration.type)
 			wf.close()
 
-path = './midi_info/'
-parse(path)
+#path = './midi_info/'
+#parse(path)
+
+def parse_file():
+	#print consts.name
+	#s = converter.parse(consts.name)
+	#print s.show('text')
+	#print s.parts.show('text')
+	n1 = note.Note('e4')
+	n1.duration.type = 'whole'
+	n2 = note.Note('d4')
+	n2.duration.type = 'whole'
+	m1 = stream.Measure()
+	m2 = stream.Measure()
+	m1.append(n1)
+	m2.append(n2)
+	partLower = stream.Part()
+	partLower.append(m1)
+	partLower.append(m2)
+	partLower.show('text')
+	print '----------------'
+	data1 = [('g4', 'quarter'), ('a4', 'quarter'), ('b4', 'quarter'), ('c#5', 'quarter')]
+	data2 = [('d5', 'whole')]
+	data = [data1, data2]
+	partUpper = stream.Part()
+	for mData in data:
+		m = stream.Measure()
+		for pitchName, durType in mData:
+			n = note.Note(pitchName)
+			n.duration.type = durType
+			m.append(n)
+	partUpper.append(m)
+	partUpper.show('text')
+	print '----------------'
+	sCadence = stream.Score()
+	sCadence.insert(0, partUpper)
+	sCadence.insert(0, partLower)
+	sCadence.show('text')
+	print '----------------'
+	print sCadence
+	return partUpper
+
+def export(mfile):
+	#mf = mfile.midiFile
+	mf = midi.translate.streamToMidiFile(mfile)
+	name = 'song.mid'
+	mf.open(consts.midi_dir + name, 'wb')
+	mf.write()
+	mf.close() 
+
+export(parse_file())

@@ -46,7 +46,9 @@ class Fitness:
     def POST(self):
         """Need to save re-ordering of pitches"""
         pass
-
+'''
+Return json of traits
+'''
 class Markov:
     def GET(self, num_traits, influencers):
         """Return Markov chain for requested influencer"""
