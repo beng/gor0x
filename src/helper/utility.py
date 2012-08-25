@@ -1,3 +1,9 @@
+""""
+Different utility functions
+"""
+########################################################
+# Strings
+########################################################
 def msg(*args): 
     """Print out message with variables
     Usage: msg('text',variable,...)"""
