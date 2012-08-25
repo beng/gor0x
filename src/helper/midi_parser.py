@@ -3,27 +3,25 @@ import os
 import fnmatch
 import consts
 
-def get_parts(song):
-	return list(enumerate(part.id for part in song.parts))
+def extract_traits(stream): 
+	"""Extract requested traits from midi file
+	TODO: modify to take traits as attributes"""
+    traits = []
+    for i in stream:
+        for d in i.elements:
+            if type(d) == note.Note:
+                traits += [(d.nameWithOctave, d.duration.type)]
+            if type(d) == chord.Chord:
+                traits += [(d.pitches, d.duration.type)]
+    return traits
 
-def get_mesaures(parts):
-	pass
+extract(converter.parse(consts.name))
 
-'''
-	json strucutre = score[ part [ measure [ note/chord [ duration type ] ] ] ]
-'''
-'''
-def create_genome():
-	midi = converter.parse(consts.name)
-	song = {
-		"score" : ,
-		"part" : , [midi.]
-		"measure" : ,
-		"note" : ,
-		"chord" : ,
-		"duration" ,
-	}
-'''
+"""
+extract traits -> markov chain -> generate pop
+"""
+
+
 
 ### IGNORE EVERYTHING BELOW -- TESTING!
 def parse(p):
@@ -105,5 +103,3 @@ def export(mfile):
 	mf.open(consts.midi_dir + name, 'wb')
 	mf.write()
 	mf.close() 
-
-parse_file()
