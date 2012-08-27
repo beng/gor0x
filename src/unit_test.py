@@ -27,7 +27,9 @@ def spawn_new_midi():
     print '------------'
     print '------------'
     
-    new_pop = ga.create_pool(5,pop)
+    new_pop = ga.create_pool(1,pop)
+    num_rounds = 1000
+    #print ''.join([next(new_pop) for k in xrange(num_rounds)])
     for i in new_pop:
         print i
 
