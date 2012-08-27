@@ -5,11 +5,10 @@ import helper.consts as consts
 '''
 Generate an individual of size num_traits
 '''
-class Individual:    
-    def genome(self, **kargs):
-        """Generate a genome"""
-        #duration = ['whole', 'half', 'quarter', 'eighth', '16th']
-        return [Markov().markov_pitch(**kargs)]
+def genome(corpus):
+    """Generate a genome"""
+    #duration = ['whole', 'half', 'quarter', 'eighth', '16th']
+    return [Markov().markov_pitch(corpus)]
 
 '''
 Take a dictionary containing the 
@@ -17,27 +16,24 @@ desired population size, number of traits,
 and influencers and return an initial
 population
 '''
-class Spawn:
-    def create_pool(self, **kargs):
-        """Create an initial population based 
-        on the Markov chain"""
-        for indi in range(kargs['pop_size']):
-            Individual().genome(**{'num_traits' : kargs['num_traits'], 'influencers' : kargs['influencers']})
 
+def create_pool(pop_size, pop):
+    """Create an initial population based 
+    on the Markov chain"""
+    for indi in range(pop_size):
+        #Individual().genome(**{'num_traits' : kargs['num_traits'], 'influencers' : kargs['influencers']})
+        yield genome(pop)
 '''
 Generate a Markov chain
 '''
 class Markov:
-    def markov_pitch(self,**kargs):        
-        if ('num_traits' and 'influencers') in kargs:
-            nr = int(kargs['num_traits'])
-            m = self.walk_corpus(consts.pitch_dir + kargs['influencers'] + '.txt')
-            print ' '.join([next(m) for k in xrange(nr)])
+    def markov_pitch(self, corpus):
+        nr=1000
+        m = self.walk_corpus(corpus)
+        print ''.join([next(m) for k in xrange(nr)])
+        return self.walk_corpus(corpus)
 
-    def walk_corpus(self, fname):
-        with open(fname, 'r') as f:
-            words = f.read().split()
+    def walk_corpus(self, corpus):
         chain = MarkovChain(5)
-        chain.add_sequence(words)
+        chain.add_sequence(corpus)        
         return chain.walk()
-

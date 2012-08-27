@@ -9,8 +9,7 @@ import consts
 def extract_traits(stream):
     """Extract requested traits from midi file
     TODO: modify to take traits as attributes               
-    """
-    traits = []
+    """    
     for i in stream:        
         for d in i.elements:
             if type(d) == note.Note:                
