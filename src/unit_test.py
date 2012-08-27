@@ -7,31 +7,19 @@ import helper.utility as utility
 
 def spawn_new_midi():
     corpus = midi_parser.extract_traits(converter.parse(consts.name))
-    #for c in corpus:
-        #print 'corpus :', c
-    # requested traits
     pre_gen = utility.find_item(corpus, 'pitch', 'duration')
     
     pop = []
 
     for indi in pre_gen:
-        print indi[0].values()   # returns the string value of the trait
         pop.append(indi[0].values()[0])
     
     # population to string
     pop = utility.to_string(pop)
-    print '------------'
-    print 'POP TO STRING'
-    print '------------'
-    print pop
-    print '------------'
-    print '------------'
-    
-    new_pop = ga.create_pool(1,pop)
-    num_rounds = 1000
-    #print ''.join([next(new_pop) for k in xrange(num_rounds)])
-    for i in new_pop:
-        print i
+
+    # get markov chain of population
+    new_pop = ga.genome(pop)
+    print new_pop
 
 def main(args):
     if 'spawn_new_midi' in args:

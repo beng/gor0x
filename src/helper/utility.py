@@ -1,8 +1,18 @@
-import itertools
-
 """"
 Different utility functions
 """
+import music21
+import itertools
+
+########################################################
+# MIDI
+########################################################
+def extract_corpus(song):
+    """Convert midi file into json object)"""
+    return music21.converter.parse(song)
+
+
+
 ########################################################
 # Strings
 ########################################################
