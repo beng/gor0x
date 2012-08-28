@@ -12,13 +12,14 @@ def extract_corpus(song):
     """Convert midi file into json object)"""
     return music21.converter.parse(song)
 
-def extract_traits(corpus, traits=[music21.note.Rest]):
+def extract_traits(corpus, traits=[music21.note.Rest, music21.note.Note]):
     # @TODO add what to do with wrong traits!
     # @TODO make it actually extract requsted traits
     
     for stream in corpus:
         for element in stream.elements:
-            print msg("element ", element)
+            if type(element) in traits:
+                print msg("element found ", element)
 
     #trait_list = []
     # for i in corpus:        
