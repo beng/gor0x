@@ -15,6 +15,7 @@ import json
 import helper.song_name as song_name
 import helper.consts as consts
 import helper.utility as utility
+import ga
 
 urls = (
     '/', 'Index',
@@ -52,23 +53,24 @@ title = "Melody Composer"
 class Markov:
     """Return json of Markov chain"""
 
-    def GET(self, size, nodes):
-        web.header('Content-Type', 'application/json')
-        return json.dumps({})
+    def GET(self, size, nodes, influencer=consts.name):
+        """Call with influencer name and other shit"""        
+        pool = ga.genome(ExtractMidi().GET(influencer))
+        print pool
+
+        #web.header('Content-Type', 'application/json')
+        #return json.dumps({influencer : pool, 'settings' : {'size' : size, 'nodes' : nodes}})
 
 class ExtractMidi:
     """Return json of traits"""
 
-    def GET(self, influencer=None):        
+    def GET(self, influencer=consts.name):        
         """Return traits of requested influencer"""
         # @TODO -- add parameter to accept different traits
-
-        if not influencer:
-            influencer=consts.name
-
         try:
-            parsed_corpus = utility.extract_traits(utility.extract_corpus(influencer), 
-                traits=[note.Note,chord.Chord, 'duration'])  # duration can be any name becuase we are just checking for type
+            parsed_corpus = utility.extract_traits(utility.extract_corpus(influencer), traits=[note.Note])  
+            # duration can be any name becuase we are just checking for type
+
             web.header('Content-Type', 'application/json')
             return json.dumps({influencer : parsed_corpus})
         except Exception, e:
