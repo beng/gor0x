@@ -14,11 +14,14 @@ def extract_corpus(song):
 
 def extract_traits(corpus, traits=[music21.note.Note]):
     # @TODO add what to do with wrong traits!
+    # @TODO make it actually extract requsted traits
 
     trait_list = []
 
     for i in corpus:        
         for d in i.elements:
+            if type(d) == music21.note.Rest:
+                trait_list.append({"rest" : "Rest", "duration" : str(d.duration.type)})
             if type(d) == music21.note.Note:    
                 trait_list.append({"pitch" : str(d.nameWithOctave), "duration" : str(d.duration.type)})
             elif type(d) == music21.chord.Chord:                

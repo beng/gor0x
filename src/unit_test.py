@@ -10,7 +10,7 @@ import helper.midi_parser as midi_parser
 import helper.utility as utility
 
 def traits():
-    for i in utility.extract_traits(utility.extract_corpus(consts.name), traits=[note.Note]):
+    for i in utility.extract_traits(utility.extract_corpus(consts.name), traits=[note.Rest()]):
         print i
 
 def spawn_new_midi():
