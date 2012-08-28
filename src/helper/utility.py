@@ -13,6 +13,7 @@ def extract_corpus(song):
 
 def extract_traits(corpus, traits=[music21.note.Note]):
     # @TODO add what to do with wrong traits!
+
     trait_list = []
 
     for i in corpus:        
@@ -23,7 +24,7 @@ def extract_traits(corpus, traits=[music21.note.Note]):
                 trait_list.append({"chords" : str(d.pitches), "duration" : str(d.duration.type)})
 
     return trait_list
-    
+
 ########################################################
 # Strings
 ########################################################
