@@ -5,6 +5,10 @@ import helper.consts as consts
 import helper.midi_parser as midi_parser
 import helper.utility as utility
 
+
+"""
+Random shit in here for testing random shit -- don't ask questions
+"""
 def traits():
     for i in utility.extract_traits(utility.extract_corpus(consts.name), traits=[note.Note]):
         print i

@@ -15,21 +15,15 @@ def extract_traits(corpus, traits=[music21.note.Note]):
     # @TODO add what to do with wrong traits!
     trait_list = []
 
-    # if traits:
-    #     print 'traits ', traits
-    #     for element in corpus:
-    #         for item in element.elements:
-    #             if type(item) in traits:
-    #                 trait_list.append({type(str(item)) : item.pitches, "duration" : item.duration.type})
-    #                 #yield({type(item) : item.pitches, "duration" : item.duration.type})
-    # return trait_list
     for i in corpus:        
         for d in i.elements:
-            if type(d) == music21.note.Note:                
+            if type(d) == music21.note.Note:    
                 trait_list.append({"pitch" : str(d.nameWithOctave), "duration" : str(d.duration.type)})
             elif type(d) == music21.chord.Chord:                
                 trait_list.append({"chords" : str(d.pitches), "duration" : str(d.duration.type)})
+
     return trait_list
+    
 ########################################################
 # Strings
 ########################################################

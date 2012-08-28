@@ -6,21 +6,21 @@
 this is a genetic algorithm that composes melodies. 
 """
 
+from music21 import *
 import web
 import random
+import json
 
 #import model
 import helper.song_name as song_name
 import helper.consts as consts
-from music21 import *
 import helper.utility as utility
-
-import json
 
 urls = (
     '/', 'Index',
     '/fitness/(.+)', 'Fitness',
-    '/markov/(.*)', 'Markov',)
+    '/extract_midi/(.*)', 'ExtractMidi',
+    '/markov/(.+)/(.+)', 'Markov',)
 
 render = web.template.render('templates/', base='layout')
 song_selection = list(song_name.parse_name('static/pitches/'))
@@ -48,18 +48,25 @@ title = "Melody Composer"
 #     def POST(self):
 #         """Need to save re-ordering of pitches"""
 #         pass
-'''
-Return json of traits
-'''
+
 class Markov:
+    """Return json of Markov chain"""
+
+    def GET(self, size, nodes):
+        web.header('Content-Type', 'application/json')
+        return json.dumps({})
+
+class ExtractMidi:
+    """Return json of traits"""
+
     def GET(self, influencer=None):        
-        """Return Markov chain for requested influencer"""
-        # @TODO -- add parameter to accept different traits        
+        """Return traits of requested influencer"""
+        # @TODO -- add parameter to accept different traits
+
         if not influencer:
             influencer=consts.name
-
         try:
-            parsed_corpus = utility.extract_traits(utility.extract_corpus(influencer), traits=[note.Note])
+            parsed_corpus = utility.extract_traits(utility.extract_corpus(influencer), traits=[note.Note,chord.Chord, 'duration'])  # duration can be any name becuase we are just checking for type
             web.header('Content-Type', 'application/json')
             return json.dumps({influencer : parsed_corpus})
         except Exception, e:
