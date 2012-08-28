@@ -1,6 +1,7 @@
 """"
 Different utility functions
 """
+
 import music21
 import itertools
 

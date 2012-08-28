@@ -1,15 +1,16 @@
 #!/usr/bin/pypy
 # markov.py - Vedant Kumar <vsk@berkeley.edu>
 
-import random
-from collections import defaultdict, deque
-
-'''
+"""
 A node is some atomic, fundamental unit.
 A state is an ordered collection of nodes (a history).
 A branch contains a list of nodes that can follow a given state (the future).
 A Markov chain maps states to their branches.
-'''
+"""
+
+import random
+from collections import defaultdict, deque
+
 class Branch:
         def __init__(self):
                 '''Node => Frequency'''

@@ -28,6 +28,9 @@ song_selection = list(song_name.parse_name('static/pitches/'))
 title = "Melody Composer"
 
 '''
+########################################################
+# Index
+########################################################
 class Index:
     def GET(self):
         # clear tables 
@@ -42,6 +45,9 @@ class Index:
         # will always be first individual since this is the beginning
         raise web.seeother('/fitness/0')
 
+########################################################
+# Fitness
+########################################################
 class Fitness:
     def GET(self, indi_id):
         traits = [trait for trait in model.get_traits(dict(indi_id=indi_id))]
@@ -52,6 +58,9 @@ class Fitness:
         pass
 '''
 
+########################################################
+# Markov JSON REST
+########################################################
 class Markov:
     """Return json of Markov chain"""
 
@@ -62,6 +71,9 @@ class Markov:
         
         return json.dumps({influencer : pool, 'settings' : {'size' : size, 'nodes' : nodes}})
 
+########################################################
+# Extract Midi JSON REST
+########################################################
 class ExtractMidi:
     """Return json of traits"""
 
@@ -71,7 +83,6 @@ class ExtractMidi:
         try:
             parsed_corpus = utility.extract_traits(utility.extract_corpus(influencer), traits=[note.Note])  
             # duration can be any name becuase we are just checking for type
-
             web.header('Content-Type', 'application/json')
             return json.dumps({influencer : parsed_corpus})
         except Exception, e:
