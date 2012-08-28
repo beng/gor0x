@@ -1,3 +1,11 @@
+Status
+
+I use Trello for project management. I have made the board public so you can view my progress/see what I'm currently working on.
+
+http://trello.com/board/thesis/503a21fa486d9e635310bcd8
+
+---
+
 Description
 
 This is a genetic algorithm that composes melodies and allows the user to play an integral part of the composition process without requiring any previous music theory knowledge. This is only possible because of how I designed the fitness function -- the user actually acts as as composer and is allowed to make a specific number of changes to the current individual. This is a unique interactive fitness function that adds a new level of user engagement and reduces user boredom.
