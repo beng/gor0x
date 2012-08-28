@@ -65,6 +65,7 @@ class ExtractMidi:
 
         if not influencer:
             influencer=consts.name
+            
         try:
             parsed_corpus = utility.extract_traits(utility.extract_corpus(influencer), traits=[note.Note,chord.Chord, 'duration'])  # duration can be any name becuase we are just checking for type
             web.header('Content-Type', 'application/json')
