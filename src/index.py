@@ -20,7 +20,7 @@ import json
 urls = (
     '/', 'Index',
     '/fitness/(.+)', 'Fitness',
-    '/markov', 'Markov',)
+    '/markov/(.*)', 'Markov',)
 
 render = web.template.render('templates/', base='layout')
 song_selection = list(song_name.parse_name('static/pitches/'))
@@ -52,14 +52,20 @@ title = "Melody Composer"
 Return json of traits
 '''
 class Markov:
-    def GET(self):
-        # @TODO -- add parameter to accept different traits
+    def GET(self, influencer=None):        
         """Return Markov chain for requested influencer"""
-        influencer=consts.name
-        parsed_corpus = utility.extract_traits(utility.extract_corpus(influencer), traits=[note.Note])
+        # @TODO -- add parameter to accept different traits        
+        if not influencer:
+            influencer=consts.name
+
+        try:
+            parsed_corpus = utility.extract_traits(utility.extract_corpus(influencer), traits=[note.Note])
+            web.header('Content-Type', 'application/json')
+            return json.dumps({influencer : parsed_corpus})
+        except Exception, e:
+            print 'issue with influencer request. please try again!'
+            raise e      
         
-        web.header('Content-Type', 'application/json')
-        return json.dumps({influencer : parsed_corpus})
 
 if __name__ == "__main__":
    app = web.application(urls, globals())
