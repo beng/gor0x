@@ -9,7 +9,8 @@ import itertools
 # Type Castings
 ########################################################
 def type_cast(obj, want):
-    """Cast obj to the desired type"""
+    """Cast obj to the desired type. Will be used to convert
+    the keys in the extract_traits dictionary"""
     # @TODO add error checking. this is will blow the fuck up 
     return want(obj)
 
