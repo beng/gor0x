@@ -20,7 +20,7 @@ import ga
 urls = (
     '/', 'Index',
     '/fitness/(.+)', 'Fitness',
-    '/extract_midi/(.*)', 'ExtractMidi',
+    '/extract_midi', 'ExtractMidi',
     '/markov/(.+)/(.+)', 'Markov',)
 
 render = web.template.render('templates/', base='layout')
@@ -79,9 +79,12 @@ class ExtractMidi:
 
     def GET(self, influencer=consts.name):        
         """Return traits of requested influencer"""
-        # @TODO -- add parameter to accept different traits
+        # @TODO add parameter to accept different traits
+        # @TODO remove default influencer and throw error
+        #       if no influencer is supplied 
+
         try:
-            parsed_corpus = utility.extract_traits(utility.extract_corpus(influencer), traits=[note.Note])  
+            parsed_corpus = utility.extract_traits(utility.extract_corpus(influencer), traits=[note.Note, note.Rest])  
             # duration can be any name becuase we are just checking for type
             web.header('Content-Type', 'application/json')
             return json.dumps({influencer : parsed_corpus})
