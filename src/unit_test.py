@@ -9,6 +9,9 @@ import helper.consts as consts
 import helper.midi_parser as midi_parser
 import helper.utility as utility
 
+def type_cast():
+    convert = utility.type_cast('1', int)
+
 def trait_extraction(traits=[note.Note, note.Rest]):
     utility.extract_traits(utility.extract_corpus(consts.name), traits)
 
@@ -33,6 +36,8 @@ def main(args):
         spawn_new_midi()
     if 'trait_extraction' in args:
         trait_extraction()
+    if 'type_cast' in args:
+        type_cast()
 
 def usage():
     print "python markov_test <type> <pop_size> <# traits> <influencers>"

@@ -6,6 +6,14 @@ import music21
 import itertools
 
 ########################################################
+# Type Castings
+########################################################
+def type_cast(obj, want):
+    """Cast obj to the desired type"""
+    # @TODO add error checking. this is will blow the fuck up 
+    return want(obj)
+
+########################################################
 # MIDI
 ########################################################
 def extract_corpus(song):
@@ -18,7 +26,7 @@ def extract_traits(corpus, traits=[music21.note.Note]):
     otherwise"""
     # @TODO add what to do with wrong traits!
     # @TODO decide if i want to use a generator instead
-    
+
     trait_list = []    
     for stream in corpus:
         for element in stream.elements:
