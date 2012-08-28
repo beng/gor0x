@@ -20,7 +20,7 @@ import ga
 urls = (
     '/', 'Index',
     '/fitness/(.+)', 'Fitness',
-    '/extract_midi', 'ExtractMidi',
+    '/extract_midi/(.*)', 'ExtractMidi',
     '/markov/(.+)/(.+)', 'Markov',)
 
 render = web.template.render('templates/', base='layout')
@@ -77,11 +77,14 @@ class Markov:
 class ExtractMidi:
     """Return json of traits"""
 
-    def GET(self, influencer=consts.name):        
+    def GET(self, influencer):
         """Return traits of requested influencer"""
         # @TODO add parameter to accept different traits
         # @TODO remove default influencer and throw error
-        #       if no influencer is supplied 
+        #       if no influencer is supplied
+         
+        if '' in influencer:
+            influencer = consts.name
 
         try:
             parsed_corpus = utility.extract_traits(utility.extract_corpus(influencer), traits=[note.Note, note.Rest])  
