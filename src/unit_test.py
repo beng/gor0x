@@ -9,9 +9,8 @@ import helper.consts as consts
 import helper.midi_parser as midi_parser
 import helper.utility as utility
 
-def traits():
-    for i in utility.extract_traits(utility.extract_corpus(consts.name), traits=[note.Rest()]):
-        print i
+def trait_extraction(traits=[note.Note, note.Rest]):
+    utility.extract_traits(utility.extract_corpus(consts.name), traits)
 
 def spawn_new_midi():
     corpus = midi_parser.extract_traits(converter.parse(consts.name))
@@ -32,8 +31,8 @@ def spawn_new_midi():
 def main(args):
     if 'spawn_new_midi' in args:
         spawn_new_midi()
-    if 'traits' in args:
-        traits()
+    if 'trait_extraction' in args:
+        trait_extraction()
 
 def usage():
     print "python markov_test <type> <pop_size> <# traits> <influencers>"
