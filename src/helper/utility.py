@@ -6,15 +6,6 @@ import music21
 import itertools
 
 ########################################################
-# Type Castings
-########################################################
-def type_cast(obj, want):
-    """Cast obj to the desired type. Will be used to convert
-    the keys in the extract_traits dictionary"""
-    # @TODO add error checking. this is will blow the fuck up 
-    return want(obj)
-
-########################################################
 # MIDI
 ########################################################
 def extract_corpus(song):
@@ -28,11 +19,10 @@ def extract_traits(corpus, traits=[music21.note.Note]):
     # @TODO add what to do with wrong traits!
     # @TODO decide if i want to use a generator instead
 
-    trait_list = []    
+    trait_list = []
     for stream in corpus:
         for element in stream.elements:
-            if type(element) in traits:                
-                # quick hack. ugly, i know
+            if type(element) in traits:
                 if type(element) == music21.note.Rest:
                     trait_list.append({str(type(element)) : "rest", "duration" : element.duration.type})
                 else:
@@ -40,10 +30,14 @@ def extract_traits(corpus, traits=[music21.note.Note]):
 
     return trait_list
 
+def save_traits(fn, loc, traits):
+    print 'traits ', traits
+    open(loc + fn + '.json', 'wb').write(traits)
+
 ########################################################
 # Strings
 ########################################################
-def msg(*args): 
+def msg(*args):
     """Print out message with variables
     Usage: msg('text',variable,...)"""
     return "".join(str(x) for x in args)
