@@ -1,9 +1,3 @@
-Status
-
-I use Trello for project management. I have made the board public so you can view my progress/see what I'm currently working on.
-
-http://trello.com/board/thesis/503a21fa486d9e635310bcd8
-
 ---
 
 Description
