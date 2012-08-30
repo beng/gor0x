@@ -31,8 +31,9 @@ def extract_traits(corpus, traits=[music21.note.Note]):
     return trait_list
 
 def save_traits(fn, loc, traits):
-    print 'traits ', traits
-    open(loc + fn + '.json', 'wb').write(traits)
+    """Save list of traits to json file
+    Complains if i add '.close()'"""
+    open(loc + fn + '.json', 'wb').write(str(traits))   # hack for time being -- needs string/buffer not list to write
 
 ########################################################
 # Strings
