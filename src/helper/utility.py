@@ -27,6 +27,15 @@ def extract_traits(corpus):
                 trait_list.append({"Chord" : str(element.pitches), "duration" : element.duration.type})
     return trait_list
 
+def load_json(fp):
+    with open(fp, 'rb') as tfp:
+        data = json.load(tfp)
+    return data
+
+def write_json(fp, data):
+    with open(fp, 'wb') as tfp:
+        json.dump(data, tfp)
+
 ########################################################
 # String Stuff
 ########################################################

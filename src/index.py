@@ -17,10 +17,20 @@ import helper.consts as consts
 import helper.utility as utility
 
 urls = (
-    '/save_midi/(.+)/(.+)', 'SaveMidi',)
+    '/save_midi/(.+)/(.+)', 'SaveMidi',
+    '/load_json/(.+)/(.+)', 'LoadJSON',)
 
 render = web.template.render('templates/', base='layout')
 title = "Melody Composer"
+
+########################################################
+# Return JSON file containing traits
+########################################################
+class LoadJSON():
+    def GET(self, artist, song):
+        artist = artist.capitalize()
+        fp = utility.to_path(consts.pitch_dir, artist, song, 'json')
+        data = utility.load_json(fp)
 
 ########################################################
 # Save MIDI to DB
@@ -38,8 +48,7 @@ class SaveMidi():
         trait_list = utility.extract_traits(stream)
 
         # write to JSON file
-        with open(consts.pitch_dir + artist + '_' + song + '.json', 'wb') as tfp:
-            json.dump(trait_list, tfp)
+        utility.write_json(utility.to_path(consts.pitch_dir, artist, song, 'json'), trait_list)
         
         web.ctx.status = '200 OK'
         return 'explicit 200'
