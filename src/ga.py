@@ -10,14 +10,14 @@ import helper.consts as consts
                 pitch : 10
 """
 
-def genome(corpus, size=5000, nodes=5):
+def genome(corpus, size=1000, nodes=5):
     """Generate a genome
     default parameters, can override when calling functions"""
     return Markov().markov_pitch(corpus, size, nodes)
 
 class Markov:
     """Generate a Markov chain"""
-    def markov_pitch(self, corpus, size=5000, nodes=5):
+    def markov_pitch(self, corpus, size=1000, nodes=5):
         """Nodes = number of previous nodes to remember"""
         m = self.walk_corpus(corpus, nodes)
         return [''.join([next(m) for k in xrange(size)])]

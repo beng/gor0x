@@ -15,10 +15,12 @@ import web
 import models.midi_info as mim
 import helper.consts as consts
 import helper.utility as utility
+import ga
 
 urls = (
     '/save_midi/(.+)/(.+)', 'SaveMidi',
-    '/load_json/(.+)/(.+)', 'LoadJSON',)
+    '/load_traits/(.+)/(.+)', 'LoadTraits',
+    '/markov/(.+)/(.+)/(.+)/(.+)', 'Markov',)
 
 render = web.template.render('templates/', base='layout')
 title = "Melody Composer"
@@ -26,11 +28,11 @@ title = "Melody Composer"
 ########################################################
 # Return JSON file containing traits
 ########################################################
-class LoadJSON():
+class LoadTraits():
     def GET(self, artist, song):
         artist = artist.capitalize()
-        fp = utility.to_path(consts.pitch_dir, artist, song, 'json')
-        data = utility.load_json(fp)
+        fp = utility.to_path(consts.pitch_dir, artist, song, 'txt')
+        data = utility.load_text(fp)
 
 ########################################################
 # Save MIDI to DB
@@ -44,16 +46,33 @@ class SaveMidi():
         fp = utility.to_path(consts.midi_dir, artist, song, 'mid')
         stream = utility.extract_corpus(fp)
 
-        # extract chord, pitch, rest, and duration from stream
+        # extract notes
         trait_list = utility.extract_traits(stream)
 
-        # write to JSON file
-        utility.write_json(utility.to_path(consts.pitch_dir, artist, song, 'json'), trait_list)
+        # write to text file
+        utility.write_text(utility.to_path(consts.pitch_dir, artist, song, 'txt'), trait_list)
         
         web.ctx.status = '200 OK'
         return 'explicit 200'
-        
-        
+
+########################################################
+# Generate Markov Chain
+########################################################
+class Markov:
+    """Return json of Markov chain"""
+
+    def GET(self, size, nodes, artist, song):
+        """Call with influencer name and other shit"""
+        artist = artist.capitalize()
+        fp = utility.to_path(consts.pitch_dir, artist, song, 'txt')
+        data = utility.load_text(fp)
+
+        pool = ga.genome(data, size=int(size), nodes=int(nodes))
+        print pool
+
+        #web.header('Content-Type', 'application/json')
+        #return json.dumps({artist : pool, 'settings' : {'size' : size, 'nodes' : nodes}})
+
 ########################################################
 # Run Web Server
 ########################################################

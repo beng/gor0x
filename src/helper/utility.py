@@ -7,7 +7,7 @@ import music21
 import itertools
 
 ########################################################
-# MIDI
+# MIDI Stuff
 ########################################################
 def extract_corpus(song):
     """Convert midi file into json object)"""
@@ -19,14 +19,20 @@ def extract_traits(corpus):
     trait_list = []
     for stream in corpus:
         for element in stream.elements:
-            if type(element) == music21.note.Rest:                
-                trait_list.append({"Rest" : "rest", "duration" : element.duration.type})
-            elif type(element) == music21.note.Note:
-                trait_list.append({"Note" : str(element.pitches), "duration" : element.duration.type})
-            elif type(element) == music21.chord.Chord:
-                trait_list.append({"Chord" : str(element.pitches), "duration" : element.duration.type})
-    return trait_list
+            if type(element) == music21.note.Note:
+                trait_list.append(' ' + str(element.nameWithOctave))
+    return ''.join(trait_list)
 
+########################################################
+# String Stuff
+########################################################
+def to_path(dir, artist, song, ext):
+    """Return string representing file path"""
+    return dir + artist + '/' + song + '.' + ext
+
+########################################################
+# IO Stuff
+########################################################
 def load_json(fp):
     with open(fp, 'rb') as tfp:
         data = json.load(tfp)
@@ -36,9 +42,11 @@ def write_json(fp, data):
     with open(fp, 'wb') as tfp:
         json.dump(data, tfp)
 
-########################################################
-# String Stuff
-########################################################
-def to_path(dir, artist, song, ext):
-    """Return string representing file path"""
-    return dir + artist + '/' + song + '.' + ext
+def write_text(fp, data):
+    with open(fp, 'wb') as tfp:
+        tfp.write(data)
+
+def load_text(fp):
+    with open(fp, 'rb') as tfp:
+        data = tfp.read()
+    return data
