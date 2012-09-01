@@ -35,11 +35,11 @@ class LoadTraits():
         data = utility.load_text(fp)
 
 ########################################################
-# Save MIDI to DB
+# Save MIDI to Server
 ########################################################
 class SaveMidi():
     def GET(self, artist, song):
-        """Export MIDI file to JSON"""
+        """Export MIDI file to specified filetype"""
 
         # convert to stream
         artist = artist.capitalize()
