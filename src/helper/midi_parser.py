@@ -73,7 +73,7 @@ def parse(p):
             stream = converter.parse(root+'/'+fname)
             idx = 0
             for i in stream:
-                for d in i.elements:                    
+                for d in i.elements:
                     if type(d) == note.Note:
                         if idx == 0:
                             wf.write(d.nameWithOctave)

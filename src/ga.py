@@ -13,7 +13,7 @@ import helper.consts as consts
 def genome(corpus, size=5000, nodes=5):
     """Generate a genome
     default parameters, can override when calling functions"""
-    return Markov().markov_pitch(corpus, size, nodes)    
+    return Markov().markov_pitch(corpus, size, nodes)
 
 class Markov:
     """Generate a Markov chain"""
@@ -24,8 +24,6 @@ class Markov:
 
     def walk_corpus(self, corpus, nodes):
         chain = MarkovChain(nodes)
-        chain.add_sequence(corpus)        
+        chain.add_sequence(corpus)
         return chain.walk()
 
-    
-        

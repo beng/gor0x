@@ -2,103 +2,53 @@
 @author   Ben G
 @email    beg5670@gmail.com
 @website  http://github.com/beng
-  
-this is a genetic algorithm that composes melodies. 
+
+this is a genetic algorithm that composes melodies.
 """
 
-from music21 import *
-import web
-import random
+import music21
+
 import json
 
-#import model
-import helper.song_name as song_name
+import web
+
+import models.midi_info as mim
 import helper.consts as consts
 import helper.utility as utility
-import ga
 
 urls = (
-    '/', 'Index',
-    '/fitness/(.+)', 'Fitness',
-    '/extract_midi/(.*)', 'ExtractMidi',
-    '/markov/(.+)/(.+)', 'Markov',)
+    '/save_midi/(.+)/(.+)', 'SaveMidi',)
 
 render = web.template.render('templates/', base='layout')
-song_selection = list(song_name.parse_name('static/pitches/'))
 title = "Melody Composer"
 
-'''
 ########################################################
-# Index
+# Save MIDI to DB
 ########################################################
-class Index:
-    def GET(self):
-        # clear tables 
-        model.clear_tables()        
-        songs = [song for song in song_selection]
-        return render.index(title, songs)
+class SaveMidi():
+    def GET(self, artist, song):
+        """Export MIDI file to JSON"""
 
-    def POST(self):        
-        params = web.input()
-        model.insert('params', params)
-        helper.Spawn().create_pool(**params)
-        # will always be first individual since this is the beginning
-        raise web.seeother('/fitness/0')
+        # convert to stream
+        artist = artist.capitalize()
+        fp = utility.to_path(consts.midi_dir, artist, song, 'mid')
+        stream = utility.extract_corpus(fp)
 
-########################################################
-# Fitness
-########################################################
-class Fitness:
-    def GET(self, indi_id):
-        traits = [trait for trait in model.get_traits(dict(indi_id=indi_id))]
-        return render.fitness(title, traits)
+        # extract chord, pitch, rest, and duration from stream
+        trait_list = utility.extract_traits(stream)
+
+        # write to JSON file
+        with open(consts.pitch_dir + artist + '_' + song + '.json', 'wb') as tfp:
+            json.dump(trait_list, tfp)
         
-    def POST(self):
-        """Need to save re-ordering of pitches"""
-        pass
-'''
-
-########################################################
-# Markov JSON REST
-########################################################
-class Markov:
-    """Return json of Markov chain"""
-
-    def GET(self, size, nodes, influencer=consts.name):
-        """Call with influencer name and other shit"""        
-        pool = ga.genome(ExtractMidi().GET(influencer))
-        web.header('Content-Type', 'application/json')
+        web.ctx.status = '200 OK'
+        return 'explicit 200'
         
-        return json.dumps({influencer : pool, 'settings' : {'size' : size, 'nodes' : nodes}})
-
-########################################################
-# Extract Midi JSON REST
-########################################################
-class ExtractMidi:
-    """Return json of traits"""
-
-    def GET(self, influencer):
-        """Return traits of requested influencer"""
-        # @TODO add parameter to accept different traits
-        # @TODO remove default influencer and throw error
-        #       if no influencer is supplied
-         
-        if '' in influencer:
-            influencer = consts.name
-
-        try:
-            parsed_corpus = utility.extract_traits(utility.extract_corpus(influencer), traits=[note.Note, note.Rest])  
-            # duration can be any name becuase we are just checking for type
-            web.header('Content-Type', 'application/json')
-            return json.dumps({influencer : parsed_corpus})
-        except Exception, e:
-            print 'issue with influencer request. please try again!'
-            raise e      
         
-
+########################################################
+# Run Web Server
+########################################################
 if __name__ == "__main__":
    app = web.application(urls, globals())
    app.internalerror = web.debugerror
-   app.run() 
-
-
+   app.run()
