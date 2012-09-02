@@ -47,24 +47,6 @@ def dict_to_string(trait):
 ########################################################
 # IO Stuff
 ########################################################
-def load_json(fp):
-    with open(fp, 'rb') as tfp:
-        data = json.load(tfp)
-    return data
-
-def write_json(fp, data):
-    with open(fp, 'wb') as tfp:
-        json.dump(data, tfp)
-
-def write_text(fp, data):
-    with open(fp, 'wb') as tfp:
-        tfp.write(data)
-
-def load_text(fp):
-    with open(fp, 'rb') as tfp:
-        data = tfp.read()
-    return data
-
 def write_file(filepath, extension, data):
     """Write to json or txt file"""
     with open(filepath, 'wb') as fp:
