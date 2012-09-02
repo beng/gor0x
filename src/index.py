@@ -73,20 +73,19 @@ class Markov:
 
     def GET(self, size, nodes, artist, song):
         """Return a Markov chain for the specified artist and song"""
+
         artist = artist.capitalize()
         extension = 'json'
         filepath = utility.to_path(consts.pitch_dir, artist, song, extension)
-        data = utility.load_file(filepath, extension)
-        mc_pop = ''
 
-        for trait in data:
-            # append to string
-            print utility.dict_to_list(trait)
-            #mc_pop.append(utility.list_to_string(utility.dict_to_list(trait)))
-        #print mc_pop
-        #pool = ga.genome(data, size=int(size), nodes=int(nodes))
-        return data
-        #return pool
+        # create string containing only the value of the traits
+        data = utility.load_file(filepath, extension)
+        mc_pop = ' '.join(utility.dict_to_string(trait) for trait in data)
+
+        # generate a single individual (genome)
+        pool = ga.genome(mc_pop, size=int(size), nodes=int(nodes))
+
+        return pool
 
         #web.header('Content-Type', 'application/json')
         #return json.dumps({artist : pool, 'settings' : {'size' : size, 'nodes' : nodes}})
