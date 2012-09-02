@@ -18,12 +18,20 @@ import helper.utility as utility
 import ga
 
 urls = (
+    '/', 'Index',
     '/save_midi/(.+)/(.+)', 'SaveMidi',
     '/load_traits/(.+)/(.+)', 'LoadTraits',
     '/markov/(.+)/(.+)/(.+)/(.+)', 'Markov',)
 
 render = web.template.render('templates/', base='layout')
 title = "Melody Composer"
+
+########################################################
+# Return JSON file containing traits
+########################################################
+class Index():
+    def GET(self):
+        return "Hello"
 
 ########################################################
 # Return JSON file containing traits
@@ -62,13 +70,14 @@ class Markov:
     """Return json of Markov chain"""
 
     def GET(self, size, nodes, artist, song):
-        """Call with influencer name and other shit"""
+        """Return a Markov chain for the specified artist and song"""
         artist = artist.capitalize()
-        fp = utility.to_path(consts.pitch_dir, artist, song, 'txt')
-        data = utility.load_text(fp)
-
+        extension = 'json'
+        filepath = utility.to_path(consts.pitch_dir, artist, song, extension)
+        data = utility.load_file(filepath, extension)
         pool = ga.genome(data, size=int(size), nodes=int(nodes))
-        print pool
+ 
+        return pool
 
         #web.header('Content-Type', 'application/json')
         #return json.dumps({artist : pool, 'settings' : {'size' : size, 'nodes' : nodes}})
