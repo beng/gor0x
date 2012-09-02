@@ -19,26 +19,43 @@ urls = (
     '/', 'Index',
     '/save_midi/(.+)/(.+)', 'SaveMidi',
     '/load_traits/(.+)/(.+)', 'LoadTraits',
-    '/markov/(.+)/(.+)/(.+)/(.+)', 'Markov',)
+    '/markov/(.+)/(.+)/(.+)/(.+)', 'Markov',
+    '/ga/spawn/(.+)/(.+)', 'SpawnPopulation',
+    '/ga/fitness', 'Fitness',
+    '/interactive', 'Interactive',)
 
+app = web.application(urls, globals())
 render = web.template.render('templates/', base='layout')
 title = "Melody Composer"
 
 ########################################################
-# Return JSON file containing traits
+# Test
 ########################################################
 class Index():
     def GET(self):
         return "Hello"
 
 ########################################################
-# Return JSON file containing traits
+# Interactive Testing
 ########################################################
-class LoadTraits():
-    def GET(self, artist, song):
-        artist = artist.capitalize()
-        fp = utility.to_path(consts.pitch_dir, artist, song, 'txt')
-        data = utility.load_text(fp)
+class Interactive():
+    def GET(self):
+        artist = 'vivaldi'
+        song = 'winter_allegro'
+        data = Markov().GET(100, 5, artist, song) 
+        data = data[0].split()
+        return render.interactive(title, data)
+
+
+########################################################
+# Return Population of X individuals and Y traits each
+########################################################
+class SpawnPopulation():
+    def GET(self, num_indi, num_traits):
+        # @TODO spawn a population!
+        artist = 'vivaldi'
+        song = 'winter_allegro'        
+        data = dict(size=10, nodes=4, artist=artist, song=song)
 
 ########################################################
 # Save MIDI to Server
@@ -66,7 +83,7 @@ class SaveMidi():
 ########################################################
 # Generate Markov Chain
 ########################################################
-class Markov:
+class Markov():
     """Return json of Markov chain"""
 
     def GET(self, size, nodes, artist, song):
@@ -89,6 +106,6 @@ class Markov:
 # Run Web Server
 ########################################################
 if __name__ == "__main__":
-   app = web.application(urls, globals())
+   
    app.internalerror = web.debugerror
    app.run()
