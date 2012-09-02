@@ -62,7 +62,12 @@ class SpawnPopulation():
 ########################################################
 class SaveMidi():
     def GET(self, artist, song):
-        """Export MIDI file to specified filetype"""
+        """Export MIDI file to specified filetype
+        Checks to see if the requested MIDI file exists
+        on my server. If it does, extracts the requested
+        traits from it using the music21 library. 
+        @TODO If it doesn't I need to return an error
+        """
 
         # convert to stream
         artist = artist.capitalize()
