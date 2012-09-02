@@ -1,7 +1,5 @@
 """
 @author   Ben G
-@email    beg5670@gmail.com
-@website  http://github.com/beng
 
 this is a genetic algorithm that composes melodies.
 """
@@ -86,9 +84,6 @@ class Markov:
         pool = ga.genome(mc_pop, size=int(size), nodes=int(nodes))
 
         return pool
-
-        #web.header('Content-Type', 'application/json')
-        #return json.dumps({artist : pool, 'settings' : {'size' : size, 'nodes' : nodes}})
 
 ########################################################
 # Run Web Server
