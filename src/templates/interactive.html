@@ -1,7 +1,18 @@
 $def with (title, data)
 $var title:$title
 
-<ul id="sortable-trait">
-	$for d in data:	
-		<p class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>$d</p>		
-</ul>
+<div class="row span4">
+	<div class="span3 offset2">
+		<ul id="sortable-trait">
+			$for d in data:	
+				<div class="ui-state-default" style="margin: 0 0 10 0">
+					<span class="ui-icon-arrowthick-2-n-s"></span>
+					$d
+				</div>
+			<div>
+				<button class="btn btn-large btn-inverse" type="button">Large button</button>	
+			</div>
+		</ul>
+	</div>	
+</div>
+
