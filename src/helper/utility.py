@@ -31,12 +31,18 @@ def extract_traits(corpus, traits=[]):
         return None
 
 ########################################################
-# String Stuff
+# Random Stuff
 ########################################################
 def to_path(dir, artist, song, ext):
     """Return string representing file path"""
     # fix to optional so i can put other things
     return dir + artist + '/' + song + '.' + ext
+
+def dict_to_string(trait):
+    """Convert dictionary to string for
+    sending to Markov chain"""
+    
+    return ' '.join(v for k,v in trait.items())
 
 ########################################################
 # IO Stuff
@@ -59,16 +65,16 @@ def load_text(fp):
         data = tfp.read()
     return data
 
-def write_file(filename, extension, location, data):
+def write_file(filepath, extension, data):
     """Write to json or txt file"""
-    with open(location+filename+extension) as fp:
+    with open(filepath, 'wb') as fp:
         if 'json' in extension:
-            json.dump(data)
+            json.dump(data, fp)
         else:
             fp.write(data)
 
 def load_file(filepath, extension):
-    with open(filepath) as fp:
+    with open(filepath, 'rb') as fp:
         if 'json' in extension:
             data = json.load(fp)
             return data

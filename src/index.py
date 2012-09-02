@@ -55,10 +55,12 @@ class SaveMidi():
         stream = utility.extract_corpus(fp)
 
         # extract notes
-        trait_list = utility.extract_traits(stream)
+        trait_list = utility.extract_traits(stream, [music21.note.Note])
 
-        # write to text file
-        utility.write_text(utility.to_path(consts.pitch_dir, artist, song, 'txt'), trait_list)
+        # write to file
+        extension = 'json'
+        filepath = utility.to_path(consts.pitch_dir, artist, song, extension)
+        utility.write_file(filepath, extension, trait_list)
         
         web.ctx.status = '200 OK'
         return 'explicit 200'
@@ -75,9 +77,16 @@ class Markov:
         extension = 'json'
         filepath = utility.to_path(consts.pitch_dir, artist, song, extension)
         data = utility.load_file(filepath, extension)
-        pool = ga.genome(data, size=int(size), nodes=int(nodes))
- 
-        return pool
+        mc_pop = ''
+
+        for trait in data:
+            # append to string
+            print utility.dict_to_list(trait)
+            #mc_pop.append(utility.list_to_string(utility.dict_to_list(trait)))
+        #print mc_pop
+        #pool = ga.genome(data, size=int(size), nodes=int(nodes))
+        return data
+        #return pool
 
         #web.header('Content-Type', 'application/json')
         #return json.dumps({artist : pool, 'settings' : {'size' : size, 'nodes' : nodes}})
