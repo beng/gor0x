@@ -1,3 +1,7 @@
+/**
+ * Different functions for the fitness function
+ */
+ 
 $(function() {
 	$( "#sortable-trait" ).sortable();
 	$( "#sortable-trait" ).disableSelection();
