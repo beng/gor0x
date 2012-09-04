@@ -33,4 +33,5 @@ def find_all_music():
     return music_coll.find_one()
 
 add_music('Vivaldi', 'Winter Allegro')
+
 print find_all_music()
