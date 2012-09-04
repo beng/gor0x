@@ -1,23 +1,15 @@
 import web
+from pymongo import Connection
 
 """
 Fuck it. Shit ain't even used anymore.
 """
 
-# dbn = 'sqlite'
-# db = './db/community.db'
-# db = web.database(dbn=dbn, db=db)
+host = 'localhost'
+port = '9999'
+db_name = 'community'
 
-# def clear_tables():
-#     db.query("delete from params")
-#     db.query("delete from song")
+connection = Connection(host, port)
+db = connection[db_name]
+music_coll = db['music_collection']
 
-# def insert(table, kargs):
-#     return db.insert(table, **kargs)
-
-# def get_max_gen():
-#     q = db.query("SELECT max(generation) as gen FROM song")[0].gen
-#     return q if q else 0
-
-# def get_traits(indi_id):
-#     return db.select('song', what='trait', vars=indi_id, where='indi_id=$indi_id')
