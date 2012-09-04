@@ -36,3 +36,7 @@ rates are adjustable by the user on the front-end.
 Technology:
 python, web.py, music21, html/css/jquery
 
+MongoDB:
+mongod --dbpath=./data/db/ --port=9999
+
+

@@ -1,102 +1,116 @@
 """
 @author   Ben G
-@email    beg5670@gmail.com
-@website  http://github.com/beng
-  
-this is a genetic algorithm that composes melodies. 
+
+this is a genetic algorithm that composes melodies.
 """
 
-from music21 import *
-import web
-import random
+import music21
+
 import json
 
-#import model
-import helper.song_name as song_name
+import web
+
+import models.midi_info as mim
 import helper.consts as consts
 import helper.utility as utility
 import ga
 
 urls = (
     '/', 'Index',
-    '/fitness/(.+)', 'Fitness',
-    '/extract_midi/(.*)', 'ExtractMidi',
-    '/markov/(.+)/(.+)', 'Markov',)
+    '/save_midi/(.+)/(.+)', 'SaveMidi',
+    '/load_traits/(.+)/(.+)', 'LoadTraits',
+    '/markov/(.+)/(.+)/(.+)/(.+)', 'Markov',
+    '/ga/spawn/(.+)/(.+)', 'SpawnPopulation',
+    '/ga/fitness', 'Fitness',
+    '/interactive', 'Interactive',)
 
+app = web.application(urls, globals())
 render = web.template.render('templates/', base='layout')
-song_selection = list(song_name.parse_name('static/pitches/'))
 title = "Melody Composer"
 
-'''
 ########################################################
-# Index
+# Test
 ########################################################
-class Index:
+class Index():
     def GET(self):
-        # clear tables 
-        model.clear_tables()        
-        songs = [song for song in song_selection]
-        return render.index(title, songs)
-
-    def POST(self):        
-        params = web.input()
-        model.insert('params', params)
-        helper.Spawn().create_pool(**params)
-        # will always be first individual since this is the beginning
-        raise web.seeother('/fitness/0')
+        return "Hello"
 
 ########################################################
-# Fitness
+# Interactive Testing
 ########################################################
-class Fitness:
-    def GET(self, indi_id):
-        traits = [trait for trait in model.get_traits(dict(indi_id=indi_id))]
-        return render.fitness(title, traits)
-        
-    def POST(self):
-        """Need to save re-ordering of pitches"""
-        pass
-'''
+class Interactive():
+    def GET(self):
+        artist = 'vivaldi'
+        song = 'winter_allegro'
+        data = Markov().GET(100, 5, artist, song)
+        data = data[0].split()
+        return render.interactive(title, data)
+
 
 ########################################################
-# Markov JSON REST
+# Return Population of X individuals and Y traits each
 ########################################################
-class Markov:
+class SpawnPopulation():
+    def GET(self, num_indi, num_traits):
+        # @TODO spawn a population!
+        artist = 'vivaldi'
+        song = 'winter_allegro'
+        data = dict(size=10, nodes=4, artist=artist, song=song)
+
+########################################################
+# Save MIDI to Server
+########################################################
+class SaveMidi():
+    def GET(self, artist, song):
+        """Export MIDI file to specified filetype
+        Checks to see if the requested MIDI file exists
+        on my server. If it does, extracts the requested
+        traits from it using the music21 library.
+        @TODO If it doesn't I need to return an error
+        """
+
+        # convert to stream
+        artist = artist.capitalize()
+        fp = utility.to_path(consts.midi_dir, artist, song, 'mid')
+        stream = utility.extract_corpus(fp)
+
+        # extract notes
+        trait_list = utility.extract_traits(stream, [music21.note.Note])
+
+        # write to file
+        extension = 'json'
+        filepath = utility.to_path(consts.pitch_dir, artist, song, extension)
+        utility.write_file(filepath, extension, trait_list)
+
+        web.ctx.status = '200 OK'
+        return 'explicit 200'
+
+########################################################
+# Generate Markov Chain
+########################################################
+class Markov():
     """Return json of Markov chain"""
 
-    def GET(self, size, nodes, influencer=consts.name):
-        """Call with influencer name and other shit"""        
-        pool = ga.genome(ExtractMidi().GET(influencer))
-        web.header('Content-Type', 'application/json')
-        
-        return json.dumps({influencer : pool, 'settings' : {'size' : size, 'nodes' : nodes}})
+    def GET(self, size, nodes, artist, song):
+        """Return a Markov chain for the specified artist and song"""
+
+        artist = artist.capitalize()
+        extension = 'json'
+        filepath = utility.to_path(consts.pitch_dir, artist, song, extension)
+
+        # create string containing only the value of the traits
+        data = utility.load_file(filepath, extension)
+        mc_pop = ' '.join(utility.dict_to_string(trait) for trait in data)
+
+        # generate a single individual (genome)
+        pool = ga.genome(mc_pop, size=int(size), nodes=int(nodes))
+
+        return pool
 
 ########################################################
-# Extract Midi JSON REST
+# Run Web Server
 ########################################################
-class ExtractMidi:
-    """Return json of traits"""
-
-    def GET(self, influencer):
-        """Return traits of requested influencer"""
-        # @TODO add parameter to accept different traits
-        # @TODO remove default influencer and throw error
-        #       if no influencer is supplied
-         
-        if '' in influencer:
-            influencer = consts.name
-
-        try:
-            parsed_corpus = utility.extract_traits(utility.extract_corpus(influencer), traits=[note.Note, note.Rest])  
-            # duration can be any name becuase we are just checking for type
-            web.header('Content-Type', 'application/json')
-            return json.dumps({influencer : parsed_corpus})
-        except Exception, e:
-            print 'issue with influencer request. please try again!'
-            raise e      
-        
-
 if __name__ == "__main__":
-   app = web.application(urls, globals())
+
    app.internalerror = web.debugerror
-   app.run() 
+   app.run()

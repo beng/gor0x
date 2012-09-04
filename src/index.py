@@ -42,7 +42,7 @@ class Interactive():
     def GET(self):
         artist = 'vivaldi'
         song = 'winter_allegro'
-        data = Markov().GET(100, 5, artist, song) 
+        data = Markov().GET(100, 5, artist, song)
         data = data[0].split()
         return render.interactive(title, data)
 
@@ -54,7 +54,7 @@ class SpawnPopulation():
     def GET(self, num_indi, num_traits):
         # @TODO spawn a population!
         artist = 'vivaldi'
-        song = 'winter_allegro'        
+        song = 'winter_allegro'
         data = dict(size=10, nodes=4, artist=artist, song=song)
 
 ########################################################
@@ -65,7 +65,7 @@ class SaveMidi():
         """Export MIDI file to specified filetype
         Checks to see if the requested MIDI file exists
         on my server. If it does, extracts the requested
-        traits from it using the music21 library. 
+        traits from it using the music21 library.
         @TODO If it doesn't I need to return an error
         """
 
@@ -81,7 +81,7 @@ class SaveMidi():
         extension = 'json'
         filepath = utility.to_path(consts.pitch_dir, artist, song, extension)
         utility.write_file(filepath, extension, trait_list)
-        
+
         web.ctx.status = '200 OK'
         return 'explicit 200'
 
@@ -111,6 +111,6 @@ class Markov():
 # Run Web Server
 ########################################################
 if __name__ == "__main__":
-   
+
    app.internalerror = web.debugerror
    app.run()
