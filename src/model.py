@@ -3,35 +3,38 @@ from pymongo import Connection
 
 """
 BSON Structure:
-    { artist: song,
+    { artist: value,
+      song: value,
       id: {
             note: note.pitch,
             duration: duration.type,
       }
     }
-
-E.g. { "Antonio Vivaldi": "Winter Allegro",
-        0: {
-             "note": "C#4",
-             "duration": "quarter",
-        }
-     }
 """
 
+# random variables
 host = 'localhost'
 port = 9999
 db_name = 'community'
 
 connection = Connection(host, port)
 db = connection[db_name]
-music_coll = db['music_collection']
 
-def add_music(name, song):
-    music_coll.insert({name: song})
+########################################################
+# Music Collection
+########################################################
 
-def find_all_music():
-    return music_coll.find_one()
+# music collection specific variables
+music_coll_2 = db['music_collection_2']
 
-add_music('Vivaldi', 'Winter Allegro')
+def insert_info(information):
+    """Insert the extracted information about the midi
+    file into the music collection.
 
-print find_all_music()
+    Information is a dictionary containing the artist, song, 
+    and traits"""
+    music_coll_2.insert(information)
+
+def print_info():
+    for i in music_coll_2.find():
+        print i

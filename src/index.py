@@ -10,10 +10,11 @@ import json
 
 import web
 
-import models.midi_info as mim
+#import models.midi_info as mim
 import helper.consts as consts
 import helper.utility as utility
 import ga
+import model
 
 urls = (
     '/', 'Index',
@@ -22,9 +23,9 @@ urls = (
     '/markov/(.+)/(.+)/(.+)/(.+)', 'Markov',
     '/ga/spawn/(.+)/(.+)', 'SpawnPopulation',
     '/ga/fitness', 'Fitness',
-    '/interactive', 'Interactive',)
+    '/interactive', 'Interactive',
+    '/mongo', 'MongoTesting',)
 
-app = web.application(urls, globals())
 render = web.template.render('templates/', base='layout')
 title = "Melody Composer"
 
@@ -34,6 +35,13 @@ title = "Melody Composer"
 class Index():
     def GET(self):
         return "Hello"
+
+########################################################
+# Mongo Testing
+########################################################
+class MongoTesting():
+    def GET(self):
+        return model.print_info()
 
 ########################################################
 # Interactive Testing
@@ -75,12 +83,10 @@ class SaveMidi():
         stream = utility.extract_corpus(fp)
 
         # extract notes
-        trait_list = utility.extract_traits(stream, [music21.note.Note])
+        trait_dict = utility.extract_traits(stream, [music21.note.Note])
 
-        # write to file
-        extension = 'json'
-        filepath = utility.to_path(consts.pitch_dir, artist, song, extension)
-        utility.write_file(filepath, extension, trait_list)
+        for items in trait_dict:
+            model.insert_info(items)
 
         web.ctx.status = '200 OK'
         return 'explicit 200'
@@ -111,6 +117,6 @@ class Markov():
 # Run Web Server
 ########################################################
 if __name__ == "__main__":
-
-   app.internalerror = web.debugerror
-   app.run()
+    app = web.application(urls, globals())
+    app.internalerror = web.debugerror
+    app.run()

@@ -5,6 +5,7 @@ Different utility functions
 import json
 import music21
 import itertools
+#import src.model
 
 ########################################################
 # MIDI Stuff
@@ -19,16 +20,15 @@ def extract_traits(corpus, traits=[]):
     # very poor implementation -- fix later just get it
     # working for the time being!
     if traits:
-        trait_list = []
+        idx = 0 # hack for testing
         for stream in corpus:
             for element in stream.elements:
                 if type(element) in traits:
-                #if type(element) == music21.note.Note:
-                    trait_list.append({"note": str(element.nameWithOctave)})
-        #return ''.join(trait_list)
-        return trait_list
-    else:
-        return None
+                    yield({
+                        str(idx): {
+                            "note": str(element.nameWithOctave),
+                            "duration": str(element.duration.type)}})
+                    idx += 1
 
 ########################################################
 # Random Stuff
