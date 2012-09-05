@@ -46,8 +46,9 @@ def dict_to_string(trait):
     return ' '.join(v for k,v in trait.items())
 
 def random_sampling(min, max, nt):
-    """Return a random starting point"""
-    
+    """Return a starting index and a stopping index for a random
+    consecutive sampling from a population"""
+
     start_idx = random.randrange(min, max)
     stop_idx = start_idx + nt
 
