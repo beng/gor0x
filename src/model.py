@@ -25,7 +25,7 @@ db = connection[db_name]
 ########################################################
 
 # music collection specific variables
-music_coll_2 = db['music_collection_2']
+music_coll = db['music_collection']
 
 def insert_info(information):
     """Insert the extracted information about the midi
@@ -33,8 +33,8 @@ def insert_info(information):
 
     Information is a dictionary containing the artist, song, 
     and traits"""
-    music_coll_2.insert(information)
+    music_coll.save(information)
 
 def print_info():
-    for i in music_coll_2.find():
+    for i in music_coll.find({'artist': 'Vivaldi'}):
         print i

@@ -82,11 +82,14 @@ class SaveMidi():
         fp = utility.to_path(consts.midi_dir, artist, song, 'mid')
         stream = utility.extract_corpus(fp)
 
-        # extract notes
+        # extract notes, returns generator
         trait_dict = utility.extract_traits(stream, [music21.note.Note])
 
         for items in trait_dict:
+            items.update({'artist': artist, 'song': song})
             model.insert_info(items)
+
+        model.print_info()
 
         web.ctx.status = '200 OK'
         return 'explicit 200'
