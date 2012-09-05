@@ -44,11 +44,14 @@ class MongoTesting():
         trait = 'note'
         notes = []
         
-        for item in model.music_find_trait('Vivaldi', 'note'):
+        for item in model.music_find_trait('Vivaldi', 'winter_allegro',trait):
             notes.append(item[trait])
         
         notes = ' '.join(notes)
-        pool = ga.genome(notes, 10, 10)
+
+        population = Markov().GET(5000, 5, 'Vivaldi', 'winter_allegro')
+
+        print population
 
 ########################################################
 # Interactive Testing
@@ -70,8 +73,30 @@ class SpawnPopulation():
     requested artist, song, size, and nodes"""
 
     def GET(self, artist, song, num_indi, num_traits):
-        # @TODO spawn a population!
-        data = dict(size=10, nodes=4, artist=artist, song=song)
+        """Experiment with using the same Markov chain pool on the entire
+    initial population VS regenerating a markov chain for each individual
+
+    Also experiment with the nodes and size values with above"""
+
+        # use same pool for entire population
+
+        # web-request not working and too lazy to figure it out
+        # right now
+        population = Markov().GET(size, nodes, artist, song)
+
+        for ni in range(num_indi):
+            pop = [random.choice]
+            current_gen = 0
+            for nt in range(num_traits):
+                trait = {
+                    'generation': current_gen,
+                    'indi_id': ni,
+                    'trait_id': nt,
+                    'artist': artist,
+                    'song': song,
+                    'note': note}
+                model.pop_save_population(trait)
+            current_gen += 1
 
 ########################################################
 # Save MIDI to Server
@@ -112,8 +137,33 @@ class Markov():
 
         #model.music_find()
         # generate a single individual (genome)
-        pool = ga.genome(mc_pop, size=int(size), nodes=int(nodes))
+        # mc_pop = ' '.join(utility.dict_to_string(trait) for trait in data)
+        '''
+        artist = artist.capitalize()
+        extension = 'json'
+        filepath = utility.to_path(consts.pitch_dir, artist, song, extension)
 
+        # create string containing only the value of the traits
+        data = utility.load_file(filepath, extension)
+        mc_pop = ' '.join(utility.dict_to_string(trait) for trait in data)
+        '''
+
+        notes = []
+        trait = 'note'
+        for item in model.music_find_trait(artist, song, trait):
+            notes.append(item[trait])
+        notes = ' '.join(notes)
+
+        pool = ga.genome(notes, size=int(size), nodes=int(nodes))
+
+        # convert to list
+        pool = pool[0].split()
+
+        # remove first and last element because they might be
+        # corrupt
+        pool.pop(0)   # first
+        pool.pop()    # last
+        
         return pool
 
 ########################################################

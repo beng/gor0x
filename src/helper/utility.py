@@ -5,7 +5,7 @@ Different utility functions
 import json
 import music21
 import itertools
-#import src.model
+import random
 
 ########################################################
 # MIDI Stuff
@@ -44,7 +44,17 @@ def dict_to_string(trait):
     sending to Markov chain"""
     
     return ' '.join(v for k,v in trait.items())
-    
+
+def random_sampling(min, max, nt):
+    """Return a random starting point"""
+
+    rnd = random.randrange(min, max)
+    idx = rnd + nt
+
+    if idx > max:
+        return random_sampling(min, max, nt)
+    return idx
+
 ########################################################
 # IO Stuff
 ########################################################
