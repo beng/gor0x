@@ -82,11 +82,15 @@ class SpawnPopulation():
 
         # web-request not working and too lazy to figure it out
         # right now
-        population = Markov().GET(size, nodes, artist, song)
+        population = Markov().GET(5000, 5, artist, song)
+        min = 0
+        max = len(population)
+        num_indi = int(num_indi)
+        num_traits = int(num_traits)
 
         for ni in range(num_indi):
-            pop = [random.choice]
             current_gen = 0
+            start, stop = utility.random_sampling(min, max, num_traits)
             for nt in range(num_traits):
                 trait = {
                     'generation': current_gen,
@@ -94,8 +98,9 @@ class SpawnPopulation():
                     'trait_id': nt,
                     'artist': artist,
                     'song': song,
-                    'note': note}
-                model.pop_save_population(trait)
+                    'note': population[start:stop]}
+            print population[start:stop]
+                #model.pop_save_population(trait)
             current_gen += 1
 
 ########################################################
