@@ -78,20 +78,16 @@ class SpawnPopulation():
 
     Also experiment with the nodes and size values with above"""
 
-        # use same pool for entire population
-
-        # web-request not working and too lazy to figure it out
-        # right now
-        population = Markov().GET(5000, 5, artist, song)
-        min = 0
-        max = len(population)
         num_indi = int(num_indi)
         num_traits = int(num_traits)
+        population = Markov().GET(5000, 10, artist, song)
+        min = 0
+        max = len(population)
 
         for ni in range(num_indi):
-            current_gen = 0
-            start, stop = utility.random_sampling(min, max, num_traits)
+            current_gen = 0            
             for nt in range(num_traits):
+                start, stop = utility.random_sampling(min, max, num_traits)
                 trait = {
                     'generation': current_gen,
                     'indi_id': ni,
@@ -99,8 +95,9 @@ class SpawnPopulation():
                     'artist': artist,
                     'song': song,
                     'note': population[start:stop]}
-            print population[start:stop]
                 #model.pop_save_population(trait)
+                print trait
+                #
             current_gen += 1
 
 ########################################################
