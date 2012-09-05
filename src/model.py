@@ -27,7 +27,7 @@ db = connection[db_name]
 # music collection specific variables
 music_coll = db['music_collection']
 
-def insert_info(information):
+def music_save_traits(information):
     """Insert the extracted information about the midi
     file into the music collection.
 
@@ -38,3 +38,6 @@ def insert_info(information):
 def print_info():
     for i in music_coll.find({'artist': 'Vivaldi'}):
         print i
+
+def music_find_trait(artist, trait):
+    return music_coll.find({'artist': artist, trait: {"$type": 2}})

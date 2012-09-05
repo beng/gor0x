@@ -41,7 +41,14 @@ class Index():
 ########################################################
 class MongoTesting():
     def GET(self):
-        return model.print_info()
+        trait = 'note'
+        notes = []
+        
+        for item in model.music_find_trait('Vivaldi', 'note'):
+            notes.append(item[trait])
+        
+        notes = ' '.join(notes)
+        print notes
 
 ########################################################
 # Interactive Testing
@@ -89,7 +96,7 @@ class SaveMidi():
         # add notes to music collection in mongodb
         for items in trait_dict:
             items.update({'artist': artist, 'song': song})
-            model.insert_info(items)
+            model.music_save_traits(items)
 
         web.ctx.status = '200 OK'
         return 'explicit 200'

@@ -17,6 +17,7 @@ def extract_corpus(song):
 def extract_traits(corpus, traits=[]):
     """Check if the listed traits are in the corpus.
     if they are then add them to the list and return it""" 
+
     # very poor implementation -- fix later just get it
     # working for the time being!
     if traits:
@@ -43,7 +44,7 @@ def dict_to_string(trait):
     sending to Markov chain"""
     
     return ' '.join(v for k,v in trait.items())
-
+    
 ########################################################
 # IO Stuff
 ########################################################
