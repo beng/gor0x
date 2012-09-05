@@ -48,7 +48,7 @@ class MongoTesting():
             notes.append(item[trait])
         
         notes = ' '.join(notes)
-        print notes
+        pool = ga.genome(notes, 10, 10)
 
 ########################################################
 # Interactive Testing
