@@ -21,7 +21,7 @@ urls = (
     '/save_midi/(.+)/(.+)', 'SaveMidi',
     '/load_traits/(.+)/(.+)', 'LoadTraits',
     '/markov/(.+)/(.+)/(.+)/(.+)', 'Markov',
-    '/ga/spawn/(.+)/(.+)', 'SpawnPopulation',
+    '/ga/spawn/(.+)/(.+)/(.+)/(.+)', 'SpawnPopulation',
     '/ga/fitness', 'Fitness',
     '/interactive', 'Interactive',
     '/mongo', 'MongoTesting',)
@@ -59,10 +59,11 @@ class Interactive():
 # Return Population of X individuals and Y traits each
 ########################################################
 class SpawnPopulation():
-    def GET(self, num_indi, num_traits):
+    """Use Markov chain to spawn the initial population for the
+    requested artist, song, size, and nodes"""
+
+    def GET(self, artist, song, num_indi, num_traits):
         # @TODO spawn a population!
-        artist = 'vivaldi'
-        song = 'winter_allegro'
         data = dict(size=10, nodes=4, artist=artist, song=song)
 
 ########################################################
@@ -102,14 +103,7 @@ class Markov():
     def GET(self, size, nodes, artist, song):
         """Return a Markov chain for the specified artist and song"""
 
-        artist = artist.capitalize()
-        extension = 'json'
-        filepath = utility.to_path(consts.pitch_dir, artist, song, extension)
-
-        # create string containing only the value of the traits
-        data = utility.load_file(filepath, extension)
-        mc_pop = ' '.join(utility.dict_to_string(trait) for trait in data)
-
+        #model.music_find()
         # generate a single individual (genome)
         pool = ga.genome(mc_pop, size=int(size), nodes=int(nodes))
 

@@ -25,9 +25,9 @@ def extract_traits(corpus, traits=[]):
             for element in stream.elements:
                 if type(element) in traits:
                     yield({
-                        str(idx): {
-                            "note": str(element.nameWithOctave),
-                            "duration": str(element.duration.type)}})
+                        "id": str(idx),
+                        "note": str(element.nameWithOctave),
+                        "duration": str(element.duration.type)})
                     idx += 1
 
 ########################################################
