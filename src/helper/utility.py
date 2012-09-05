@@ -47,11 +47,11 @@ def dict_to_string(trait):
 
 def random_sampling(min, max, nt):
     """Return a random starting point"""
+    
+    idx = random.randrange(min, max)
+    total = idx + nt
 
-    rnd = random.randrange(min, max)
-    idx = rnd + nt
-
-    if idx > max:
+    if total > max:
         return random_sampling(min, max, nt)
     return idx
 
