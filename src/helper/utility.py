@@ -48,12 +48,12 @@ def dict_to_string(trait):
 def random_sampling(min, max, nt):
     """Return a random starting point"""
     
-    idx = random.randrange(min, max)
-    total = idx + nt
+    start_idx = random.randrange(min, max)
+    stop_idx = start_idx + nt
 
-    if total > max:
+    if stop_idx > max:
         return random_sampling(min, max, nt)
-    return idx
+    return start_idx, stop_idx
 
 ########################################################
 # IO Stuff
