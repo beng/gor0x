@@ -95,9 +95,7 @@ class SpawnPopulation():
                     'artist': artist,
                     'song': song,
                     'note': population[start:stop]}
-                #model.pop_save_population(trait)
-                print trait
-                #
+                model.pop_save_population(trait)
             current_gen += 1
 
 ########################################################

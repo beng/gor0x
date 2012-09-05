@@ -20,14 +20,20 @@ def pop_save_population(information):
     try:
         pop_coll.save(information)
     except TypeError:
-        raise 'Variable is not of type dictionary.'
+        print 'Variable is not of type dictionary.'
 
 def pop_find_individual(indi_id):
     try:
-        #return pop_coll.find()
-        pass
+        return pop_coll.find({'indi_id': indi_id})
     except TypeError:
         print 'Arguments of improper type'
+
+def pop_find_all():
+    try:
+        return [indi for indi in pop_coll.find()]
+    except TypeError:
+        print 'Arguments of improper type'
+    
 
 ########################################################
 # Music Collection
@@ -46,7 +52,7 @@ def music_save_traits(information):
     try:
         music_coll.save(information)
     except TypeError:
-        raise 'Variable is not of type dictionary.'
+        print 'Variable is not of type dictionary.'
 
 def print_info():
     for i in music_coll.find({'artist': 'Vivaldi'}):
