@@ -85,11 +85,10 @@ class SaveMidi():
         # extract notes, returns generator
         trait_dict = utility.extract_traits(stream, [music21.note.Note])
 
+        # add notes to music collection in mongodb
         for items in trait_dict:
             items.update({'artist': artist, 'song': song})
             model.insert_info(items)
-
-        model.print_info()
 
         web.ctx.status = '200 OK'
         return 'explicit 200'
