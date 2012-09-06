@@ -34,7 +34,8 @@ title = "REST Server"
 ########################################################
 class Index():
     def GET(self):
-        return "Hello"
+        return web.ctx.status
+        #return "<html><body>hello</body></html>"
 
 ########################################################
 # Mongo Testing
