@@ -8,11 +8,11 @@ This is a genetic algorithm that composes melodies and allows the user to play a
 
 ---
 GAServer:
-python index.py <port>
+python index.py [port]
 
 RestServer:
-python index.py <port>
+python index.py [port]
 
 MongoDB:
-mongod --journal --port <port> --dbpath /path/data/db/
+mongod --journal --port [port] --dbpath /path/data/db/
 
