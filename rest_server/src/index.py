@@ -134,29 +134,15 @@ class Markov():
 
     def GET(self, size, nodes, artist, song):
         """Return a Markov chain for the specified artist and song
-        
+
         Artist and song have to exactly match
         """
 
-        #model.music_find()
-        # generate a single individual (genome)
-        # mc_pop = ' '.join(utility.dict_to_string(trait) for trait in data)
-        '''
-        artist = artist.capitalize()
-        extension = 'json'
-        filepath = utility.to_path(consts.pitch_dir, artist, song, extension)
-
-        # create string containing only the value of the traits
-        data = utility.load_file(filepath, extension)
-        mc_pop = ' '.join(utility.dict_to_string(trait) for trait in data)
-        '''
-        print 'hello'
         notes = []
         trait = 'note'
         for item in model.music_find_trait(artist, song, trait):
             notes.append(item[trait])
         notes = ' '.join(notes)
-
 
         pool = ga.genome(notes, int(size), int(nodes))
 
