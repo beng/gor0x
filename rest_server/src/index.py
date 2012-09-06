@@ -17,57 +17,13 @@ import ga
 import model
 
 urls = (
-    '/', 'Index',
     '/save_midi/(.+)/(.+)', 'SaveMidi',
     '/load_traits/(.+)/(.+)', 'LoadTraits',
     '/markov/(.+)/(.+)/(.+)/(.+)', 'Markov',
-    '/spawn_pop/(.+)/(.+)/(.+)/(.+)', 'SpawnPopulation',
-    '/ga/fitness', 'Fitness',
-    '/interactive', 'Interactive',
-    '/mongo', 'MongoTesting',)
+    '/spawn_pop/(.+)/(.+)/(.+)/(.+)', 'SpawnPopulation',)
 
 render = web.template.render('templates/', base='layout')
 title = "REST Server"
-
-########################################################
-# Test
-########################################################
-class Index():
-    def GET(self):
-        return web.ctx.status
-        #return "<html><body>hello</body></html>"
-
-########################################################
-# Mongo Testing
-########################################################
-class MongoTesting():
-    def GET(self):
-        trait = 'note'
-        notes = []
-
-        for item in model.music_find_trait('Vivaldi', 'winter_allegro',trait):
-            notes.append(item[trait])
-
-        notes = ' '.join(notes)
-
-        population = Markov().GET(5000, 5, 'Vivaldi', 'winter_allegro')
-
-        print population
-
-########################################################
-# Interactive Testing
-########################################################
-class Interactive():
-    def GET(self):
-        artist = 'vivaldi'
-        song = 'winter_allegro'
-        data = Markov().GET(100, 5, artist, song)
-        data = data[0].split()
-        return render.interactive(title, data)
-
-# class QueryPopulation:
-#     def GET(self, individual_id, trait_id):
-#         model.
 
 ########################################################
 # Return Population of X individuals and Y traits each
