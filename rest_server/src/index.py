@@ -21,7 +21,7 @@ urls = (
     '/save_midi/(.+)/(.+)', 'SaveMidi',
     '/load_traits/(.+)/(.+)', 'LoadTraits',
     '/markov/(.+)/(.+)/(.+)/(.+)', 'Markov',
-    '/ga/spawn/(.+)/(.+)/(.+)/(.+)', 'SpawnPopulation',
+    '/spawn_pop/(.+)/(.+)/(.+)/(.+)', 'SpawnPopulation',
     '/ga/fitness', 'Fitness',
     '/interactive', 'Interactive',
     '/mongo', 'MongoTesting',)
@@ -65,6 +65,9 @@ class Interactive():
         data = data[0].split()
         return render.interactive(title, data)
 
+# class QueryPopulation:
+#     def GET(self, individual_id, trait_id):
+#         model.
 
 ########################################################
 # Return Population of X individuals and Y traits each
@@ -84,6 +87,7 @@ class SpawnPopulation():
         population = Markov().GET(5000, 10, artist, song)
         min = 0
         max = len(population)
+        new_population = []
 
         for ni in range(num_indi):
             current_gen = 0
@@ -96,8 +100,10 @@ class SpawnPopulation():
                     'artist': artist,
                     'song': song,
                     'note': population[start:stop]}
-                model.pop_save_population(trait)
+                new_population.append(trait)
             current_gen += 1
+
+        return json.dumps(new_population)
 
 ########################################################
 # Save MIDI to Server
