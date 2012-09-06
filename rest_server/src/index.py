@@ -27,7 +27,7 @@ urls = (
     '/mongo', 'MongoTesting',)
 
 render = web.template.render('templates/', base='layout')
-title = "Melody Composer"
+title = "REST Server"
 
 ########################################################
 # Test
@@ -43,10 +43,10 @@ class MongoTesting():
     def GET(self):
         trait = 'note'
         notes = []
-        
+
         for item in model.music_find_trait('Vivaldi', 'winter_allegro',trait):
             notes.append(item[trait])
-        
+
         notes = ' '.join(notes)
 
         population = Markov().GET(5000, 5, 'Vivaldi', 'winter_allegro')
@@ -85,7 +85,7 @@ class SpawnPopulation():
         max = len(population)
 
         for ni in range(num_indi):
-            current_gen = 0            
+            current_gen = 0
             for nt in range(num_traits):
                 start, stop = utility.random_sampling(min, max, num_traits)
                 trait = {
@@ -133,7 +133,10 @@ class Markov():
     """Return json of Markov chain"""
 
     def GET(self, size, nodes, artist, song):
-        """Return a Markov chain for the specified artist and song"""
+        """Return a Markov chain for the specified artist and song
+        
+        Artist and song have to exactly match
+        """
 
         #model.music_find()
         # generate a single individual (genome)
@@ -147,14 +150,15 @@ class Markov():
         data = utility.load_file(filepath, extension)
         mc_pop = ' '.join(utility.dict_to_string(trait) for trait in data)
         '''
-
+        print 'hello'
         notes = []
         trait = 'note'
         for item in model.music_find_trait(artist, song, trait):
             notes.append(item[trait])
         notes = ' '.join(notes)
 
-        pool = ga.genome(notes, size=int(size), nodes=int(nodes))
+
+        pool = ga.genome(notes, int(size), int(nodes))
 
         # convert to list
         pool = pool[0].split()
@@ -163,7 +167,7 @@ class Markov():
         # corrupt
         pool.pop(0)   # first
         pool.pop()    # last
-        
+
         return pool
 
 ########################################################
