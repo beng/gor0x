@@ -9,8 +9,6 @@ import music21
 import json
 
 import web
-
-#import models.midi_info as mim
 import helper.consts as consts
 import helper.utility as utility
 import ga
@@ -33,10 +31,11 @@ class SpawnPopulation():
     requested artist, song, size, and nodes"""
 
     def GET(self, artist, song, num_indi, num_traits):
-        """Experiment with using the same Markov chain pool on the entire
-    initial population VS regenerating a markov chain for each individual
+        """Experiment with using the same Markov chain pool 
+        on the entire initial population VS regenerating a 
+        markov chain for each individual
 
-    Also experiment with the nodes and size values with above"""
+        Also experiment with the nodes and size values with above"""
 
         num_indi = int(num_indi)
         num_traits = int(num_traits)
