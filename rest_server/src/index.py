@@ -55,6 +55,7 @@ class SpawnPopulation():
                     'song': song,
                     'note': population[start:stop]}
                 new_population.append(trait)
+                print trait
             current_gen += 1
 
         return json.dumps(new_population)
