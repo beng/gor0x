@@ -1,7 +1,6 @@
 """
-@author   Ben G
-
-this is a genetic algorithm that composes melodies.
+REST Server used to store and return various traits of
+MIDI files
 """
 
 import music21
@@ -30,7 +29,7 @@ class SpawnPopulation():
     """Use Markov chain to spawn the initial population for the
     requested artist, song, size, and nodes"""
 
-    def GET(self, artist, song, num_indi, num_traits):
+    def GET(self, artist, song, num_indi, num_traits, size, nodes):
         """Experiment with using the same Markov chain pool 
         on the entire initial population VS regenerating a 
         markov chain for each individual
@@ -39,7 +38,7 @@ class SpawnPopulation():
 
         num_indi = int(num_indi)
         num_traits = int(num_traits)
-        population = Markov().GET(5000, 10, artist, song)
+        population = Markov().GET(int(size), int(nodes), artist, song)
         min = 0
         max = len(population)
         new_population = []
