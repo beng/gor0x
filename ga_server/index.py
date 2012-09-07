@@ -1,10 +1,12 @@
 import web
 import json
 import ast
-
+import model
+import ga
 urls = (
         '/', 'Index',
-        '/ga/population/(.*)', 'Population',)
+        '/ga/population/(.*)', 'Population',
+        '/ga/fitness', 'Fitness')
 
 render = web.template.render('templates/', base='layout')
 app = web.application(urls, globals())
@@ -12,43 +14,45 @@ title = 'GA Server'
 
 class Index:
 	def GET(self):
-		# generate population
-		params = ['spawn_pop', 'Vivaldi', 'winter_allegro', '5', '10']
+		# clear population collection
+		model.pop_clear_conn()
+
+		# parameters for calling the server
+		route = 'spawn_pop'
+		artist = 'Vivaldi'
+		song = 'winter_allegro'
+		num_indi = '1'
+		num_traits = '4'
+		size = '5000'
+		nodes = '5'
+		params = [route, artist, song, num_indi, num_traits, size, nodes]
 		params = '/'.join(params)
 
 		br = web.Browser()
 		br.open(params)
-		#traits = ast.literal_eval(traits)
-		#traits = json.loads(traits)
-
 		traits = json.loads(br.get_text())
-		
+
+		# add content to population collection
 		for trait in traits:
-			model.population_save_individual(trait)
+			model.pop_save_individual(trait)
 
-		# pass to pyevolve
-		
-		# fitness
+		# call pyevolve class to initialize everything
+		return ga.init_ga(num_traits)
 
-		# select
+class Fitness:
+	def GET(self):
+		pass
 
-		# crossover
+# class Population:
+# 	"""Generate a population"""
 
-		# mutate
+# 	def GET(self):
+# 		params = ['markov', '5000', '5', 'Vivaldi', 'winter_allegro']
+# 		params = '/'.join(params)
 
-		# termination?
-		return render.index(title)
-
-class Population:
-	"""Generate a population"""
-
-	def GET(self, generation=0):
-		params = ['markov', '100', '5', 'Vivaldi', 'winter_allegro']
-		params = '/'.join(params)
-
-		br = web.Browser()
-		br.open(params)
-		traits = eval(br.get_text())	# string to list
+# 		br = web.Browser()
+# 		br.open(params)
+# 		traits = eval(br.get_text())	# string to list
 
 	
 if __name__ == "__main__":

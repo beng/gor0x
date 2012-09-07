@@ -17,7 +17,7 @@ urls = (
     '/save_midi/(.+)/(.+)', 'SaveMidi',
     '/load_traits/(.+)/(.+)', 'LoadTraits',
     '/markov/(.+)/(.+)/(.+)/(.+)', 'Markov',
-    '/spawn_pop/(.+)/(.+)/(.+)/(.+)', 'SpawnPopulation',)
+    '/spawn_pop/(.+)/(.+)/(.+)/(.+)/(.+)/(.+)', 'SpawnPopulation',)
 
 render = web.template.render('templates/', base='layout')
 title = "REST Server"

@@ -14,7 +14,10 @@ db = connection[db_name]
 ########################################################
 pop_coll = db['pop_coll']
 
-def pop_save_population(information):
+def pop_clear_conn():
+    pop_coll.remove()
+
+def pop_save_individual(information):
     """Information is a dictionary containing
     individual id, artist, song, note, duration, fitness"""
     try:
