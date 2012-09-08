@@ -52,22 +52,16 @@ class SpawnPopulation():
         max = len(population)
         new_population = []
 
-        for ni in range(num_indi):
-            current_gen = 0
-            for nt in range(num_traits):                
-                start, stop = utility.random_sampling(min, max, num_traits)
-                trait = {
-                    'generation': current_gen,
-                    'indi_id': ni,
-                    'trait_id': nt,
-                    'artist': artist,
-                    'song': song,
-                    # WHY THE FUCK AM I TAKING A SUBSET OF THE POPULATION AND 
-                    # SAYING IT IS A SINGLE NOTE I CANNOT REMEMBER!?!
-                    'note': population[start:stop]}
-                new_population.append(trait)
-                print trait
-            current_gen += 1
+        for ni in range(num_indi):            
+            start, stop = utility.random_sampling(min, max, num_traits)
+            trait = {
+                'generation': '0',
+                'indi_id': ni,
+                'artist': artist,
+                'song': song,
+                'note': population[start:stop]}
+            new_population.append(trait)
+            print trait
 
         return json.dumps(new_population)
 
