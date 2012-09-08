@@ -14,6 +14,7 @@ import ga
 import model
 
 urls = (
+    '/', 'Index',
     '/save_midi/(.+)/(.+)', 'SaveMidi',
     '/load_traits/(.+)/(.+)', 'LoadTraits',
     '/markov/(.+)/(.+)/(.+)/(.+)', 'Markov',
@@ -21,6 +22,14 @@ urls = (
 
 render = web.template.render('templates/', base='layout')
 title = "REST Server"
+
+########################################################
+# Empty 
+########################################################
+class Index:
+    def GET(self):
+        songs = []  # use mongodb to grab song names
+        return render.index(title, songs)
 
 ########################################################
 # Return Population of X individuals and Y traits each
@@ -45,7 +54,7 @@ class SpawnPopulation():
 
         for ni in range(num_indi):
             current_gen = 0
-            for nt in range(num_traits):
+            for nt in range(num_traits):                
                 start, stop = utility.random_sampling(min, max, num_traits)
                 trait = {
                     'generation': current_gen,
@@ -53,6 +62,8 @@ class SpawnPopulation():
                     'trait_id': nt,
                     'artist': artist,
                     'song': song,
+                    # WHY THE FUCK AM I TAKING A SUBSET OF THE POPULATION AND 
+                    # SAYING IT IS A SINGLE NOTE I CANNOT REMEMBER!?!
                     'note': population[start:stop]}
                 new_population.append(trait)
                 print trait

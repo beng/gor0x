@@ -1,2 +1,21 @@
-$def with (title)
+$def with (title, songs) 
 $var title:$title
+
+<form method="POST" action="/" class="well">
+	<h2>GA Settings</h2>
+	<div class="form-inline">
+		<input type="text" class="input-large" placeholder="Population Size" style="height:30;" name="pop_size" />
+		<input type="text" class="input-large" placeholder="Number of Traits" style="height:30;" name="num_traits" />
+		<input type="text" class="input-large" placeholder="Number of Generations" style="height:30;" name="num_gen" />
+	</div>
+	<div class="form-inline">
+		<select class="input-large" name="influencers">
+			$for song in songs:
+				<option>$song</option>
+		</select>		
+	</div>
+	<div class="actions">
+		<button class="btn primary" type="submit">Submit!</button>
+	</div>
+</form>
+
