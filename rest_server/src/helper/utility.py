@@ -16,7 +16,10 @@ def extract_corpus(song):
 
 def extract_traits(corpus, traits=[]):
     """Check if the listed traits are in the corpus.
-    if they are then add them to the list and return it""" 
+    if they are then add them to the list and return it
+
+    This obviously isn't nearly complete as I ignore 
+    the traits you want and just return note and duration""" 
 
     # very poor implementation -- fix later just get it
     # working for the time being!
