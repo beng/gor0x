@@ -20,13 +20,9 @@ def music_save_traits(information):
     """Insert the extracted information about the midi
     file into the music collection.
 
-    Information is a dictionary containing the artist, song, 
+    Information is a dictionary containing the artist, song,
     and traits"""
-    
-    try:
-        music_coll.save(information)
-    except TypeError:
-        print 'Variable is not of type dictionary.'
+    music_coll.save(information)
 
 def print_info():
     for i in music_coll.find({'artist': 'Vivaldi'}):
