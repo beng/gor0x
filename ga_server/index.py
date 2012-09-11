@@ -41,7 +41,7 @@ class Index:
 
 class Fitness:
     def GET(self):
-        pass
+        return render.fitness(title)
     
 if __name__ == "__main__":
    app.internalerror = web.debugerror

@@ -1,9 +1,10 @@
-$def with(title, traits) 
+$def with(title) 
 $var title:$title
-
-<ul id="sortable-trait">
-	$for trait in traits:	
-		<p class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>$trait['trait']</p>		
-		<button onclick="playNote(Note.fromLatin('$trait.trait'))">Play</button>
-</ul>
-
+<div class="row">
+    <div class="span10 offset2">
+        <ul id="sortable-trait">
+           $for trait in range(40):
+              <div class="span1 ui-state-default">$trait</div>
+        </ul>
+    </div>
+</div>
