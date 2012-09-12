@@ -3,6 +3,7 @@ import json
 import ast
 import model
 import ga
+
 urls = (
         '/', 'Index',
         '/population/(.*)', 'Population',
@@ -14,36 +15,32 @@ title = 'GA Server'
 
 class Index:
     def GET(self):
-        br = web.Browser()
-        br.open('http://localhost:8000/q/artist') # make dynamic later
-        songs = json.loads(br.get_text())        
-        return render.index(title, songs)
-
-    def POST(self):
         # clear population collection
         model.pop_clear_conn()
 
-        # parameters for calling the server
-        route = 'spawn_pop'
-        artist = 'Vivaldi'
-        song = 'winter_allegro'
-        num_indi = '4'
-        num_traits = '2'
-        size = '5000'
-        nodes = '5'
-        params = [route, artist, song, num_indi, num_traits, size, nodes]
-        params = '/'.join(params)
-
+        # call REST server for a list of available artists
         br = web.Browser()
-        br.open(params)
-        traits = json.loads(br.get_text())
+        br.open('http://localhost:8000/q/artist') # make dynamic later
+        songs = json.loads(br.get_text())
+        return render.index(title, songs)
 
-        # add content to population collection
-        for trait in traits:
-            model.pop_save_individual(trait)
+    def POST(self):
+        """
+        TODO add validation to make sure only integers are allowed
+        TODO bounds checking on mc_size and mc_nodes!
+        """
+        pd = web.input()
+        population_info = {
+            'artist': pd.influencer,
+            'song': song,   # MAKE DYNAMIC LATER!
+            'num_indi': pd.pop_size,
+            'num_traits': pd.num_traits,
+            'num_gen': pd.num_gen,
+            'size': pd.mc_size,
+            'nodes': pd.mc_nodes,
+        }
 
-        # call pyevolve class to initialize everything
-        return ga.init_ga(num_indi)
+        return ga.init_ga(population_info)
 
 class Fitness:
     def GET(self):

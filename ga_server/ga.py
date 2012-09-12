@@ -37,54 +37,100 @@ def evolve_callback(ga_engine):
 def eval_func(chromosome):
     return random.randint(0,100)
 
+########################################################
+# NEW INITIALIZATION FUNCTION
+########################################################
 def init(genome, **args):
+    """Creates the population for pyevolve"""
     a = []
     for i in model.pop_find_all():
         a.append(i['note'])
     genome.genomeList = a
     random.shuffle(genome.genomeList)
-    #pop = [t['note'] for t in model.pop_find_all()]
-    #lst = [i for i in xrange(genome.getListSize())]
-    #random.shuffle(pop)
-    #genome.setInternalList(pop)
 
-def init_ga(num_indi):
-    """Shit is acting funky right now. I'm doing something stupid.
-    The problem might be with using the GAllele structure. I'll
-    experiment with this later once I get the real fitness function
-    in place."""
+def init_ga(population_info):
+    """Call the REST server to spawn an initial
+    population based on the parameters in population_info
 
-    #setOfAlleles = GAllele.GAlleles()
-    num_indi = int(num_indi)
+    population_info is a dictionary containing """
 
-    # list of traits per indi
-    #tl = [[t['note']] for t in model.pop_find_all()]
+    # pop the items we don't need from population_info
+    req_info = population_info
+    req_info.pop('num_gen')
+
+    # parameters for calling the server
+    root = 'http://localhost:8000/spawn_pop/'
+    params = root +'/'.join(v for v in req_info.values())
+    br = web.Browser()
+    br.open(params)
+    traits = json.loads(br.get_text())
+
+    # add content to population collection
+    for trait in traits:
+        model.pop_save_individual(trait)
+
+    # do shit for pyevolve
     genome = G1DList.G1DList(num_indi)
 
-    # for i in model.pop_find_all():
-    #     a = GAllele.GAlleleList([i['note']])
-    #     setOfAlleles.add(a)
-
-    #genome = G1DList.G1DList(num_indi)
-    #genome.setParams(allele=setOfAlleles)
     genome.initializator.set(init)
     genome.evaluator.set(eval_func)
-    #genome.mutator.set(Mutators.G1DListMutatorAllele)
-    #genome.initializator.set(Initializators.G1DListInitializatorAllele)
-    
 
     # Genetic Algorithm Instance
     ga = GSimpleGA.GSimpleGA(genome)
     ga.selector.set(Selectors.GRouletteWheel)
-    ga.setGenerations(20)
-    ga.setPopulationSize(num_indi)
+    ga.setGenerations(population_info['num_gen'])
+    ga.setPopulationSize(population_info['num_indi'])
 
     # stepback callback
     ga.stepCallback.set(evolve_callback)
 
     # Do the evolution, with stats dump
     # frequency of 10 generations
-    ga.evolve(freq_stats=1)
+    ga.evolve(freq_stats=10)
 
     # Best individual
     print ga.bestIndividual()
+
+########################################################
+# ORIGINAL INITIALIZATION FUNCTION!!!
+########################################################
+# def init_ga(num_indi):
+#     """Shit is acting funky right now. I'm doing something stupid.
+#     The problem might be with using the GAllele structure. I'll
+#     experiment with this later once I get the real fitness function
+#     in place."""
+
+#     #setOfAlleles = GAllele.GAlleles()
+#     num_indi = int(num_indi)
+
+#     # list of traits per indi
+#     #tl = [[t['note']] for t in model.pop_find_all()]
+#     genome = G1DList.G1DList(num_indi)
+
+#     # for i in model.pop_find_all():
+#     #     a = GAllele.GAlleleList([i['note']])
+#     #     setOfAlleles.add(a)
+
+#     #genome = G1DList.G1DList(num_indi)
+#     #genome.setParams(allele=setOfAlleles)
+#     genome.initializator.set(init)
+#     genome.evaluator.set(eval_func)
+#     #genome.mutator.set(Mutators.G1DListMutatorAllele)
+#     #genome.initializator.set(Initializators.G1DListInitializatorAllele)
+    
+
+#     # Genetic Algorithm Instance
+#     ga = GSimpleGA.GSimpleGA(genome)
+#     ga.selector.set(Selectors.GRouletteWheel)
+#     ga.setGenerations(20)
+#     ga.setPopulationSize(num_indi)
+
+#     # stepback callback
+#     ga.stepCallback.set(evolve_callback)
+
+#     # Do the evolution, with stats dump
+#     # frequency of 10 generations
+#     ga.evolve(freq_stats=1)
+
+#     # Best individual
+#     print ga.bestIndividual()

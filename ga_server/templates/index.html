@@ -7,9 +7,11 @@ $var title:$title
 		<input type="text" class="input-large" placeholder="Population Size" style="height:30;" name="pop_size" />
 		<input type="text" class="input-large" placeholder="Number of Traits" style="height:30;" name="num_traits" />
 		<input type="text" class="input-large" placeholder="Number of Generations" style="height:30;" name="num_gen" />
+		<input type="text" class="input-large" placeholder="Markov Chain: Size" style="height:30;" name="mc_size" />
+		<input type="text" class="input-large" placeholder="Markov Chain: Node History" style="height:30;" name="mc_nodes" />
 	</div>
 	<div class="form-inline">
-		<select class="input-large" name="influencers">
+		<select class="input-large" name="influencer">
 			$for song in songs:
 				<option>$song</option>
 		</select>		
