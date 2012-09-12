@@ -5,8 +5,8 @@ import model
 import ga
 urls = (
         '/', 'Index',
-        '/ga/population/(.*)', 'Population',
-        '/ga/fitness', 'Fitness')
+        '/population/(.*)', 'Population',
+        '/fitness', 'Fitness')
 
 render = web.template.render('templates/', base='layout')
 app = web.application(urls, globals())
@@ -14,6 +14,12 @@ title = 'GA Server'
 
 class Index:
     def GET(self):
+        br = web.Browser()
+        br.open('http://localhost:8000/q/artist') # make dynamic later
+        songs = json.loads(br.get_text())        
+        return render.index(title, songs)
+
+    def POST(self):
         # clear population collection
         model.pop_clear_conn()
 

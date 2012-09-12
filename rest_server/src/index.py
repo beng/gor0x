@@ -14,25 +14,26 @@ import ga
 import model
 
 urls = (
-    '/', 'Index',
     '/save_midi/(.+)/(.+)', 'SaveMidi',
     '/load_traits/(.+)/(.+)', 'LoadTraits',
     '/markov/(.+)/(.+)/(.+)/(.+)', 'Markov',
-    '/spawn_pop/(.+)/(.+)/(.+)/(.+)/(.+)/(.+)', 'SpawnPopulation',)
+    '/spawn_pop/(.+)/(.+)/(.+)/(.+)/(.+)/(.+)', 'SpawnPopulation',
+    '/q/artist', 'QueryArtist',)
 
 render = web.template.render('templates/', base='layout')
 title = "REST Server"
 
 ########################################################
-# Empty 
+# QueryArtist
 ########################################################
-class Index:
+class QueryArtist:
     def GET(self):
-        songs = []  # use mongodb to grab song names
-        return render.index(title, songs)
+        """Return JSON of artists"""
+        artist = model.music_find_artist()
+        return json.dumps(artist)
 
 ########################################################
-# Return Population of X individuals and Y traits each
+# SpawnPopulation
 ########################################################
 class SpawnPopulation():
     """Use Markov chain to spawn the initial population for the
@@ -43,7 +44,9 @@ class SpawnPopulation():
         on the entire initial population VS regenerating a 
         markov chain for each individual
 
-        Also experiment with the nodes and size values with above"""
+        Also experiment with the nodes and size values with above
+
+        @TODO ignore lowercase/uppercase for song and artist"""
 
         num_indi = int(num_indi)
         num_traits = int(num_traits)
@@ -66,7 +69,7 @@ class SpawnPopulation():
         return json.dumps(new_population)
 
 ########################################################
-# Save MIDI to Server
+# SaveMidi
 ########################################################
 class SaveMidi():
     def GET(self, artist, song):
@@ -94,7 +97,7 @@ class SaveMidi():
         return 'explicit 200'
 
 ########################################################
-# Generate Markov Chain
+# MarkovChain
 ########################################################
 class Markov():
     """Return json of Markov chain"""

@@ -30,3 +30,6 @@ def print_info():
 
 def music_find_trait(artist, song, trait):
     return music_coll.find({'artist': artist, 'song': song, trait: {"$type": 2}})
+
+def music_find_artist():
+    return music_coll.distinct('artist')
