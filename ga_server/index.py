@@ -30,6 +30,7 @@ class Index:
         TODO bounds checking on mc_size and mc_nodes!
         """
         pd = web.input()
+        song = 'winter_allegro'
         population_info = {
             'artist': pd.influencer,
             'song': song,   # MAKE DYNAMIC LATER!
