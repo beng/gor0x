@@ -2,6 +2,7 @@ import model
 import random
 import web
 import json
+import index
 
 from pyevolve import G1DList
 from pyevolve import GSimpleGA
@@ -34,10 +35,16 @@ from pyevolve import GAllele
 def evolve_callback(ga_engine):
     generation = ga_engine.getCurrentGeneration()
     pop = ga_engine.getPopulation()
-    print pop
-
+    
 def eval_func(chromosome):
-    return random.randint(0,100)
+    # call fitness view
+    for c in chromosome:
+        print 'CHROMOSOME ',c
+    print 'in fitness...'
+    #return random.randint(0,100)
+    print 'about to call fitness...'
+    score = 10
+    return score
 
 ########################################################
 # NEW INITIALIZATION FUNCTION
@@ -60,7 +67,6 @@ def init_ga(population_info):
     root = 'http://localhost:8000/spawn_pop/'
     params = [population_info['artist'], population_info['song'], population_info['num_indi'], population_info['num_traits'], population_info['size'], population_info['nodes']]
     params = root +'/'.join(params)
-    print params
     br = web.Browser()
     br.open(params)
     traits = json.loads(br.get_text())
@@ -89,7 +95,7 @@ def init_ga(population_info):
     ga.evolve(freq_stats=10)
 
     # Best individual
-    print ga.bestIndividual()
+    #print ga.bestIndividual()
 
 ########################################################
 # ORIGINAL INITIALIZATION FUNCTION!!!

@@ -8,9 +8,11 @@ $(function() {
 });
 
 function playNote(note) {
-		console.log('note :: ' + note);
-		this.audioletApp = new AudioletAppNote(note);
-	}
+	console.log(Note.fromLatin(note));
+	console.log(note);
+	console.log('note :: ' + note);
+	this.audioletApp = new AudioletAppNote(Note.fromLatin(note));
+}
 	
 function playChord(note) {
 	var intervals = new Array();

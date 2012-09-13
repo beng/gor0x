@@ -4,10 +4,13 @@ import ast
 import model
 import ga
 
+from pyevolve import G1DList
+from pyevolve import GSimpleGA
+
 urls = (
         '/', 'Index',
         '/population/(.*)', 'Population',
-        '/fitness', 'Fitness')
+        '/fitness', 'Fitness',)
 
 render = web.template.render('templates/', base='layout')
 app = web.application(urls, globals())
@@ -44,9 +47,15 @@ class Index:
         return ga.init_ga(population_info)
 
 class Fitness:
+    def get_score(self, score):
+        return score
+
     def GET(self):
         return render.fitness(title)
     
+    def POST(self):
+        score = 10
+
 if __name__ == "__main__":
    app.internalerror = web.debugerror
    app.run() 
