@@ -1,18 +1,18 @@
-$def with(title) 
+$def with(title, traits) 
 $var title:$title
 
 <!-- <form method="POST" action="/fitness" class="well"> -->
     <div class="row">
         <div class="span10 offset2">
             <ul id="sortable-trait">
-               $for trait in range(10,50):
-                    <div class="span1 ui-state-default">
-                        <button onClick="playNote('$trait')">$trait</br></br></button>
+               $for trait in traits:
+                    <div id="$trait" class="span1 ui-state-default">
+                        $trait
                     </div>
             </ul>
         </div>
         <div class="actions">
-            <button class="btn primary" type="submit">Submit!</button>
+            <button id="play" class="btn primary" type="submit">Submit!</button>
         </div>
     </div>
 <!-- </form> -->

@@ -47,11 +47,9 @@ class Index:
         return ga.init_ga(population_info)
 
 class Fitness:
-    def get_score(self, score):
-        return score
-
     def GET(self):
-        return render.fitness(title)
+        traits = ['A4', 'B4', 'C4', 'D4', 'E4', 'F4', 'G4']
+        return render.fitness(title, traits)
     
     def POST(self):
         score = 10
