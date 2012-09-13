@@ -24,6 +24,7 @@ extend(Synth, AudioletGroup);
 
 		
 var SchedulerPlayAudio = function(audio) {
+    console.log("in scheduling...");
 	this.audiolet = new Audiolet();
 
 	var freqArray = new Array();
@@ -34,6 +35,7 @@ var SchedulerPlayAudio = function(audio) {
 		freqArray.push(audio[i].name.frequency());
 		durationArray.push(audio[i].duration);
 	}
+    console.log('frequency array...' + freqArray);
 	
 	var melody = new PSequence(freqArray);
 	var frequencyPattern = new PChoose([melody]);
