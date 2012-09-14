@@ -14,7 +14,7 @@ db = connection[db_name]
 ########################################################
 pop_coll = db['pop_coll']
 
-def pop_clear_conn)(:
+def pop_clear_conn():
     pop_coll.remove()
 
 def pop_save_individual(information):

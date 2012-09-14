@@ -40,6 +40,9 @@ def eval_func(chromosome):
     # call fitness view
     for c in chromosome:
         print 'CHROMOSOME ',c
+    
+    # poll mongo db for fitness 
+     
     print 'in fitness...'
     #return random.randint(0,100)
     print 'about to call fitness...'
