@@ -7,6 +7,8 @@ import music21
 
 import json
 
+import inspect
+
 import web
 import helper.consts as consts
 import helper.utility as utility
@@ -39,7 +41,8 @@ class SpawnPopulation():
     """Use Markov chain to spawn the initial population for the
     requested artist, song, size, and nodes"""
 
-    def GET(self, artist, song, num_indi, num_traits, size, nodes):
+    #def GET(self, artist, song, num_indi, num_traits, size, nodes):
+    def GET(self, *args):
         """Experiment with using the same Markov chain pool 
         on the entire initial population VS regenerating a 
         markov chain for each individual
@@ -48,9 +51,23 @@ class SpawnPopulation():
 
         @TODO ignore lowercase/uppercase for song and artist"""
 
-        num_indi = int(num_indi)
-        num_traits = int(num_traits)
-        population = Markov().GET(int(size), int(nodes), artist, song)
+        # error checking
+        if len(args) != 6:
+            raise web.notfound()
+
+        # will try to pop an empty list otherwise
+        if int(args[5]) > int(args[4]):
+            raise web.notfound()
+
+        # shitty results otherwise
+        if int(args[4]) < 50:
+            raise web.notfound()
+
+        artist = args[0]
+        song = args[1]
+        num_indi = int(args[2])
+        num_traits = int(args[3])
+        population = Markov().GET(int(args[4]), int(args[5]), artist, song)
         min = 0
         max = len(population)
         new_population = []
@@ -67,6 +84,27 @@ class SpawnPopulation():
             print trait
 
         return json.dumps(new_population)
+
+
+        # num_indi = int(num_indi)
+        # num_traits = int(num_traits)
+        # population = Markov().GET(int(size), int(nodes), artist, song)
+        # min = 0
+        # max = len(population)
+        # new_population = []
+
+        # for ni in range(num_indi):            
+        #     start, stop = utility.random_sampling(min, max, num_traits)
+        #     trait = {
+        #         'generation': '0',
+        #         'indi_id': ni,
+        #         'artist': artist,
+        #         'song': song,
+        #         'note': population[start:stop]}
+        #     new_population.append(trait)
+        #     print trait
+
+        # return json.dumps(new_population)
 
 ########################################################
 # SaveMidi
@@ -126,10 +164,15 @@ class Markov():
 
         return pool
 
+def notfound():
+    msg = "Sorry, the page you were looking for was not found. There was probably a problem with your query!"
+    return web.notfound(render.notfound(title, msg))
+
 ########################################################
 # Run Web Server
 ########################################################
 if __name__ == "__main__":
     app = web.application(urls, globals())
     app.internalerror = web.debugerror
+    app.notfound = notfound
     app.run()

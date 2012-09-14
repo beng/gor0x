@@ -48,7 +48,8 @@ class Index:
 
 class Fitness:
     def GET(self):
-        traits = ['A4', 'B4', 'C4', 'D4', 'E4', 'F4', 'G4']
+        
+        traits = ['F3', 'B4', 'E3', 'E3', 'F3', 'C3', 'F4', 'F3', 'F3', 'G3', 'E3', 'A4', 'D3', 'C#3', 'F3', 'E3', 'E3', 'D3', 'E3']
         return render.fitness(title, traits)
     
     def POST(self):
