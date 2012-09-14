@@ -29,7 +29,7 @@ The REST server, like its name, is a simple RESTful server that allows a user to
 
 #####Return JSON containing a population of individuals
 ```
-  /q/spawn/{artist}/{song}/{num_indi}/{num_traits}/{mc_size}/{mc_nodes}
+  /q/spawn_pop/{artist}/{song}/{num_indi}/{num_traits}/{mc_size}/{mc_nodes}
 ```
 
 #####Save a MIDI file's information and metadata to the database
@@ -39,7 +39,7 @@ The REST server, like its name, is a simple RESTful server that allows a user to
 
 #####Return JSON containing a Markov chain
 ```
-  /q/spawn/{mc_size}/{mc_nodes}/{artist}/{song}
+  /q/markov/{artist}/{song}/{mc_size}/{mc_nodes}
 ```
 
 ---

@@ -16,11 +16,12 @@ import ga
 import model
 
 urls = (
-    '/save_midi/(.+)/(.+)', 'SaveMidi',
-    '/load_traits/(.+)/(.+)', 'LoadTraits',
-    '/markov/(.+)/(.+)/(.+)/(.+)', 'Markov',
-    '/spawn_pop/(.+)/(.+)/(.+)/(.+)/(.+)/(.+)', 'SpawnPopulation',
-    '/q/artist', 'QueryArtist',)
+    '/q/save_midi/(.+)/(.+)', 'SaveMidi',
+    '/q/load_traits/(.+)/(.+)', 'LoadTraits',
+    '/q/markov/(.+)/(.+)/(.+)/(.+)', 'Markov',
+    '/q/spawn_pop/(.+)/(.+)/(.+)/(.+)/(.+)/(.+)', 'SpawnPopulation',
+    '/q/artist', 'QueryArtist',
+    '/q/song', 'QuerySong',)
 
 render = web.template.render('templates/', base='layout')
 title = "REST Server"
@@ -33,6 +34,15 @@ class QueryArtist:
         """Return JSON of artists"""
         artist = model.music_find_artist()
         return json.dumps(artist)
+
+########################################################
+# QuerySong
+########################################################
+class QuerySong:
+    def GET(self):
+        """Return JSON of songs"""
+        song = model.music_find_song()
+        return json.dumps(song)
 
 ########################################################
 # SpawnPopulation
@@ -67,7 +77,7 @@ class SpawnPopulation():
         song = args[1]
         num_indi = int(args[2])
         num_traits = int(args[3])
-        population = Markov().GET(int(args[4]), int(args[5]), artist, song)
+        population = Markov().GET(artist, song, int(args[4]), int(args[5]))
         min = 0
         max = len(population)
         new_population = []
@@ -84,27 +94,6 @@ class SpawnPopulation():
             print trait
 
         return json.dumps(new_population)
-
-
-        # num_indi = int(num_indi)
-        # num_traits = int(num_traits)
-        # population = Markov().GET(int(size), int(nodes), artist, song)
-        # min = 0
-        # max = len(population)
-        # new_population = []
-
-        # for ni in range(num_indi):            
-        #     start, stop = utility.random_sampling(min, max, num_traits)
-        #     trait = {
-        #         'generation': '0',
-        #         'indi_id': ni,
-        #         'artist': artist,
-        #         'song': song,
-        #         'note': population[start:stop]}
-        #     new_population.append(trait)
-        #     print trait
-
-        # return json.dumps(new_population)
 
 ########################################################
 # SaveMidi
@@ -140,7 +129,7 @@ class SaveMidi():
 class Markov():
     """Return json of Markov chain"""
 
-    def GET(self, size, nodes, artist, song):
+    def GET(self, artist, song, size, nodes):
         """Return a Markov chain for the specified artist and song
 
         Artist and song have to exactly match

@@ -64,7 +64,7 @@ def init_ga(population_info):
     population_info is a dictionary containing """
 
     # parameters for calling the server
-    root = 'http://localhost:8000/spawn_pop/'
+    root = 'http://localhost:8000/q/spawn_pop/'
     params = [population_info['artist'], population_info['song'], population_info['num_indi'], population_info['num_traits'], population_info['size'], population_info['nodes']]
     params = root +'/'.join(params)
     br = web.Browser()
