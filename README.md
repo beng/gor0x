@@ -13,7 +13,7 @@ This is a genetic algorithm that composes melodies and allows the user to play a
 
 ---
 
-###RESTful API (Serverside)
+###RESTful API (Server-side)
 
 The REST server, like its name, is a simple RESTful server that allows a user to query the database for musical and meta information surrouding a specific artist, song, or collection. Additionally, it allows a user to upload, parse, and/or store new MIDI files.
 
