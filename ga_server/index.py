@@ -10,7 +10,9 @@ from pyevolve import GSimpleGA
 urls = (
         '/', 'Index',
         '/population/(.*)', 'Population',
-        '/fitness/(.+)', 'Fitness',)
+        '/fitness/(.+)', 'Fitness',
+        '/oracle/(.+)', 'Oracle',
+        '/save_fitness/(.+)', 'SaveFitness',)
 
 render = web.template.render('templates/', base='layout')
 app = web.application(urls, globals())
@@ -58,13 +60,30 @@ class Fitness:
     def GET(self, id):
         individual = model.pop_find_individual(int(id))
         return render.fitness(title, individual, id)
-    
-    def POST(self, id,):
-        """A new request will be received for each {note,duration}"""
+
+    def POST(self, id):
+        print 'in post fitness...'
+        raise web.seeother('/oracle/' + str(int(id) + 1))
+
+
+class SaveFitness:
+    def POST(self, id):
+        """A new request will be received for each {note,duration}
+        Oracle called from javascript once jquery finishes sending all of the 
+        traits."""
         pd = web.input()
 
         # save input to mongo
-        
+        print pd
+
+class Oracle:
+    def GET(self, id):
+        # use ID to get the current generation to determine what to 
+        # do next...
+        print 'IN ORACLE~!!!!!!!!!!!'
+        print 'fuck...'
+
+        raise web.seeother('/fitness/' + id)
 
 class GA:
     def spawn_population(self, population_info):
