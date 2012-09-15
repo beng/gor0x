@@ -22,8 +22,8 @@ def pop_save_individual(information):
     individual id, artist, song, note, duration, fitness"""
     pop_coll.save(information)
 
-def pop_find_individual(indi_id):
-    return pop_coll.find({'indi_id': indi_id})
+def pop_find_individual(id):
+    return pop_coll.find_one({'indi_id': id})
 
 def pop_find_all():
     return [indi for indi in pop_coll.find()]
