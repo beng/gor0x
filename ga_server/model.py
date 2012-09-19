@@ -10,6 +10,20 @@ connection = Connection(host, port)
 db = connection[db_name]
 
 ########################################################
+# Various Parameters Collection
+########################################################
+params = db['params']
+
+def params_clear_conn():
+    params.remove()
+
+def params_save(init):
+    params.save(init)
+
+def params_max_gen():
+    return params.find_one()
+
+########################################################
 # Population Collection
 ########################################################
 pop_coll = db['pop_coll']
@@ -37,7 +51,7 @@ def pop_update_indi(indi_id, note):
 
 def pop_max_indi(generation):
     """get max indi of current generation"""
-    return pop_coll.find({"generation": generation}).sort("generation",-1).limit(1)
+    return pop_coll.find({"generation": generation}, limit=1).sort("indi_id",-1)
 
 def pop_current_generation(indi_id):
     return pop_coll.find_one({"indi_id":indi_id})
@@ -47,3 +61,4 @@ def pop_find_trait(indi_id, t_id):
 
 def pop_update_trait(f, n):
     pop_coll.update(f,n)
+
