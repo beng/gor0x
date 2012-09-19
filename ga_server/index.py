@@ -16,7 +16,11 @@ app = web.application(urls, globals())
 title = 'GA Server'
 
 class GA:
+    """Miniature genetic algorithm library"""
+
     def create_indi(self,indi_id, trait_id, generation, fitness, note, duration):
+        """Spawn an individual. Returns a dictionary containing an individual
+        with the desired features"""
         indi = {
             "indi_id": indi_id,
             "trait_id": trait_id,
@@ -39,23 +43,22 @@ class GA:
         max_indi = model.pop_max_indi(current_generation)[0]['indi_id']    
 
         if indi_id == max_indi:
-            print 'last indi of pop!'
             # termination requirements met?
             if current_generation == max_gen:
-                print 'peace! shits over!'
                 raise web.seeother('/terminate')
             else:
                 # current generation over, start mating!
-                print 'go to select!'
                 self.select(current_generation)
         elif indi_id < max_indi:
-            print 'still more to go!'
             raise web.seeother('/fitness/'+str(indi_id+1))
         else:
             raise web.seeother('/terminate')
 
     def select(self, current_generation):
-        """Use current_generation to grab all individuals of previous generation"""
+        """Selection phase -- right now I've only implemented tournament
+        selection. Use current_generation to grab all individuals of 
+        previous generation"""
+
         num_rounds = 2
         k = 2
         winner = []
@@ -92,6 +95,7 @@ class GA:
 
 class Index:
     def GET(self):
+        """Render the parameter initialization view"""
         model.pop_clear_conn()
         model.params_clear_conn()
 
@@ -106,7 +110,16 @@ class Index:
                 #print chromosome
         raise web.seeother('/fitness/0')
 
+    def POST(self):
+        pass
+
 class Fitness:
+    """This is an interactive fitness function, i.e. the individual is scored
+    by the user. The user is shown a melody and is allowed to make X modifications 
+    to it (e.g. re-order up to X traits). The euclidean dsitance is taken for the original melody
+    and the user-modified melody. Ideally, we want a fitness score of 0 because that
+    means the user liked what the computer presented."""
+    
     def GET(self, indi_id):
         individual = model.pop_find_individual(int(indi_id))
         # converts from unicode to dictionary
@@ -132,6 +145,9 @@ class Fitness:
 
 class SaveFitness:
     def POST(self, indi_id):
+        """Updates the user-note in a single trait in an individual. This is information
+        is used to find out what notes the user didn't like from the computer
+        presented melody"""
         t_id = web.input()['trait_id']
         _note = web.input()['name']
         saved_traits = model.pop_find_trait(int(indi_id), int(t_id))
@@ -139,7 +155,11 @@ class SaveFitness:
 
 class Terminate:
     def GET(self):
+        """Render the terminate view and present the user with a list of save options"""
         return 'game over...'
+
+    def POST(self):
+        pass
 
 if __name__ == "__main__":
    app.internalerror = web.debugerror
