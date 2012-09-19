@@ -26,15 +26,15 @@ $(function() {
                 type: 'POST',
                 async: false,
                 url: '/save_fitness/' + indi_id,
-                data: {name: note, duration:1, trait_id: index}, // 1 is quarter I believe
+                data: {name: note, duration:1, id: index}, // 1 is quarter I believe
                 success: function(){
                     console.log("SUCCESSFUL!");
                     console.log(indi_id);
                 }
             });
-        }).promise().done(function() {
-            $.post("/fitness/" + indi_id);
-        });
+        })//.promise().done(function() {
+          //  $.post("/fitness/" + indi_id);
+        //});
     });
 });
 

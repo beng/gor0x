@@ -81,7 +81,7 @@ class SpawnPopulation():
         min = 0
         max = len(population)
         new_population = []
-
+        print population
         for ni in range(num_indi):            
             start, stop = utility.random_sampling(min, max, num_traits)
             trait = {
@@ -117,6 +117,7 @@ class SaveMidi():
 
         # add notes to music collection in mongodb
         for items in trait_dict:
+            print 'items : ', items
             items.update({'artist': artist, 'song': song})
             model.music_save_traits(items)
 
