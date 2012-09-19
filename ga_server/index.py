@@ -119,7 +119,14 @@ class Fitness:
         return render.fitness(title, indi_id, fake_individual)
     
     def POST(self, indi_id):
-        # take euclidean distance between
+        """
+        @TODO get all traits for the individual by gathering all the notes
+        and user-notes for the indiviudal and storing in two lists. compute
+        the euclidean distance between the two lists and set as fitness score
+        for the individual
+
+        @TODO oracle to decide what to do next
+        """
         #model.pop_update_indi_fitness(int(indi_id), score)
         GA().fate(int(indi_id))
 
