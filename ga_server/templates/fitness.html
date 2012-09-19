@@ -1,13 +1,13 @@
-$def with(title, individual, indi_id) 
+$def with(title, indi_id,individual) 
 $var title:$title
 
 <form method="POST" action="/fitness/$indi_id">
     <div class="row">
         <div class="span10 offset2">
             <ul id="sortable-trait">
-                $for note in individual['dna']:
-                    <div id="$note['note']" class="span1 ui-state-default">
-                        $note['note']
+                $for note in individual:
+                    <div id="$note" class="span1 ui-state-default">
+                        $note
                     </div>
             </ul>
         </div>

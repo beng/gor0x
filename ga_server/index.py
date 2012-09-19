@@ -5,10 +5,10 @@ import model
 import random
 import ga
 
-
 urls = (
         '/', 'Index',
         '/fitness/(.+)', 'Fitness',
+        '/save_fitness/(.+)', 'SaveFitness',
         '/terminate', 'Terminate',)
 
 render = web.template.render('templates/', base='layout')
@@ -23,6 +23,7 @@ class GA:
             "generation": generation,
             "fitness": fitness,
             "note": note,
+            "user_note": note,
             "duration": duration,
         }
         return indi
@@ -61,8 +62,7 @@ class GA:
 
         for i in range(num_rounds):
             winner.append(self.tournament(k,current_generation))
-
-        
+      
         child = self.crossover(random.choice(winner), random.choice(winner))
 
     def tournament(self, k, current_generation):
@@ -97,7 +97,7 @@ class Index:
 
         model.params_save({"max_gen":1})
         pop_size = 5
-        num_traits = 2
+        num_traits = 10
         notes = ['A','B','C','D','E','F','G']
         for ps in range(pop_size):
             for nt in range(num_traits):
@@ -108,26 +108,30 @@ class Index:
 
 class Fitness:
     def GET(self, indi_id):
-        score = random.randint(0,100)
-        model.pop_update_indi_fitness(int(indi_id), score)
+        individual = model.pop_find_individual(int(indi_id))
+        # converts from unicode to dictionary
+        fake_individual = []
+
+        for i in individual:
+            fake_individual.append(i['note'])
+
+        #print fake_individual
+        return render.fitness(title, indi_id, fake_individual)
+    
+    def POST(self, indi_id):
+        # take euclidean distance between
+        #model.pop_update_indi_fitness(int(indi_id), score)
         GA().fate(int(indi_id))
 
-        """
-        THIS SHIT WORKS DO NOT DELETE WHAT IS BELOW!
-        """
-        # user = [{'trait_id': 0, 'note': 'G'}, {'trait_id':1, 'note':'F'}]
-
-        # for u in user:
-        #     user_tid = u['trait_id']
-        #     saved_traits = model.pop_find_trait(int(indi_id), user_tid)
-        #     model.pop_update_trait(saved_traits, {"$set": {"note":u['note']}})
-
-        #raise web.seeother('/fitness/' + str(int(indi_id)+1))
-        
+class SaveFitness:
+    def POST(self, indi_id):
+        t_id = web.input()['trait_id']
+        _note = web.input()['name']
+        saved_traits = model.pop_find_trait(int(indi_id), int(t_id))
+        model.pop_update_trait(saved_traits, {"$set": {"user_note":_note}})
 
 class Terminate:
     def GET(self):
-        #model.print_info()
         return 'game over...'
 
 if __name__ == "__main__":
