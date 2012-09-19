@@ -28,48 +28,74 @@ class GA:
         return indi
 
     def fate(self,indi_id):
+        """Use the individual that was just evaluated to determine
+        where we are in the grand scheme of things. How many more individuals
+        of the current generation need to be evaluated? Are the termination
+        requirements met? Are we ready to move to the next generation? Etc..."""
+
         max_gen = model.params_max_gen()['max_gen']        
-        current_gen = model.pop_current_generation(indi_id)['generation']
-
-        # returns a cursor even though i set the limit
-        # figure out why...
-        max_indi = model.pop_max_indi(current_gen)[0]['indi_id']    
-
-        print 'MG ', max_gen
-        print 'CG ',current_gen
-        print 'current indi ', indi_id
-        print 'max indi', max_indi
+        current_generation = model.pop_current_generation(indi_id)['generation']
+        max_indi = model.pop_max_indi(current_generation)[0]['indi_id']    
 
         if indi_id == max_indi:
             print 'last indi of pop!'
             # termination requirements met?
-            if current_gen == max_gen:
+            if current_generation == max_gen:
                 print 'peace! shits over!'
                 raise web.seeother('/terminate')
             else:
+                # current generation over, start mating!
                 print 'go to select!'
-                pop_size = 5
-                num_traits = 2
-                notes = ['A','B','C','D','E','F','G']
-                for ps in range(indi_id+1,pop_size+indi_id+1):
-                    for nt in range(num_traits):
-                        chromosome = GA().create_indi(ps, nt, current_gen+1, 0, random.choice(notes), 1)
-                        model.pop_save_individual(chromosome)
-                raise web.seeother('/fitness/'+str(indi_id+1))
+                self.select(current_generation)
         elif indi_id < max_indi:
             print 'still more to go!'
             raise web.seeother('/fitness/'+str(indi_id+1))
         else:
             raise web.seeother('/terminate')
-        #raise web.seeother('/fitness/' + str(indi_id+1))
 
+    def select(self, current_generation):
+        """Use current_generation to grab all individuals of previous generation"""
+        num_rounds = 2
+        k = 2
+        winner = []
+
+        for i in range(num_rounds):
+            winner.append(self.tournament(k,current_generation))
+
+        
+        child = self.crossover(random.choice(winner), random.choice(winner))
+
+    def tournament(self, k, current_generation):
+        """Tournament Selection
+
+        k = subset size
+    
+        1. a random subset of size, k, from the given generation is extracted 
+        2. sort the pool by fitness value
+        3. return the winner, the individual with the highest fitness value"""
+
+        # find k best individuals in population
+        population = model.pop_population_by_generation(current_generation)
+        pool = []
+        for i in range(k):
+            individual = random.choice(population)
+            if individual not in pool:
+                pool.append(individual)
+
+        # select individual with the highest fitness score
+        winner = sorted(pool, key=lambda x: -x['fitness'])[0]
+        return winner
+    
+    def crossover(self, parent1, parent2):
+        """Do tomorrow..."""
+        pass
 
 class Index:
     def GET(self):
         model.pop_clear_conn()
         model.params_clear_conn()
 
-        model.params_save({"max_gen":0})
+        model.params_save({"max_gen":1})
         pop_size = 5
         num_traits = 2
         notes = ['A','B','C','D','E','F','G']
@@ -82,7 +108,10 @@ class Index:
 
 class Fitness:
     def GET(self, indi_id):
+        score = random.randint(0,100)
+        model.pop_update_indi_fitness(int(indi_id), score)
         GA().fate(int(indi_id))
+
         """
         THIS SHIT WORKS DO NOT DELETE WHAT IS BELOW!
         """

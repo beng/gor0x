@@ -45,9 +45,11 @@ def pop_find_all():
 def pop_update_user_note(spec,user_note):
     pop_coll.update(spec,user_note)
 
-
 def pop_update_indi(indi_id, note):
-    pop_coll.update({"individual": indi_id}, {"$set": {"note": note}})
+    pop_coll.update({"indi_id": indi_id}, {"$set": {"note": note}})
+
+def pop_update_indi_fitness(indi_id, score):
+    pop_coll.update({"indi_id": indi_id}, {"$set": {"fitness": score}})
 
 def pop_max_indi(generation):
     """get max indi of current generation"""
@@ -62,3 +64,6 @@ def pop_find_trait(indi_id, t_id):
 def pop_update_trait(f, n):
     pop_coll.update(f,n)
 
+def pop_population_by_generation(current_generation):
+    """Used for tournament selection"""
+    return [individual for individual in pop_coll.find({"generation":current_generation, "trait_id":0})]
