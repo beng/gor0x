@@ -19,7 +19,7 @@ title = 'GA Server'
 
 class GA:
     """Miniature genetic algorithm library"""
-    
+
     def create_population(self, artist, song, num_indi, num_traits, size, nodes):
         root = 'http://localhost:8000/q/spawn_pop/'
         params = root +'/'.join([artist, song, str(num_indi), str(num_traits), str(size), str(nodes)])
@@ -162,15 +162,29 @@ class Index:
         """Render the parameter initialization view"""
         model.pop_clear_conn()
         model.params_clear_conn()
-        model.params_save({"max_gen":1})
-        num_indi = 3
-        num_traits = 5
-        size = 2000
-        nodes = 5
-        population = GA().create_population('Vivaldi', 'winter_allegro', num_indi,num_traits,size,nodes)
+        
+        # call REST server for a list of available artists
+        br = web.Browser()
+        br.open('http://localhost:8000/q/artist') # make dynamic later
+        songs = json.loads(br.get_text())
+        
+        return render.index(title, songs)        
+
+    def POST(self):
+        pd = web.input()
+        num_gen = pd.num_gen
+        artist = pd.influencer
+        song = "winter_allegro"
+        num_indi = pd.pop_size
+        num_traits = pd.num_traits
+        size = pd.mc_size
+        nodes = pd.mc_nodes
+
+        model.params_save({"max_gen":num_gen})
+        population = GA().create_population(artist, song, num_indi, num_traits, size, nodes)
         
         for indi in population:
-            for nt in range(num_traits):
+            for nt in range(int(num_traits)):
                 trait = {
                     "artist": indi['artist'],
                     "song": indi['song'],
@@ -183,19 +197,6 @@ class Index:
                     "duration": 1,}
                 print 'trait :', trait
                 model.pop_save_individual(trait)
-            
-            #model.pop_save_individual(indi)
-        
-        
-        # notes = ['A','B','C','D','E','F','G']
-        # for ps in range(pop_size):
-        #     for nt in range(num_traits):
-        #         chromosome = GA().create_indi(ps, nt, 0, 0, random.choice(notes), 1)
-        #         model.pop_save_individual(chromosome)
-        # raise web.seeother('/fitness/0')
-
-    def POST(self):
-        pass
 
 class Fitness:
     """This is an interactive fitness function, i.e. the individual is scored
