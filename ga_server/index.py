@@ -75,13 +75,36 @@ class GA:
         num_rounds = 2
         k = 2
         winner = []
+        population = model.pop_population_by_generation(current_generation)
 
+        # get list of winning individuals
         for i in range(num_rounds):
-            winner.append(self.tournament(k,current_generation))
-      
-        child = self.crossover(random.choice(winner), random.choice(winner))
+            winner.append(self.tournament(k,population))
+        
+        for i in range(len(population)):
+            # select random winners to be parent
+            p1 = random.choice(winner)
+            p2 = random.choice(winner)
+            _p1 = []
+            _p2 = []
 
-    def tournament(self, k, current_generation):
+            # find each parents traits
+            for i in model.pop_find_individual(int(p1['indi_id'])):
+                for k,v in i.items():
+                    if k == 'note':
+                        _p1.append(v)
+
+            for i in model.pop_find_individual(int(p2['indi_id'])):
+                for k,v in i.items():
+                    if k == 'note':
+                        _p2.append(v)
+            # create child among parents
+            child = self.crossover(_p1,_p2)
+            
+            # save child
+            print child
+
+    def tournament(self, k, population):
         """Tournament Selection
 
         k = subset size
@@ -91,7 +114,6 @@ class GA:
         3. return the winner, the individual with the highest fitness value"""
 
         # find k best individuals in population
-        population = model.pop_population_by_generation(current_generation)
         pool = []
         for i in range(k):
             individual = random.choice(population)
@@ -103,11 +125,20 @@ class GA:
         return winner
     
     def crossover(self, parent1, parent2):
-        """Do tomorrow...
+        """Parents are a list of notes!
+
         @TODO make sure that the child is the same length
         as the parents otherwise will have problems with
         euclidean distance"""
-        pass
+
+        try:
+            split = random.randint(0, len(parent1))
+            print "split ", split
+            print "parents1 ", parent1
+            print "parent2 ", parent2
+            return parent1[:split] + parent2[split:]#, parent2[:split] + parent1[split:]
+        except ValueError:
+            raise "Parents aren't the same length!"
 
 class Index:
     def GET(self):
@@ -161,6 +192,7 @@ class Fitness:
         user_list = []
         original_list = []
 
+        # so ugly -- fix later
         for trait in individual:
             for k,v in trait.items():
                 if k == 'user_note':
