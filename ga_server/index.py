@@ -20,19 +20,29 @@ title = 'GA Server'
 class GA:
     """Miniature genetic algorithm library"""
 
-    def create_indi(self,indi_id, trait_id, generation, fitness, note, duration):
-        """Spawn an individual. Returns a dictionary containing an individual
-        with the desired features"""
-        indi = {
-            "indi_id": indi_id,
-            "trait_id": trait_id,
-            "generation": generation,
-            "fitness": fitness,
-            "note": note,
-            "user_note": note,
-            "duration": duration,
-        }
-        return indi
+    # def create_indi(self,indi_id, trait_id, generation, fitness, note, duration):
+    #     """Spawn an individual. Returns a dictionary containing an individual
+    #     with the desired features"""
+
+    #     # call rest server to get information
+    #     indi = {
+    #         "indi_id": indi_id,
+    #         "trait_id": trait_id,
+    #         "generation": generation,
+    #         "fitness": fitness,
+    #         "note": note,
+    #         "user_note": note,
+    #         "duration": duration,
+    #     }
+    #     return indi
+    def create_population(self, artist, song, num_indi, num_traits, size, nodes):
+        root = 'http://localhost:8000/q/spawn_pop/'
+        params = root +'/'.join([artist, song, str(num_indi), str(num_traits), str(size), str(nodes)])
+        br = web.Browser()
+        br.open(params)
+        population = json.loads(br.get_text())
+        
+        return population
 
     def euclidean_distance(self, song1, song2):
         """The songs are lists of notes converted to their midi value
@@ -72,8 +82,8 @@ class GA:
         selection. Use current_generation to grab all individuals of 
         previous generation"""
 
-        num_rounds = 10
-        k = 5
+        num_rounds = 2
+        k = 2
         winner = []
         population = model.pop_population_by_generation(current_generation)
 
@@ -89,10 +99,15 @@ class GA:
             #print "PARENT2 ", p2
             _p1 = []
             _p2 = []
-
+            artist = ''
+            song = ''
             # find each parents traits
             for i in model.pop_find_individual(int(p1['indi_id'])):
                 for k,v in i.items():
+                    if k == 'artist':
+                        artist = v
+                    if k == 'song':
+                        song = v
                     if k == 'note':
                         _p1.append(v)
 
@@ -104,7 +119,22 @@ class GA:
             child = self.crossover(_p1,_p2)
             
             # save child
-            print child
+            max_indi = model.pop_max_indi(current_generation)[0]['indi_id']
+            t_id = 0
+            for i in child:
+                information = {
+                    "artist": artist,
+                    "song": song,
+                    "indi_id": int(max_indi)+1, 
+                    "trait_id":t_id, 
+                    "generation": int(current_generation)+1,
+                    "fitness": 0,
+                    "note": i,
+                    "user_note": note,
+                    "duration": 1,}
+                t_id += 1
+                print "information :: ", information
+                model.pop_save_individual(information)
 
     def tournament(self, k, population):
         """Tournament Selection
@@ -147,16 +177,37 @@ class Index:
         """Render the parameter initialization view"""
         model.pop_clear_conn()
         model.params_clear_conn()
-
         model.params_save({"max_gen":1})
-        pop_size = 50
-        num_traits = 10
-        notes = ['A','B','C','D','E','F','G']
-        for ps in range(pop_size):
+        num_indi = 3
+        num_traits = 5
+        size = 2000
+        nodes = 5
+        population = GA().create_population('Vivaldi', 'winter_allegro', num_indi,num_traits,size,nodes)
+        
+        for indi in population:
             for nt in range(num_traits):
-                chromosome = GA().create_indi(ps, nt, 0, 0, random.choice(notes), 1)
-                model.pop_save_individual(chromosome)
-        raise web.seeother('/fitness/0')
+                trait = {
+                    "artist": indi['artist'],
+                    "song": indi['song'],
+                    "indi_id": indi['indi_id'],
+                    "trait_id": nt,
+                    "generation": indi['generation'],
+                    "fitness": 0,
+                    "note": indi['note'][nt],
+                    "user_note": indi['note'][nt],
+                    "duration": 1,}
+                print 'trait :', trait
+                model.pop_save_individual(trait)
+            
+            #model.pop_save_individual(indi)
+        
+        
+        # notes = ['A','B','C','D','E','F','G']
+        # for ps in range(pop_size):
+        #     for nt in range(num_traits):
+        #         chromosome = GA().create_indi(ps, nt, 0, 0, random.choice(notes), 1)
+        #         model.pop_save_individual(chromosome)
+        # raise web.seeother('/fitness/0')
 
     def POST(self):
         pass

@@ -53,8 +53,8 @@ class SpawnPopulation():
 
     #def GET(self, artist, song, num_indi, num_traits, size, nodes):
     def GET(self, *args):
-        """Experiment with using the same Markov chain pool 
-        on the entire initial population VS regenerating a 
+        """Experiment with using the same Markov chain pool
+        on the entire initial population VS regenerating a
         markov chain for each individual
 
         Also experiment with the nodes and size values with above
@@ -81,8 +81,8 @@ class SpawnPopulation():
         min = 0
         max = len(population)
         new_population = []
-        print population
-        for ni in range(num_indi):            
+        #print population
+        for ni in range(num_indi):
             start, stop = utility.random_sampling(min, max, num_traits)
             trait = {
                 'generation': '0',
@@ -91,7 +91,7 @@ class SpawnPopulation():
                 'song': song,
                 'note': population[start:stop]}
             new_population.append(trait)
-            print trait
+            #print trait
 
         return json.dumps(new_population)
 
