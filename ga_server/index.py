@@ -4,6 +4,8 @@ import ast
 import model
 import random
 import ga
+import math
+import music21
 
 urls = (
         '/', 'Index',
@@ -31,6 +33,17 @@ class GA:
             "duration": duration,
         }
         return indi
+
+    def euclidean_distance(self, song1, song2):
+        """The songs are lists of notes converted to their midi value
+        @TODO clean this up. it's too messy"""
+        try:
+            score = 0
+            for i in range(len(song1)):
+                score += math.sqrt((music21.pitch.Pitch(song1[i]).midi - int(music21.pitch.Pitch(song2[i]).midi)) ** 2)
+            return score
+        except ValueError:
+            raise 'Songs must be the same length!'
 
     def fate(self,indi_id):
         """Use the individual that was just evaluated to determine
@@ -90,7 +103,10 @@ class GA:
         return winner
     
     def crossover(self, parent1, parent2):
-        """Do tomorrow..."""
+        """Do tomorrow...
+        @TODO make sure that the child is the same length
+        as the parents otherwise will have problems with
+        euclidean distance"""
         pass
 
 class Index:
@@ -100,14 +116,13 @@ class Index:
         model.params_clear_conn()
 
         model.params_save({"max_gen":1})
-        pop_size = 5
+        pop_size = 2
         num_traits = 10
         notes = ['A','B','C','D','E','F','G']
         for ps in range(pop_size):
             for nt in range(num_traits):
                 chromosome = GA().create_indi(ps, nt, 0, 0, random.choice(notes), 1)
                 model.pop_save_individual(chromosome)
-                #print chromosome
         raise web.seeother('/fitness/0')
 
     def POST(self):
@@ -119,7 +134,7 @@ class Fitness:
     to it (e.g. re-order up to X traits). The euclidean dsitance is taken for the original melody
     and the user-modified melody. Ideally, we want a fitness score of 0 because that
     means the user liked what the computer presented."""
-    
+
     def GET(self, indi_id):
         individual = model.pop_find_individual(int(indi_id))
         # converts from unicode to dictionary
@@ -134,13 +149,29 @@ class Fitness:
     def POST(self, indi_id):
         """
         @TODO get all traits for the individual by gathering all the notes
-        and user-notes for the indiviudal and storing in two lists. compute
+        and user-notes for the individual and storing in two lists. compute
         the euclidean distance between the two lists and set as fitness score
         for the individual
 
         @TODO oracle to decide what to do next
         """
         #model.pop_update_indi_fitness(int(indi_id), score)
+        # query the individual and extract note and user-note
+        individual = model.pop_find_individual(int(indi_id))
+        user_list = []
+        original_list = []
+
+        for trait in individual:
+            for k,v in trait.items():
+                if k == 'user_note':
+                    user_list.append(str(v))
+                if k == 'note':
+                    original_list.append(str(v))
+
+        score = GA().euclidean_distance(original_list, user_list)
+
+        #update fitness score for individual
+        model.pop_update_indi_fitness(int(indi_id), score)
         GA().fate(int(indi_id))
 
 class SaveFitness:
