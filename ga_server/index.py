@@ -56,13 +56,13 @@ class GA:
                 raise web.seeother('/terminate')
             else:
                 # current generation over, start mating!
-                self.select(current_generation)
+                self.select(current_generation, indi_id)
         elif indi_id < max_indi:
             raise web.seeother('/fitness/'+str(indi_id+1))
         else:
             raise web.seeother('/terminate')
 
-    def select(self, current_generation):
+    def select(self, current_generation, current_indi_id):
         """Selection phase -- right now I've only implemented tournament
         selection. Use current_generation to grab all individuals of 
         previous generation"""
@@ -106,6 +106,7 @@ class GA:
             # save child
             max_indi = model.pop_max_indi(current_generation)[0]['indi_id']
             t_id = 0
+
             for i in child:
                 information = {
                     "artist": artist,
@@ -115,11 +116,13 @@ class GA:
                     "generation": int(current_generation)+1,
                     "fitness": 0,
                     "note": i,
-                    "user_note": note,
+                    "user_note": i,
                     "duration": 1,}
                 t_id += 1
                 print "information :: ", information
                 model.pop_save_individual(information)
+
+        raise web.seeother('/fitness/' + str(current_indi_id+1))
 
     def tournament(self, k, population):
         """Tournament Selection
@@ -195,8 +198,10 @@ class Index:
                     "note": indi['note'][nt],
                     "user_note": indi['note'][nt],
                     "duration": 1,}
-                print 'trait :', trait
                 model.pop_save_individual(trait)
+
+        # call fitness on first individual
+        raise web.seeother('/fitness/0')
 
 class Fitness:
     """This is an interactive fitness function, i.e. the individual is scored
@@ -253,7 +258,7 @@ class SaveFitness:
         t_id = web.input()['trait_id']
         _note = web.input()['name']
         saved_traits = model.pop_find_trait(int(indi_id), int(t_id))
-        model.pop_update_trait(saved_traits, {"$set": {"user_note":_note}})
+        model.pop_update_user_trait(saved_traits, {"$set": {"user_note":_note}})
 
 class Terminate:
     def GET(self):
