@@ -72,8 +72,8 @@ class GA:
         selection. Use current_generation to grab all individuals of 
         previous generation"""
 
-        num_rounds = 2
-        k = 2
+        num_rounds = 10
+        k = 5
         winner = []
         population = model.pop_population_by_generation(current_generation)
 
@@ -83,8 +83,10 @@ class GA:
         
         for i in range(len(population)):
             # select random winners to be parent
-            p1 = random.choice(winner)
+            p1 = random.choice(winner)            
             p2 = random.choice(winner)
+            #print "PARENT 1", p1
+            #print "PARENT2 ", p2
             _p1 = []
             _p2 = []
 
@@ -147,7 +149,7 @@ class Index:
         model.params_clear_conn()
 
         model.params_save({"max_gen":1})
-        pop_size = 2
+        pop_size = 50
         num_traits = 10
         notes = ['A','B','C','D','E','F','G']
         for ps in range(pop_size):
