@@ -19,22 +19,7 @@ title = 'GA Server'
 
 class GA:
     """Miniature genetic algorithm library"""
-
-    # def create_indi(self,indi_id, trait_id, generation, fitness, note, duration):
-    #     """Spawn an individual. Returns a dictionary containing an individual
-    #     with the desired features"""
-
-    #     # call rest server to get information
-    #     indi = {
-    #         "indi_id": indi_id,
-    #         "trait_id": trait_id,
-    #         "generation": generation,
-    #         "fitness": fitness,
-    #         "note": note,
-    #         "user_note": note,
-    #         "duration": duration,
-    #     }
-    #     return indi
+    
     def create_population(self, artist, song, num_indi, num_traits, size, nodes):
         root = 'http://localhost:8000/q/spawn_pop/'
         params = root +'/'.join([artist, song, str(num_indi), str(num_traits), str(size), str(nodes)])
