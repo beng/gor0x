@@ -45,16 +45,11 @@ class GA:
         where we are in the grand scheme of things. How many more individuals
         of the current generation need to be evaluated? Are the termination
         requirements met? Are we ready to move to the next generation? Etc..."""
+
         indi_id = int(indi_id)
-        max_gen = model.params_max_gen()['max_gen']
-        current_generation = model.pop_current_generation(indi_id)['generation']
-        max_indi = model.pop_max_indi(current_generation)[0]['indi_id']
-        print "CURRENT GENERATION : ", current_generation
-        print "MAX GENERATION : ", max_gen
-        print "MAX INDI :: ", max_indi
-        max_gen = int(max_gen)
-        current_generation = int(current_generation)
-        max_indi = int(max_indi)
+        max_gen = int(model.params_max_gen()['max_gen'])
+        current_generation = int(model.pop_current_generation(indi_id)['generation'])
+        max_indi = int(model.pop_max_indi(current_generation)[0]['indi_id'])
 
         if indi_id == max_indi:
             # termination requirements met?
@@ -73,12 +68,13 @@ class GA:
         selection. Use current_generation to grab all individuals of 
         previous generation"""
 
-        print "CURRENT GENERATION IN CHILD ", int(current_generation)+1
+        current_indi_id = int(current_indi_id)
+        current_generation = int(current_generation)
         num_rounds = 2
         k = 2
         winner = []
-        population = model.pop_population_by_generation(int(current_generation))
-        print "population  ::: ", population
+        population = model.pop_population_by_generation(current_generation)
+
         # get list of winning individuals
         for i in range(num_rounds):
             winner.append(self.tournament(k,population))
@@ -87,8 +83,6 @@ class GA:
             # select random winners to be parent
             p1 = random.choice(winner)            
             p2 = random.choice(winner)
-            #print "PARENT 1", p1
-            #print "PARENT2 ", p2
             _p1 = []
             _p2 = []
             artist = ''
@@ -106,22 +100,21 @@ class GA:
             child = self.crossover(_p1,_p2)
             
             # save child
-            max_indi = model.pop_max_indi(current_generation)[0]['indi_id']
+            max_indi = int(model.pop_max_indi(current_generation)[0]['indi_id'])
             t_id = 0
 
             for i in child:
                 information = {
                     "artist": artist,
                     "song": song,
-                    "indi_id": int(max_indi)+1, 
+                    "indi_id": max_indi+1, 
                     "trait_id":t_id, 
-                    "generation": int(current_generation)+1,
+                    "generation": current_generation+1,
                     "fitness": 0,
                     "note": i,
                     "user_note": i,
                     "duration": 1,}
                 t_id += 1
-                #print "information :: ", information
                 model.pop_save_individual(information)
 
         raise web.seeother('/fitness/' + str(current_indi_id+1))
@@ -144,7 +137,7 @@ class GA:
 
         # select individual with the highest fitness score
         winner = sorted(pool, key=lambda x: -x['fitness'])[0]
-        #print "WINNER ::: ", winner
+
         return winner
     
     def crossover(self, parent1, parent2):
@@ -156,9 +149,6 @@ class GA:
 
         try:
             split = random.randint(0, len(parent1))
-            #print "split ", split
-            #print "parents1 ", parent1
-            #print "parent2 ", parent2
             return parent1[:split] + parent2[split:]#, parent2[:split] + parent1[split:]
         except ValueError:
             raise "Parents aren't the same length!"
@@ -194,9 +184,9 @@ class Index:
                 trait = {
                     "artist": indi['artist'],
                     "song": indi['song'],
-                    "indi_id": indi['indi_id'],
+                    "indi_id": int(indi['indi_id']),
                     "trait_id": nt,
-                    "generation": indi['generation'],
+                    "generation": int(indi['generation']),
                     "fitness": 0,
                     "note": indi['note'][nt],
                     "user_note": indi['note'][nt],
@@ -241,11 +231,8 @@ class Fitness:
 
         # so ugly -- fix later
         for trait in individual:
-            for k,v in trait.items():
-                if k == 'user_note':
-                    user_list.append(str(v))
-                if k == 'note':
-                    original_list.append(str(v))
+            user_list.append(str(trait['user_note']))
+            original_list.append(str(trait['note']))
 
         score = GA().euclidean_distance(original_list, user_list)
 
