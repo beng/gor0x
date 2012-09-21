@@ -68,7 +68,10 @@ class GA:
         selection. Use current_generation to grab all individuals of 
         previous generation
 
-        @TODO get rid of max_indi since current_indi_id is OBVIOUSLY the max_indi...
+        @TODO redo this entire method before you get shot
+        @TODO redo this entire method before you get shot
+        @TODO redo this entire method before you get shot
+        @TODO redo this entire method before you get shot
         """
 
         current_indi_id = int(current_indi_id)
@@ -82,15 +85,12 @@ class GA:
         for i in range(num_rounds):
             winner.append(self.tournament(k,population))
         
-        print "LENGTH OF WINNER : ", len(winner)
         max_indi = int(model.pop_max_indi(current_generation)[0]['indi_id'])
 
         for i in range(model.params_num_indi()['num_indi']):
             # select random winners to be parent
             p1 = random.choice(winner)            
             p2 = random.choice(winner)
-            print "p1 ", p1
-            print "p2 ", p2
             _p1 = []
             _p2 = []
             artist = ''
@@ -105,18 +105,11 @@ class GA:
             for item in model.pop_find_individual(int(p2['indi_id'])):
                 _p2.append(item['note'])
 
-            print "parent 1", _p1
-            print "parent 2", _p2
             # create child among parents
             child1, child2 = self.crossover(_p1,_p2)
             
-            print "CHILD 1 HERE ", child1
-            print "CHILD 2 HERE ", child2
-
             # save child
-            
             t_id = 0
-            print 'mx indi no loop ', max_indi
             # clean the fuck up
             for i in child1:
                 print "max indi loop c1 ", max_indi+1
