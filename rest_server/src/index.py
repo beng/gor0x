@@ -85,7 +85,7 @@ class SpawnPopulation():
         for ni in range(num_indi):
             start, stop = utility.random_sampling(min, max, num_traits)
             trait = {
-                'generation': '0',
+                'generation': 0,
                 'indi_id': ni,
                 'artist': artist,
                 'song': song,

@@ -45,19 +45,25 @@ class GA:
         where we are in the grand scheme of things. How many more individuals
         of the current generation need to be evaluated? Are the termination
         requirements met? Are we ready to move to the next generation? Etc..."""
-
-        max_gen = model.params_max_gen()['max_gen']        
+        indi_id = int(indi_id)
+        max_gen = model.params_max_gen()['max_gen']
         current_generation = model.pop_current_generation(indi_id)['generation']
-        max_indi = model.pop_max_indi(current_generation)[0]['indi_id']    
+        max_indi = model.pop_max_indi(current_generation)[0]['indi_id']
+        print "CURRENT GENERATION : ", current_generation
+        print "MAX GENERATION : ", max_gen
+        print "MAX INDI :: ", max_indi
+        max_gen = int(max_gen)
+        current_generation = int(current_generation)
+        max_indi = int(max_indi)
 
         if indi_id == max_indi:
             # termination requirements met?
-            if current_generation == max_gen:
+            if current_generation >= max_gen:
                 raise web.seeother('/terminate')
             else:
                 # current generation over, start mating!
                 self.select(current_generation, indi_id)
-        elif indi_id < max_indi:
+        elif indi_id <= max_indi:
             raise web.seeother('/fitness/'+str(indi_id+1))
         else:
             raise web.seeother('/terminate')
@@ -67,11 +73,12 @@ class GA:
         selection. Use current_generation to grab all individuals of 
         previous generation"""
 
+        print "CURRENT GENERATION IN CHILD ", int(current_generation)+1
         num_rounds = 2
         k = 2
         winner = []
-        population = model.pop_population_by_generation(current_generation)
-
+        population = model.pop_population_by_generation(int(current_generation))
+        print "population  ::: ", population
         # get list of winning individuals
         for i in range(num_rounds):
             winner.append(self.tournament(k,population))
@@ -114,7 +121,7 @@ class GA:
                     "user_note": i,
                     "duration": 1,}
                 t_id += 1
-                print "information :: ", information
+                #print "information :: ", information
                 model.pop_save_individual(information)
 
         raise web.seeother('/fitness/' + str(current_indi_id+1))
@@ -137,6 +144,7 @@ class GA:
 
         # select individual with the highest fitness score
         winner = sorted(pool, key=lambda x: -x['fitness'])[0]
+        #print "WINNER ::: ", winner
         return winner
     
     def crossover(self, parent1, parent2):
@@ -148,9 +156,9 @@ class GA:
 
         try:
             split = random.randint(0, len(parent1))
-            print "split ", split
-            print "parents1 ", parent1
-            print "parent2 ", parent2
+            #print "split ", split
+            #print "parents1 ", parent1
+            #print "parent2 ", parent2
             return parent1[:split] + parent2[split:]#, parent2[:split] + parent1[split:]
         except ValueError:
             raise "Parents aren't the same length!"
