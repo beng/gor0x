@@ -33,3 +33,7 @@ def music_find_trait(artist, song, trait):
 
 def music_find_artist():
     return music_coll.distinct('artist')
+
+def music_find_traits(artist, song):
+    for t in music_coll.find({"artist": artist, "song":song}):
+        print t

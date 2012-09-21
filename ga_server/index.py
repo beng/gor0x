@@ -179,24 +179,57 @@ class GA:
         except ValueError:
             raise "Parents aren't the same length!"
 
+    def create_pheno(self, indi_id):
+        '''
+        converts the individuals pitch, accidental, octave, and rhythm to a music stream
+        using the music21 library. the music stream is then used to create a midi file
+        '''
+        indi_id = 2
+        individual = model.pop_find_individual(int(indi_id))
+        gene = []
+
+        for i in individual:
+            gene.append(i['note'])
+
+        partupper = music21.stream.Part()
+        m = music21.stream.Measure()
+        for _note in gene:
+            n = music21.note.Note(_note)
+            print n
+            #n.duration.type = "half"
+            m.append(n)
+        partupper.append(m)    
+        return partupper
+    
+    def convert_midi(self, mfile, indi_id):
+        '''
+        mfile is a musicstream which is exported to as midi format
+        '''
+        mf = mfile.midiFile
+        name = str(indi_id) + 'song.mid'
+        mf.open('static/' + name, 'wb')
+        mf.write()
+        mf.close()
+        return name
+
 class Index:
     def GET(self):
         """Render the parameter initialization view"""
         model.pop_clear_conn()
         model.params_clear_conn()
-        
         # call REST server for a list of available artists
         br = web.Browser()
         br.open('http://localhost:8000/q/artist') # make dynamic later
         songs = json.loads(br.get_text())
         
-        return render.index(title, songs)        
+        return render.index(title, songs)
 
     def POST(self):
         pd = web.input()
         num_gen = pd.num_gen
         artist = pd.influencer
         song = "winter_allegro"
+        #song = "top100_Ready_To_Die"
         num_indi = pd.pop_size
         num_traits = pd.num_traits
         size = pd.mc_size
@@ -239,7 +272,8 @@ class Fitness:
         for i in individual:
             fake_individual.append(i['note'])
 
-        #print fake_individual
+        fake_individual = [fi.replace('-', '') for fi in fake_individual]
+
         return render.fitness(title, indi_id, fake_individual)
     
     def POST(self, indi_id):
@@ -281,6 +315,7 @@ class SaveFitness:
 class Terminate:
     def GET(self):
         """Render the terminate view and present the user with a list of save options"""
+        GA().convert_midi(GA().create_pheno(2),2)
         return 'game over...'
 
     def POST(self):

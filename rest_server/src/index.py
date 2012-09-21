@@ -70,8 +70,8 @@ class SpawnPopulation():
             raise web.notfound()
 
         # shitty results otherwise
-        if int(args[4]) < 50:
-            raise web.notfound()
+        # if int(args[4]) < 50:
+        #     raise web.notfound()
 
         artist = args[0]
         song = args[1]
@@ -91,7 +91,7 @@ class SpawnPopulation():
                 'song': song,
                 'note': population[start:stop]}
             new_population.append(trait)
-            #print trait
+            print trait
 
         return json.dumps(new_population)
 
