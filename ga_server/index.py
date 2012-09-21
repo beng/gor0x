@@ -87,19 +87,14 @@ class GA:
             artist = ''
             song = ''
             # find each parents traits
-            for i in model.pop_find_individual(int(p1['indi_id'])):
-                for k,v in i.items():
-                    if k == 'artist':
-                        artist = v
-                    if k == 'song':
-                        song = v
-                    if k == 'note':
-                        _p1.append(v)
+            for item in model.pop_find_individual(int(p1['indi_id'])):
+                artist = item['artist']
+                song = item['song']
+                _p1.append(item['note'])
 
-            for i in model.pop_find_individual(int(p2['indi_id'])):
-                for k,v in i.items():
-                    if k == 'note':
-                        _p2.append(v)
+            for item in model.pop_find_individual(int(p2['indi_id'])):
+                _p2.append(item['note'])
+
             # create child among parents
             child = self.crossover(_p1,_p2)
             
