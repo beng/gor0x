@@ -22,7 +22,10 @@ def params_save(init):
     params.save(init)
 
 def params_max_gen():
-    return params.find_one()
+    return params.find_one({"max_gen": {"$type": 16}})
+
+def params_num_indi():
+    return params.find_one({"num_indi": {"$type": 16}})
 
 ########################################################
 # Population Collection

@@ -66,7 +66,10 @@ class GA:
     def select(self, current_generation, current_indi_id):
         """Selection phase -- right now I've only implemented tournament
         selection. Use current_generation to grab all individuals of 
-        previous generation"""
+        previous generation
+
+        @TODO get rid of max_indi since current_indi_id is OBVIOUSLY the max_indi...
+        """
 
         current_indi_id = int(current_indi_id)
         current_generation = int(current_generation)
@@ -79,14 +82,20 @@ class GA:
         for i in range(num_rounds):
             winner.append(self.tournament(k,population))
         
-        for i in range(len(population)):
+        print "LENGTH OF WINNER : ", len(winner)
+        max_indi = int(model.pop_max_indi(current_generation)[0]['indi_id'])
+
+        for i in range(model.params_num_indi()['num_indi']):
             # select random winners to be parent
             p1 = random.choice(winner)            
             p2 = random.choice(winner)
+            print "p1 ", p1
+            print "p2 ", p2
             _p1 = []
             _p2 = []
             artist = ''
             song = ''
+
             # find each parents traits
             for item in model.pop_find_individual(int(p1['indi_id'])):
                 artist = item['artist']
@@ -96,14 +105,21 @@ class GA:
             for item in model.pop_find_individual(int(p2['indi_id'])):
                 _p2.append(item['note'])
 
+            print "parent 1", _p1
+            print "parent 2", _p2
             # create child among parents
-            child = self.crossover(_p1,_p2)
+            child1, child2 = self.crossover(_p1,_p2)
             
-            # save child
-            max_indi = int(model.pop_max_indi(current_generation)[0]['indi_id'])
-            t_id = 0
+            print "CHILD 1 HERE ", child1
+            print "CHILD 2 HERE ", child2
 
-            for i in child:
+            # save child
+            
+            t_id = 0
+            print 'mx indi no loop ', max_indi
+            # clean the fuck up
+            for i in child1:
+                print "max indi loop c1 ", max_indi+1
                 information = {
                     "artist": artist,
                     "song": song,
@@ -116,6 +132,22 @@ class GA:
                     "duration": 1,}
                 t_id += 1
                 model.pop_save_individual(information)
+            t_id = 0
+            for i in child2:
+                print "max indi loop c2", max_indi+2
+                information = {
+                    "artist": artist,
+                    "song": song,
+                    "indi_id": max_indi+2, 
+                    "trait_id":t_id, 
+                    "generation": current_generation+1,
+                    "fitness": 0,
+                    "note": i,
+                    "user_note": i,
+                    "duration": 1,}
+                t_id += 1
+                model.pop_save_individual(information)
+            max_indi += 2
 
         raise web.seeother('/fitness/' + str(current_indi_id+1))
 
@@ -132,6 +164,7 @@ class GA:
         pool = []
         for i in range(k):
             individual = random.choice(population)
+            print "INDIVIDUAL ", individual
             if individual not in pool:
                 pool.append(individual)
 
@@ -148,8 +181,8 @@ class GA:
         euclidean distance"""
 
         try:
-            split = random.randint(0, len(parent1))
-            return parent1[:split] + parent2[split:]#, parent2[:split] + parent1[split:]
+            split = random.randint(1, len(parent1))
+            return parent1[:split] + parent2[split:], parent2[:split] + parent1[split:]
         except ValueError:
             raise "Parents aren't the same length!"
 
@@ -176,7 +209,9 @@ class Index:
         size = pd.mc_size
         nodes = pd.mc_nodes
 
-        model.params_save({"max_gen":num_gen})
+        model.params_save({"max_gen":int(num_gen)})
+        model.params_save({"num_indi": int(num_indi)})
+
         population = GA().create_population(artist, song, num_indi, num_traits, size, nodes)
         
         for indi in population:
