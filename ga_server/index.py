@@ -266,7 +266,6 @@ class Fitness:
 
     def GET(self, indi_id):
         individual = model.pop_find_individual(int(indi_id))
-        # converts from unicode to dictionary
         fake_individual = []
 
         for i in individual:
