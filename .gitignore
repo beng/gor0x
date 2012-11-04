@@ -1,3 +1,4 @@
 *.pyc
 rest_server/data/
 rest_server/src/static/melodies/
+ga_server/static/melodies/
