@@ -41,7 +41,7 @@ class QueryArtist:
 class QuerySong:
     def GET(self):
         """Return JSON of songs"""
-        song = model.music_find_song()
+        song = model.music_find_songs()
         return json.dumps(song)
 
 ########################################################
@@ -138,6 +138,7 @@ class Markov():
 
         notes = []
         trait = 'note'
+        
         for item in model.music_find_trait(artist, song, trait):
             notes.append(item[trait])
         notes = ' '.join(notes)

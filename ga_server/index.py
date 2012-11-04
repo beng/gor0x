@@ -1,9 +1,8 @@
 import web
 import json
-import ast
 import model
 import random
-import ga
+#import ga
 import math
 import music21
 
@@ -11,12 +10,16 @@ urls = (
         '/', 'Index',
         '/fitness/(.+)', 'Fitness',
         '/save_fitness/(.+)', 'SaveFitness',
-        '/terminate', 'Terminate',)
+        '/terminate', 'Terminate',
+        '/test', 'Test',)
 
 render = web.template.render('templates/', base='layout')
 app = web.application(urls, globals())
 title = 'GA Server'
 
+class Test:
+    def GET(self):
+        return render.test(title)
 class GA:
     """Miniature genetic algorithm library"""
 
@@ -183,8 +186,7 @@ class GA:
         '''
         converts the individuals pitch, accidental, octave, and rhythm to a music stream
         using the music21 library. the music stream is then used to create a midi file
-        '''
-        indi_id = 2
+        '''        
         individual = model.pop_find_individual(int(indi_id))
         gene = []
 
@@ -219,7 +221,7 @@ class Index:
         model.params_clear_conn()
         # call REST server for a list of available artists
         br = web.Browser()
-        br.open('http://localhost:8000/q/artist') # make dynamic later
+        br.open('http://localhost:8000/q/song') # make dynamic later
         songs = json.loads(br.get_text())
         
         return render.index(title, songs)
@@ -227,8 +229,10 @@ class Index:
     def POST(self):
         pd = web.input()
         num_gen = pd.num_gen
-        artist = pd.influencer
-        song = "winter_allegro"
+        #artist = pd.influencer    
+        artist = "Video_game"
+        song = pd.influencer
+        #song = "winter_allegro"
         #song = "top100_Ready_To_Die"
         num_indi = pd.pop_size
         num_traits = pd.num_traits
@@ -285,6 +289,7 @@ class Fitness:
 
         @TODO oracle to decide what to do next
         """
+        #GA().convert_midi(GA().create_pheno(int(indi_id)),int(indi_id))
         #model.pop_update_indi_fitness(int(indi_id), score)
         # query the individual and extract note and user-note
         individual = model.pop_find_individual(int(indi_id))
@@ -315,7 +320,7 @@ class SaveFitness:
 class Terminate:
     def GET(self):
         """Render the terminate view and present the user with a list of save options"""
-        GA().convert_midi(GA().create_pheno(2),2)
+        GA().convert_midi(GA().create_pheno(0),0)
         return 'game over...'
 
     def POST(self):

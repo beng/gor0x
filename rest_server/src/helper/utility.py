@@ -23,19 +23,18 @@ def extract_traits(corpus, traits=[]):
 
     # very poor implementation -- fix later just get it
     # working for the time being!
+    print 'in extrct traits!@!!!!!'
     if traits:
         idx = 0 # hack for testing
-        t_id = 0
-        for stream in corpus:
-            for element in stream.elements:
-                if type(element) in traits:
+        t_id = 0        
+        for stream in corpus:            
+            for element in stream.elements:                
+                #print element
+                if type(element) in traits:                    
                     yield({
                         "id": str(idx),
-                        "traits": {
-                            "id": t_id,
-                            "note": str(element.nameWithOctave),
-                            "duration": str(element.duration.type)}
-                        })
+                        "note": str(element.nameWithOctave),
+                        "duration": str(element.duration.type)})
                     idx += 1
 
 ########################################################

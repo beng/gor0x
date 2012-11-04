@@ -57,19 +57,23 @@ def export(mfile):
 #######################################
 ### IGNORE EVERYTHING BELOW -- TESTING!
 #######################################
+import consts
+
 def parse(p):
     path = p
     pattern = '*.mid'
     name = ''
     for root, dirs, files in os.walk(path):
+        artist= root.replace('/Users/pwzoii/Documents/git_hub/melody_composer_public/melody_composer_public/rest_server/src/static/melodies/', '')
+        print artist
+        wf = open(root+'/'+artist+'.txt', 'w')
         for fname in fnmatch.filter(files,pattern):
             if 'top100_' in fname:          
                 song_name = fname.replace('top100_', '')
                 song_name = song_name.replace('.mid', '')
             else:
                 song_name = fname.replace('.mid', '')
-            print 'Parsing Song :: ', song_name
-            wf = open(root+'/'+song_name+'.txt', 'w')
+            print 'Parsing Song :: ', song_name            
             stream = converter.parse(root+'/'+fname)
             idx = 0
             for i in stream:
@@ -83,10 +87,10 @@ def parse(p):
                         print d.nameWithOctave
                         idx += 1
                         #wf.write(d.duration.type)
-            wf.close()
+        wf.close()
 
-#path = './midi_info/'
-#parse(path)
+path = consts.midi_dir
+parse(path)
 
 def parse_file():
     #print consts.name
