@@ -21,7 +21,8 @@ urls = (
     '/q/markov/(.+)/(.+)/(.+)/(.+)', 'Markov',
     '/q/spawn_pop/(.+)/(.+)/(.+)/(.+)/(.+)/(.+)', 'SpawnPopulation',
     '/q/artist', 'QueryArtist',
-    '/q/song', 'QuerySong',)
+    '/q/song', 'QuerySong',
+    '/q/exportmarkov', 'ExportMarkov',)
 
 render = web.template.render('templates/', base='layout')
 title = "REST Server"
@@ -154,6 +155,37 @@ class Markov():
         pool.pop()    # last
 
         return pool
+
+class ExportMarkov:
+    def create_pheno(self, traits):
+            '''
+            converts the individuals pitch, accidental, octave, and rhythm to a music stream
+            using the music21 library. the music stream is then used to create a midi file
+            '''                    
+
+            partupper = music21.stream.Part()
+            m = music21.stream.Measure()
+            for _note in traits:
+                n = music21.note.Note(_note)
+                print n
+                #n.duration.type = "half"
+                m.append(n)
+            partupper.append(m)    
+            return partupper
+        
+    def convert_midi(self, mfile, indi_id):
+        '''
+        mfile is a musicstream which is exported to as midi format
+        '''
+        mf = mfile.midiFile
+        name = str(indi_id) + '_song.mid'
+        mf.open('static/' + name, 'wb')
+        mf.write()
+        mf.close()
+        return name
+
+    def GET(self):
+        self.convert_midi(self.create_pheno(Markov().GET('Video_game','N64_StarFox64',50,5)),1)
 
 def notfound():
     msg = "Sorry, the page you were looking for was not found. There was probably a problem with your query!"

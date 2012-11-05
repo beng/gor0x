@@ -191,7 +191,7 @@ class GA:
         gene = []
 
         for i in individual:
-            gene.append(i['note'])
+            gene.append(i['user_note'])
 
         partupper = music21.stream.Part()
         m = music21.stream.Measure()
@@ -208,7 +208,7 @@ class GA:
         mfile is a musicstream which is exported to as midi format
         '''
         mf = mfile.midiFile
-        name = str(indi_id) + 'song.mid'
+        name = str(indi_id) + '_song.mid'
         mf.open('static/' + name, 'wb')
         mf.write()
         mf.close()
@@ -277,8 +277,8 @@ class Fitness:
             fake_individual.append(i['note'])
 
         fake_individual = [fi.replace('-', '') for fi in fake_individual]
-
-        return render.fitness(title, indi_id, fake_individual)
+        song_name = indi_id+"_song.mid" # don't cast indi_id to int because cant concat int and string
+        return render.fitness(title, indi_id, fake_individual, song_name)
     
     def POST(self, indi_id):
         """
@@ -288,8 +288,7 @@ class Fitness:
         for the individual
 
         @TODO oracle to decide what to do next
-        """
-        #GA().convert_midi(GA().create_pheno(int(indi_id)),int(indi_id))
+        """        
         #model.pop_update_indi_fitness(int(indi_id), score)
         # query the individual and extract note and user-note
         individual = model.pop_find_individual(int(indi_id))
@@ -304,7 +303,7 @@ class Fitness:
         score = GA().euclidean_distance(original_list, user_list)
 
         #update fitness score for individual
-        model.pop_update_indi_fitness(int(indi_id), score)
+        model.pop_update_indi_fitness(int(indi_id), score)        
         GA().fate(int(indi_id))
 
 class SaveFitness:
@@ -316,6 +315,8 @@ class SaveFitness:
         _note = web.input()['name']
         saved_traits = model.pop_find_trait(int(indi_id), int(t_id))
         model.pop_update_user_trait(saved_traits, {"$set": {"user_note":_note}})
+        GA().convert_midi(GA().create_pheno(int(indi_id)),int(indi_id))
+
 
 class Terminate:
     def GET(self):

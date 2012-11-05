@@ -1,5 +1,6 @@
-$def with(title, indi_id, individual) 
+$def with(title, indi_id, individual, song_name) 
 $var title:$title
+
 <!-- 
 <form method="POST" action="/fitness/$indi_id">
     <div class="row">
@@ -32,7 +33,9 @@ $var title:$title
 
 
 
-<div class="row span8 offset2" style="background-color:rgba(212, 230, 235, 0.84);border:1px solid black;">
+<div class="row span10 offset2" style="background-color:rgba(212, 230, 235, 0.84);border:1px solid black;">
+    <h4>To listen to the melody in MIDI form, move the traits around then click "Save Order!" then refresh the page</h4>
+</br>
     <div class="span2">
         <form method="POST" action="/fitness/$indi_id">
             
@@ -41,21 +44,24 @@ $var title:$title
                     <div id="$note" style="background-color:rgba(139, 139, 139, 0.5);border:2px solid black; height:50px;">
                         $note
                     </div>
+            <div><button id="next-song" style="background-color:#F85B5B;border:4px solid black"><h4>Next Song!</h4></button></div>
             </ul>
-            <div>
-                <button id="next-song" class="span2" style="background-color:#F85B5B;border:4px solid black;"><h3>Next Song!</h3></button>
-            </div> 
         </form>  
     </div>   
 
 
     <div class="offset3" >
-        <div class="span2 actions">
-            <button id="play" style="background-color:#12EC35;border:4px solid black; width:95px;height:50px;">Listen!</button>
-
-            <button id="submit-individual" class="$indi_id" style="background-color:#EEC07A;border:4px solid black; height:50px;">Save Order!</button>        
+        <div class="span2 actions btn-toolbar btn-toolbar
+btn-group">
+            <button id="play" style="background-color:#12EC35;border:4px solid black;">Listen!</button>
+            <button id="submit-individual" class="$indi_id" style="background-color:#EEC07A;border:4px solid black;">Save Order!</button> 
+            <!-- <button id="next-song" style="background-color:#F85B5B;border:4px solid black;">Next Song!</button>        -->
         </div>
-
+        <object type="audio/x-midi" data="/static/$song_name" width="250"
+            height="50">
+            <param name="autoplay" value="false">
+            <param name="autoStart" value="0">
+        </object>            
     </div>   
      
 

@@ -68,6 +68,7 @@ def pop_find_trait(indi_id, t_id):
 def pop_update_user_trait(f, n):
     pop_coll.update(f,n)
 
+
 def pop_population_by_generation(current_generation):
     """Used for tournament selection"""
     return [individual for individual in pop_coll.find({"generation":current_generation, "trait_id":0})]
