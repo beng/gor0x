@@ -12,6 +12,10 @@ $(function() {
         var app = new SchedulerPlayAudio(audio);
     });
 
+    // $("previous-song").click(function() {
+    //     $(location).attr('href',url);
+    // });
+
     $("#submit-individual").click(function(){
         var melody = new Array();
         var indi_id = $(this).attr("class");

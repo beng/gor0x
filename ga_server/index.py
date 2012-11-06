@@ -272,13 +272,18 @@ class Fitness:
         individual = model.pop_find_individual(int(indi_id))
         # converts from unicode to dictionary
         fake_individual = []
+        artist = ''
+        song = ''
+
 
         for i in individual:
             fake_individual.append(i['note'])
+            artist = i['artist']
+            song = i['song']
 
         fake_individual = [fi.replace('-', '') for fi in fake_individual]
         song_name = indi_id+"_song.mid" # don't cast indi_id to int because cant concat int and string
-        return render.fitness(title, indi_id, fake_individual, song_name)
+        return render.fitness(title, indi_id, fake_individual, song_name, artist, song)
     
     def POST(self, indi_id):
         """

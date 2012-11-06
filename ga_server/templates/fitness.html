@@ -1,4 +1,4 @@
-$def with(title, indi_id, individual, song_name) 
+$def with(title, indi_id, individual, song_name, artist, song) 
 $var title:$title
 
 <!-- 
@@ -33,7 +33,7 @@ $var title:$title
 
 
 
-<div class="row span10 offset2" style="background-color:rgba(212, 230, 235, 0.84);border:1px solid black;">
+<!-- <div class="row span10 offset2" style="background-color:rgba(212, 230, 235, 0.84);border:1px solid black;">
     <h4>To listen to the melody in MIDI form, move the traits around then click "Save Order!" then refresh the page</h4>
 </br>
     <div class="span2">
@@ -54,8 +54,7 @@ $var title:$title
         <div class="span2 actions btn-toolbar btn-toolbar
 btn-group">
             <button id="play" style="background-color:#12EC35;border:4px solid black;">Listen!</button>
-            <button id="submit-individual" class="$indi_id" style="background-color:#EEC07A;border:4px solid black;">Save Order!</button> 
-            <!-- <button id="next-song" style="background-color:#F85B5B;border:4px solid black;">Next Song!</button>        -->
+            <button id="submit-individual" class="$indi_id" style="background-color:#EEC07A;border:4px solid black;">Save Order!</button>
         </div>
         <object type="audio/x-midi" data="/static/$song_name" width="250"
             height="50">
@@ -66,6 +65,40 @@ btn-group">
      
 
 </div>    
-
-
-
+ -->
+<div class="row well span5 offset3">
+    <div class="page-header offset1">
+            <h1>$artist <small>$song</small></h1>
+    </div>
+</div>
+<div class="row well span10">
+    <div class="span3">
+        <div class="span3">
+            <div class="btn-group-vertical">
+                <button id="play" class="btn btn-large btn-block"><h3>Listen</h3></button>
+                <button id="submit-individual" class="$indi_id btn btn-large btn-block"><h3>Save Order</h3> </button>                
+            </div>
+        </div>
+        <div class="offset2">
+            <object type="audio/x-midi" data="/static/$song_name" style="border:2px solid black; height:20px; width:200px;">
+                <param name="autoplay" value="false">
+                <param name="autoStart" value="0">
+            </object>             
+        </div>        
+    </div> 
+    <div class="span2 offset2">
+        <ul id="sortable-trait">
+                $for note in individual:
+                    <div id="$note" style="background-color:rgba(201, 145, 145, 0.329412);border:2px solid black; height:50px;">
+                        $note
+                    </div>
+            <div>
+            </ul>
+    </div>
+    <div class="btn-group span5 offset8">
+        <!-- <button id="previous-song" class="btn-primary btn-inverse btn-large">Previous</button> -->
+        <form method="POST" action="/fitness/$indi_id">
+            <button id="next-song" class="btn-primary btn-inverse btn-large">Next</button>
+        </form>
+    </div>
+</div>
