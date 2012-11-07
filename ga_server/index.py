@@ -283,7 +283,8 @@ class Fitness:
 
         fake_individual = [fi.replace('-', '') for fi in fake_individual]
         song_name = indi_id+"_song.mid" # don't cast indi_id to int because cant concat int and string
-        return render.fitness(title, indi_id, fake_individual, song_name, artist, song)
+        max_gen = int(model.params_max_gen()['max_gen'])
+        return render.fitness(title, indi_id, fake_individual, song_name, artist, song, max_gen)
     
     def POST(self, indi_id):
         """

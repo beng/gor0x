@@ -1,31 +1,32 @@
 $def with (title)
 $var title:$title
 
+<div id="player">
+	<ul class="player-controls">
+        <li class="player-prev" ><i class="icon-step-backward"></i></li>
+        <li class="player-play" ><i class="icon-play"></i></li>
+        <li class="player-pause" style="display:none;"><i class="icon-pause"></i></li>
+        <li class="player-stop" ><i class="icon-stop"></i></li>
+        <li class="player-next" ><i class="icon-step-forward"></i></li>
+      </ul>
 
-<div class="row">
-    <div class="span12" style="border:1px solid black">    	
-		<ul id="sortable-trait" class="span10" style="margin-left: 200px;">			
-			$for i in range(2):				
-			    <div class="span1" style="background-color:red; width:10%; height:10%;">
-			        C
-			    </div>
+      <div class="player-progress-container">
+        <div class="player-progress-bar"></div>
+        <span class="player-progress-text"></span>
+      </div>
 
-			    <div class="span1" style="background-color:blue; width:10%; height:10%;">
-					B            
-			    </div>
-			    
-			    <div class="span1" style="background-color:green; width:10%; height:10%;">
-			    	A
-			    </div>
-			    
-			    <div class="span1" style="background-color:orange; width:10%; height:10%;">
-			    	D
-			    </div>
-			</div>
-		</ul>			
-		<div style="background-color:orange; width:5%; height:30%; margin-left: 30px;">
-		</div>	
-    </div>
+      <ul id="sortable">
+            <div id="note" style="background-color:rgba(201, 145, 145, 0.329412);border:2px solid black; height:50px;">
+                C#
+            </div>
+
+            <div id="note" style="background-color:rgba(201, 145, 145, 0.329412);border:2px solid black; height:50px;">
+                C#9
+            </div>
+        </ul>
+          <ul class="player-playlist-container nano">        
+            <div class="content">
+              <ul class="player-playlist"></ul>
+            </div>
+          </ul>    
 </div>
-
-

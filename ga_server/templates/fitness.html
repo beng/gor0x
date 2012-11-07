@@ -1,8 +1,8 @@
-$def with(title, indi_id, individual, song_name, artist, song) 
+$def with(title, indi_id, individual, song_name, artist, song, max_gen) 
 $var title:$title
 
-<!-- 
-<form method="POST" action="/fitness/$indi_id">
+
+<!-- <form method="POST" action="/fitness/$indi_id">
     <div class="row">
         <div class="span10 offset2" style="border:4px solid black">
             <ul id="sortable-trait">
@@ -21,13 +21,13 @@ $var title:$title
 <div class="actions">
         <button id="play" class="btn primary">Listen!</button>
         <button id="submit-individual" class="$indi_id" class="btn primary">Save Order!</button>        
-</div>
+</div> -->
 
 
 
 
 
- -->
+
 
 
 
@@ -66,7 +66,7 @@ btn-group">
 
 </div>    
  -->
-<div class="row well span5 offset3">
+<!-- <div class="row well span5 offset3">
     <div class="page-header offset1">
             <h1>$artist <small>$song</small></h1>
     </div>
@@ -96,9 +96,57 @@ btn-group">
             </ul>
     </div>
     <div class="btn-group span5 offset8">
-        <!-- <button id="previous-song" class="btn-primary btn-inverse btn-large">Previous</button> -->
         <form method="POST" action="/fitness/$indi_id">
             <button id="next-song" class="btn-primary btn-inverse btn-large">Next</button>
         </form>
     </div>
+</div> -->
+
+
+
+
+
+<!-- <div class="row">
+    <div class="btn-group well page-header pagination-centered span4 offset4">
+        <button id="previous-song" class="btn-primary btn-inverse btn-large">Previous</button>
+        <button id="play" class="btn-primary btn-large">Listen</button>
+        <button id="save-order" class="$indi_id" class="btn-primary btn-large">Save Order</button>
+        <button id="next-song" class="btn-primary btn-inverse btn-large">Next</button>        
+        <h2>$artist <small>$song</small></h2>
+    </div>
+    <div id="sortable-trait" class="span10 offset1 pagination-centered">
+        $for note in individual:
+            <div id="$note" style="background-color:rgba(201, 145, 145, 0.329412);border:2px solid black;width:100px">$note</div>
+    </div>
+
+</div>
+
+    
+ -->
+
+ <div class="container-fluid">        
+  <div class="row-fluid">
+    
+    <div class="span8 offset2">
+      <div class="pagination-centered page-header btn-group">
+            <h1>$artist <small>$song</small></h1>          
+            <a class="btn btn-inverse" id="previous-song" href="#"><i class="icon-arrow-left"></i> Prevous Song</a>
+            <a class="btn btn-inverse" id="play" href="#">Listen</a>
+            <a class="btn btn-inverse" id="save-order" href="$indi_id">Save Order</a>
+            <a class="btn btn-inverse" id="next-song" href="#">Next Song <i class="icon-arrow-right"></i></a>
+    </div>
+
+
+    <div id="stats" class="well span4" style="background: rgba(100, 100, 100, 0.3);color: #ddd;">
+        <h4>Generation: <small>1/$max_gen</small></h4>
+        <h4>Current Score: <small>5/100</small></h4>
+    </div>
+
+    <div id="sortable-trait" class="well pagination-centered span4" style="background: rgba(100, 100, 100, 0.3);color: #ddd;">    
+      $for note in individual:
+        <div id="$note" style="background-color:rgba(35, 231, 59, 0.329412);border:2px solid black;">$note</div>
+    </div>
+    </div>
+
+  </div>
 </div>
