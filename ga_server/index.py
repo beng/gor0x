@@ -275,13 +275,30 @@ class Fitness:
         artist = ''
         song = ''
 
+        note_colors = {
+            'A': 'red',
+            'B': 'yellow',
+            'C': 'orange',
+            'D': 'green',
+            'E': 'blue',
+            'F': 'purple',
+            'G': 'grey',}
 
         for i in individual:
-            fake_individual.append(i['note'])
+            if i['note'][0] in note_colors.keys():
+                color = note_colors[i['note'][0]]
+                print 'color :: ', color
+                fake_individual.append([i['note'],color])
             artist = i['artist']
             song = i['song']
+        print fake_individual
+        
+        for fi in fake_individual:
+            if '-' in fi[0]:
+                fake_individual.pop(fake_individual.index(fi))
 
-        fake_individual = [fi.replace('-', '') for fi in fake_individual]
+        #fake_individual = [fi[0].replace('-', '') for fi in fake_individual]
+
         song_name = indi_id+"_song.mid" # don't cast indi_id to int because cant concat int and string
         max_gen = int(model.params_max_gen()['max_gen'])
         return render.fitness(title, indi_id, fake_individual, song_name, artist, song, max_gen)
