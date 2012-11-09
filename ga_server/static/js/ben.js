@@ -13,19 +13,7 @@ $(function() {
     });
 
     $("#next-song").click(function() {
-        var indi_id = $(this).attr("href");
-        console.log(indi_id);
-        $.ajax({
-            type: 'POST',
-            async: false,
-            url: '/fitness/' + indi_id,
-            //data: {name: note, duration:1, trait_id: index}, // 1 is quarter I believe
-            success: function(){
-                console.log("SUCCESSFUL POST TO FITNESS!");
-                console.log(indi_id);
-                window.location.href = '/fitness/' + int(indi_id)+1;
-            }
-        });
+        $("#ns").submit();
     });
 
     $("#save-order").click(function(){

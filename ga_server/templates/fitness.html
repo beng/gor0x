@@ -129,12 +129,14 @@ btn-group">
     
     <div class="span8 offset2">
       <div class="pagination-centered page-header btn-group">
+        <form method="POST" id="ns" action="/fitness/$indi_id">
             <h1>$artist <small>$song</small></h1>          
             <a class="btn btn-inverse" id="previous-song" href="#"><i class="icon-arrow-left"></i> Prevous Song</a>
             <a class="btn btn-inverse" id="play" href="#">Listen</a>
             <a class="btn btn-inverse" id="save-order" href="$indi_id">Save Order</a>
-            <a class="btn btn-inverse" id="next-song" href="$indi_id">Next Song <i class="icon-arrow-right"></i></a>
+            <a class="btn btn-inverse" id="next-song">Next Song <i class="icon-arrow-right"></i></a>
             <!-- <button id="next-song" class="btn btn-inverse">Next</button>         -->
+        </form>
     </div>
 
 
