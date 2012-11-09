@@ -133,16 +133,19 @@ btn-group">
             <a class="btn btn-inverse" id="previous-song" href="#"><i class="icon-arrow-left"></i> Prevous Song</a>
             <a class="btn btn-inverse" id="play" href="#">Listen</a>
             <a class="btn btn-inverse" id="save-order" href="$indi_id">Save Order</a>
-            <a class="btn btn-inverse" id="next-song" href="#">Next Song <i class="icon-arrow-right"></i></a>
+            <a class="btn btn-inverse" id="next-song" href="$indi_id">Next Song <i class="icon-arrow-right"></i></a>
+            <!-- <button id="next-song" class="btn btn-inverse">Next</button>         -->
     </div>
 
 
     <div id="stats" class="well span4" style="background: rgba(100, 100, 100, 0.3);color: #ddd;">
+        <legend style="color:rgba(236, 221, 200, 0.32);">Stats</legend>
         <h4>Generation: <small>1/$max_gen</small></h4>
         <h4>Current Score: <small>5/100</small></h4>
     </div>
 
     <div id="sortable-trait" class="well pagination-centered span4" style="background: rgba(100, 100, 100, 0.3);color: #ddd;">    
+        
       $for note in individual:
         <div id="$note" style="background-color:rgba(35, 231, 59, 0.329412);border:2px solid black;">$note</div>
     </div>

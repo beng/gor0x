@@ -1,7 +1,7 @@
 $def with (title, songs) 
 $var title:$title
 
-<form method="POST" action="/" class="well">
+<!-- <form method="POST" action="/" class="well">
 	<legend>GA Settings</legend>
 	<div class="form-inline">
 		<input type="text" class="input-large" placeholder="Population Size" style="height:30;" name="pop_size" />
@@ -19,5 +19,43 @@ $var title:$title
 	<div class="actions">
 		<button class="btn primary" type="submit">Submit!</button>
 	</div>
-</form>
+</form> -->
+<form method="POST" action="/">
+	<div class="span12">
+		<legend style="color:rgba(151, 115, 115, 0.68);">Genetic Algorithm Melody Composer Initialization Settings -- <small>Fill out everything below!</small></legend>
 
+	</div>
+
+	<div class="well span3" style="background: rgba(100, 100, 100, 0.3);color: #ddd;">
+		<legend style="color:rgba(236, 221, 200, 0.32);">Artist Influencer</legend>
+			<label>Artist Influencer</label>
+				<select class="input-large" name="influencer">			
+					$for song in songs:
+						<option>$song</option>
+				</select>
+	</div>
+
+
+	<div class="well span3" style="background: rgba(100, 100, 100, 0.3);color: #ddd;">
+	        <legend style="color:rgba(236, 221, 200, 0.32);">Markov Chain Settings</legend>
+	        <label>Markov Chain: Size</label>
+	        <input type="text" class="input-large" placeholder="Recommended 100-5000" style="height:30;" name="mc_size" />
+			<label>Markov Chain: Node History</label>
+			<input type="text" class="input-large" placeholder="Recommended 1-5" style="height:30;" name="mc_nodes" />
+	</div>
+
+
+	<div class="well span3" style="background: rgba(100, 100, 100, 0.3);color: #ddd;">
+	        <legend style="color:rgba(236, 221, 200, 0.32);">GA Settings</legend>
+	        <label>Population Size</label>
+			<input type="text" class="input-large" placeholder="Recommended 1-10" style="height:30;" name="pop_size" />
+			<label>Number of Traits</label>
+			<input type="text" class="input-large" placeholder="Recommended 1-20" style="height:30;" name="num_traits" />
+			<label>Number of Generations</label>
+			<input type="text" class="input-large" placeholder="Recommended 1-100" style="height:30;" name="num_gen" />
+
+			<div class="actions">
+				<button class="btn primary" type="submit">Submit!</button>
+			</div>
+	</div>
+</form>
