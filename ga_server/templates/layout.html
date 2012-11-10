@@ -1,20 +1,7 @@
 $def with (page)
 <html>
 <head>
-	<!-- base64 packages -->
-    <script src="/static/js/MIDI/VersionControl.Base64.js" type="text/javascript"></script>
-    <script src="/static/js/MIDI/lib/base64binary.js" type="text/javascript"></script>
-
-    <!-- MIDI.js packages -->
-    <script src="/static/js/MIDI/DOMLoader.XMLHttp.js" type="text/javascript"></script>
-    <script src="/static/js/MIDI/DOMLoader.script.js" type="text/javascript"></script>
-    <script src="/static/js/MIDI/MIDI.audioDetect.js" type="text/javascript"></script>
-    <script src="/static/js/MIDI/MIDI.loadPlugin.js" type="text/javascript"></script>
-    <script src="/static/js/MIDI/MIDI.Plugin.js" type="text/javascript"></script>
-    <script src="/static/js/MIDI/MIDI.Player.js" type="text/javascript"></script>
-    <script src="/static/js/MIDI/Color.js" type="text/javascript"></script>
-    <script src="/static/js/MIDI/MusicTheory.js" type="text/javascript"></script>
-    <script src="/static/js/MIDI/MusicTheory.Synesthesia.js" type="text/javascript"></script>
+	
 
 	<!--jQuery UI -->
 	<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
@@ -38,12 +25,30 @@ $def with (page)
 	<!--custom script-->
 	<script src="/static/js/ben.js" type="text/javascript"></script>
 
+
+	<!-- base64 packages -->
+    <script src="/static/js/Polyfill/Base64.js" type="text/javascript"></script>
+    <script src="/static/inc/base64binary.js" type="text/javascript"></script>
+
+    <!-- MIDI.js packages -->
+    <script src="/static/js/Window/DOMLoader.XMLHttp.js" type="text/javascript"></script>
+    <script src="/static/js/Window/DOMLoader.script.js" type="text/javascript"></script>
+    <script src="/static/js/MIDI/audioDetect.js" type="text/javascript"></script>
+    <script src="/static/js/MIDI/loadPlugin.js" type="text/javascript"></script>
+    <script src="/static/js/MIDI/Plugin.js" type="text/javascript"></script>
+    <script src="/static/js/MIDI/Player.js" type="text/javascript"></script>
+    <script src="/static/js/Color/SpaceW3.js" type="text/javascript"></script>
+    <script src="/static/js/MusicTheory/_musictheory.js" type="text/javascript"></script>
+    <script src="/static/js/MusicTheory/Synesthesia.js" type="text/javascript"></script>
+
+
 	<style type="text/css">
 		/*#sortable-trait { list-style-type: none; margin: 0; padding: 0; width: 60%; }
 		#sortablet li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
 		#sortable-trait li span { position: absolute; margin-left: -1.3em; }*/		
 		body {padding-top: 60px; padding-bottom: 40px; font-size: 18px; background: #252424;color: #ccc;}		
 	</style>
+
 
 	<title>$page.title</title>
 </head>

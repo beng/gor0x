@@ -1,8 +1,9 @@
 $def with(title, indi_id, individual, song_name, artist, song, max_gen) 
 $var title:$title
 
- <div class="container-fluid">        
-  <div class="row-fluid">
+<div id="content">
+    <div class="container-fluid">        
+    <div class="row-fluid">
     
     <div class="span8 offset2">
       <div class="pagination-centered page-header btn-group">
@@ -32,38 +33,4 @@ $var title:$title
 
   </div>
 </div>
-
-<script type="text/javascript">
-SPEED = 250,
-SPACING = 200,
-PATTERN = [], // PATTERN TO PLAY
-NOTES = ['B4','C4','B4', 'G4', 'E4'];
-LISTEN=true;
-playPattern();
-function playPattern() { // playback a pattern
-            var next = NOTES.length >> 0,
-                i = 0;
-            PATTERN[PATTERN.length] = next;
-            (function play() { // recursive loop to play pattern
-                setTimeout( function() {
-                    playSingle( NOTES[ PATTERN[i] ]);
-                    i++;
-                    if( i < PATTERN.length ) {
-                        play();
-                    } else {
-                        setTimeout( function() { LISTEN = true; }, SPEED + SPACING );
-                    }
-                },
-                SPEED + SPACING)
-            })(); // end recursion
-        }
-function playSingle(note) { // play a color/note
-    MIDI.loadPlugin(function() {
-            MIDI.noteOn(0, MIDI.keyToNote[note], 127, 0);
-            setTimeout(function() { // turn off color
-                MIDI.noteOff(0, MIDI.keyToNote[note], 0);
-            }, SPEED);
-        });
-        }
-
-</script>
+</div>
