@@ -3,7 +3,8 @@ SPACING = 200,
 LISTEN=true;
 
 $(function() {
-    NOTES = ['Ab2','B4','C3', 'D5','A4','A3'];
+    // NOTES = ['E2','E2','E2','E2'];
+    
     colors = {
             'A': '#'+(Math.random()*0xFFFFFF<<0).toString(16),
             'B': '#'+(Math.random()*0xFFFFFF<<0).toString(16),
@@ -13,13 +14,15 @@ $(function() {
             'F': '#'+(Math.random()*0xFFFFFF<<0).toString(16),
             'G': '#'+(Math.random()*0xFFFFFF<<0).toString(16)};
 
-    $.each(NOTES, function(idx) {
-        for(var k in colors) {
-            if(NOTES[idx][0] == k){
-                $('#sortable-trait').append('<div id='+NOTES[idx]+' style="background-color:'+colors[k]+';border:2px solid black;">'+NOTES[idx]+'</div>')
-            }
-        }
-    });
+    // $.get('/fitness', function(){console.log('hey');});
+
+    // $.each(NOTES, function(idx) {
+    //     for(var k in colors) {
+    //         if(NOTES[idx][0] == k){
+    //             $('#sortable-trait').append('<div id='+NOTES[idx]+' style="background-color:'+colors[k]+';border:2px solid black;">'+NOTES[idx]+'</div>')
+    //         }
+    //     }
+    // });
 
     $( "#sortable-trait" ).sortable();
     $( "#sortable-trait" ).disableSelection();
@@ -36,12 +39,14 @@ $(function() {
 
     $('#listen').click(function(){
         PATTERN = [];
-        
+        // NOTES = [];
+
         $('div#sortable-trait > div').each(function(index) {
             PATTERN.push($(this).attr('id'));
+            // NOTES.push($(this).attr('id'));
         });
         
-        console.log(PATTERN);
+        // console.log(PATTERN);
         playPattern();
     });
 
@@ -51,7 +56,7 @@ $(function() {
 
     $("#save-order").click(function(){
         var melody = new Array();
-        var indi_id = $(this).attr("class");
+        var indi_id = $(this).attr("href");
         $("div#sortable-trait > div").each(function(index){
             /*  If I don't do it like this, then web.py WILL NOT
                 receive duplicate objects (e.g. if the notes are
@@ -83,9 +88,14 @@ function playPattern() { // playback a pattern
     
     (function play() { // recursive loop to play pattern
         setTimeout( function() {
+            console.log("i :: "+i);
+            console.log("pattern i :: "+PATTERN[i]);
+            console.log("pattern length:: "+PATTERN.length);
+
             playSingle( PATTERN[i]);
 
             i++;
+
             if( i < PATTERN.length ) {
                 play();
             } else {

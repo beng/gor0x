@@ -76,7 +76,7 @@ class GA:
         @TODO redo this entire method before you get shot
         @TODO redo this entire method before you get shot
         """
-
+        print 'in selection'
         current_indi_id = int(current_indi_id)
         current_generation = int(current_generation)
         num_rounds = 2
@@ -176,6 +176,7 @@ class GA:
         as the parents otherwise will have problems with
         euclidean distance"""
 
+        print 'in crossover'
         try:
             split = random.randint(1, len(parent1))
             return parent1[:split] + parent2[split:], parent2[:split] + parent1[split:]
@@ -274,6 +275,7 @@ class Fitness:
         fake_individual = []
         artist = ''
         song = ''
+        current_gen = ''
 
         note_colors = {
             'A': 'red',
@@ -285,23 +287,19 @@ class Fitness:
             'G': 'grey',}
 
         for i in individual:
+            current_gen = i['generation']
             if i['note'][0] in note_colors.keys():
-                color = note_colors[i['note'][0]]
-                print 'color :: ', color
+                if '-' in i['note']:
+                    i['note'] = i['note'].replace('-', 'b')
+                color = note_colors[i['note'][0]]                
                 fake_individual.append([i['note'],color])
             artist = i['artist']
             song = i['song']
-        print fake_individual
         
-        for fi in fake_individual:
-            if '-' in fi[0]:
-                fake_individual.pop(fake_individual.index(fi))
-
-        #fake_individual = [fi[0].replace('-', '') for fi in fake_individual]
-
-        song_name = indi_id+"_song.mid" # don't cast indi_id to int because cant concat int and string
+        # song_name = indi_id+"_song.mid" # don't cast indi_id to int because cant concat int and string
         max_gen = int(model.params_max_gen()['max_gen'])
-        return render.fitness(title, indi_id, fake_individual, song_name, artist, song, max_gen)
+        
+        return render.fitness(title, indi_id, fake_individual, artist, song, max_gen, current_gen)
     
     def POST(self, indi_id):
         """
@@ -324,7 +322,7 @@ class Fitness:
             original_list.append(str(trait['note']))
 
         score = GA().euclidean_distance(original_list, user_list)
-
+        print 'Fitness score :: ', score
         #update fitness score for individual
         model.pop_update_indi_fitness(int(indi_id), score)        
         GA().fate(int(indi_id))
@@ -335,10 +333,10 @@ class SaveFitness:
         is used to find out what notes the user didn't like from the computer
         presented melody"""
         t_id = web.input()['trait_id']
-        _note = web.input()['name']
+        _note = web.input()['name'].replace('b', '-')
         saved_traits = model.pop_find_trait(int(indi_id), int(t_id))
         model.pop_update_user_trait(saved_traits, {"$set": {"user_note":_note}})
-        GA().convert_midi(GA().create_pheno(int(indi_id)),int(indi_id))
+        # GA().convert_midi(GA().create_pheno(int(indi_id)),int(indi_id))
 
 
 class Terminate:

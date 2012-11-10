@@ -1,4 +1,4 @@
-$def with(title, indi_id, individual, song_name, artist, song, max_gen) 
+$def with(title, indi_id, individual, artist, song, max_gen, current_gen) 
 $var title:$title
 
 <div id="content">
@@ -10,7 +10,7 @@ $var title:$title
         <form method="POST" id="ns" action="/fitness/$indi_id">
             <h1>$artist <small>$song</small></h1>          
             <a class="btn btn-inverse" id="previous-song" href="#"><i class="icon-arrow-left"></i> Prevous Song</a>
-            <a class="btn btn-inverse" id="play" href="#">Listen</a>
+            <a class="btn btn-inverse" id="listen" href="#">Listen</a>
             <a class="btn btn-inverse" id="save-order" href="$indi_id">Save Order</a>
             <a class="btn btn-inverse" id="next-song">Next Song <i class="icon-arrow-right"></i></a>
             <!-- <button id="next-song" class="btn btn-inverse">Next</button>         -->
@@ -20,7 +20,7 @@ $var title:$title
 
     <div id="stats" class="well span4" style="background: rgba(100, 100, 100, 0.3);color: #ddd;">
         <legend style="color:rgba(236, 221, 200, 0.32);">Stats</legend>
-        <h4>Generation: <small>1/$max_gen</small></h4>
+        <h4>Generation: <small>$current_gen/$max_gen</small></h4>
         <h4>Current Score: <small>5/100</small></h4>
     </div>
 
