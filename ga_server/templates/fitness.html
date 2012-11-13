@@ -20,8 +20,9 @@ $var title:$title
 
     <div id="stats" class="well span4" style="background: rgba(100, 100, 100, 0.3);color: #ddd;">
         <legend style="color:rgba(236, 221, 200, 0.32);">Stats</legend>
-        <h4>Generation: <small>$current_gen/$max_gen</small></h4>
-        <h4>Current Score: <small>5/100</small></h4>
+        <h4>Current Individual: <small>$indi_id</small></h4>
+        <h4>Current Generation: <small>$current_gen/$max_gen</small></h4>
+        <!-- <h4>Current Score: <small>5/100</small></h4> -->
     </div>
 
     <div id="sortable-trait" class="well pagination-centered span4" style="background: rgba(100, 100, 100, 0.3);color: #ddd;">    
@@ -29,6 +30,16 @@ $var title:$title
       $for note in individual:
         <div id="$note[0]" style="background-color:$note[1];border:2px solid black;">$note[0]</div>
     </div>
+
+    <!-- <div id="quick_fitness" class="well span3" style="background: rgba(100, 100, 100, 0.3);color: #ddd;">
+        <legend style="color:rgba(236, 221, 200, 0.32);">Quick Fitness</legend>        
+        <form method="POST" id="qf" action="/fitness/$indi_id">        
+            <input type="text" id="score" name="score" value="50"/>         
+            <a class="btn btn-inverse" id="love" href="#">Love</a>
+            <a class="btn btn-inverse" id="hate" href="#">Hate</a>   
+        </form>
+    </div> -->
+
     </div>
 
   </div>

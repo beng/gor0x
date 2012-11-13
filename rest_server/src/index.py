@@ -16,6 +16,7 @@ import ga
 import model
 
 urls = (
+    '/q/songartist/(.+)', 'SongArtist',
     '/q/save_midi/(.+)/(.+)', 'SaveMidi',
     '/q/load_traits/(.+)/(.+)', 'LoadTraits',
     '/q/markov/(.+)/(.+)/(.+)/(.+)', 'Markov',
@@ -26,6 +27,11 @@ urls = (
 
 render = web.template.render('templates/', base='layout')
 title = "REST Server"
+
+class SongArtist:
+    def GET(self, song):
+        artist = model.music_find_artist_by_song(song)
+        return json.dumps(artist)
 
 ########################################################
 # QueryArtist

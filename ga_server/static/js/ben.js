@@ -1,5 +1,5 @@
-SPEED = 250,
-SPACING = 200,
+SPEED = 200,
+SPACING = 300,
 LISTEN=true;
 
 $(function() {
@@ -46,7 +46,7 @@ $(function() {
             // NOTES.push($(this).attr('id'));
         });
         
-        // console.log(PATTERN);
+        
         playPattern();
     });
 
@@ -79,6 +79,14 @@ $(function() {
         //});
     });
 
+    $("#love").click(function() {
+        $("#qf").submit();
+    });
+
+    $("#hate").click(function() {
+        $("#qf").submit();
+    });
+
 });
 
 function playPattern() { // playback a pattern
@@ -88,9 +96,7 @@ function playPattern() { // playback a pattern
     
     (function play() { // recursive loop to play pattern
         setTimeout( function() {
-            console.log("i :: "+i);
             console.log("pattern i :: "+PATTERN[i]);
-            console.log("pattern length:: "+PATTERN.length);
 
             playSingle( PATTERN[i]);
 
@@ -108,9 +114,12 @@ function playPattern() { // playback a pattern
 
 function playSingle(note) { // play a color/note
     MIDI.loadPlugin(function() {
+        default_bg = $('#'+note).css('background-color');
+        $('#'+note).css('background-color', 'white');
         MIDI.noteOn(0, MIDI.keyToNote[note], 127, 0);
         setTimeout(function() { // turn off color
             MIDI.noteOff(0, MIDI.keyToNote[note], 0);
+            $('#'+note).css('background-color', default_bg);
         }, SPEED);
     });
 }

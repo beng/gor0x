@@ -220,7 +220,7 @@ class Index:
         """Render the parameter initialization view"""
         model.pop_clear_conn()
         model.params_clear_conn()
-        # call REST server for a list of available artists
+        # call REST server for a list of available songs
         br = web.Browser()
         br.open('http://localhost:8000/q/song') # make dynamic later
         songs = json.loads(br.get_text())
@@ -229,12 +229,15 @@ class Index:
 
     def POST(self):
         pd = web.input()
-        num_gen = pd.num_gen
-        #artist = pd.influencer    
-        artist = "Video_game"
+        num_gen = pd.num_gen           
         song = pd.influencer
-        #song = "winter_allegro"
-        #song = "top100_Ready_To_Die"
+
+        # call REST server to get artist
+        br = web.Browser()
+        br.open('http://localhost:8000/q/songartist/' + song) # make dynamic later
+        artist = json.loads(br.get_text())[0]
+        print artist
+
         num_indi = pd.pop_size
         num_traits = pd.num_traits
         size = pd.mc_size
@@ -310,6 +313,7 @@ class Fitness:
 
         @TODO oracle to decide what to do next
         """        
+
         #model.pop_update_indi_fitness(int(indi_id), score)
         # query the individual and extract note and user-note
         individual = model.pop_find_individual(int(indi_id))
