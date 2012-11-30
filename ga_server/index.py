@@ -103,10 +103,10 @@ class GA:
             for item in model.pop_find_individual(int(p1['indi_id'])):
                 artist = item['artist']
                 song = item['song']
-                _p1.append(item['user_note'])
+                _p1.append(item['note'])
 
             for item in model.pop_find_individual(int(p2['indi_id'])):
-                _p2.append(item['user_note'])
+                _p2.append(item['note'])
 
             # create child among parents
             child1, child2 = self.crossover(_p1,_p2)

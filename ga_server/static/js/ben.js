@@ -3,6 +3,8 @@ SPACING = 300,
 LISTEN=true;
 
 $(function() {
+    // NOTES = ['E2','E2','E2','E2'];
+    
     colors = {
             'A': '#'+(Math.random()*0xFFFFFF<<0).toString(16),
             'B': '#'+(Math.random()*0xFFFFFF<<0).toString(16),
@@ -12,8 +14,28 @@ $(function() {
             'F': '#'+(Math.random()*0xFFFFFF<<0).toString(16),
             'G': '#'+(Math.random()*0xFFFFFF<<0).toString(16)};
 
+    // $.get('/fitness', function(){console.log('hey');});
+
+    // $.each(NOTES, function(idx) {
+    //     for(var k in colors) {
+    //         if(NOTES[idx][0] == k){
+    //             $('#sortable-trait').append('<div id='+NOTES[idx]+' style="background-color:'+colors[k]+';border:2px solid black;">'+NOTES[idx]+'</div>')
+    //         }
+    //     }
+    // });
+
     $( "#sortable-trait" ).sortable();
     $( "#sortable-trait" ).disableSelection();
+
+    // $("#play").click(function() {        
+    //     var audio = new Array();
+    //     $("div#sortable-trait > div").each(function(index){            
+    //         var note = Note.fromLatin($(this).attr('id'));
+    //         console.log(note);
+    //         audio.push({name: note, duration: 1});
+    //     });
+    //     var app = new SchedulerPlayAudio(audio);
+    // });
 
     $('#listen').click(function(){
         PATTERN = [];
@@ -23,6 +45,8 @@ $(function() {
             PATTERN.push($(this).attr('id'));
             // NOTES.push($(this).attr('id'));
         });
+        
+        
         playPattern();
     });
 
@@ -50,7 +74,9 @@ $(function() {
                     console.log(indi_id);
                 }
             });
-        })  
+        })//.promise().done(function() {
+          //  $.post("/fitness/" + indi_id);
+        //});
     });
 
     $("#love").click(function() {

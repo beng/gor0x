@@ -190,6 +190,9 @@ class ExportMarkov:
         mf.close()
         return name
 
+    def GET(self):
+        self.convert_midi(self.create_pheno(Markov().GET('Video_game','N64_StarFox64',50,5)),1)
+
 def notfound():
     msg = "Sorry, the page you were looking for was not found. There was probably a problem with your query!"
     return web.notfound(render.notfound(title, msg))

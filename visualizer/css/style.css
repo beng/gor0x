@@ -1,0 +1,133 @@
+body, html {
+  padding: 0px;
+  margin: 0px;
+  height: 100%;
+  width: 100%;
+  background: #000000;
+  color: #ccc;
+  overflow: hidden;
+}
+
+ul, ol {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+
+a {
+  color: #bbb;
+}
+a:hover {
+  color: #ddd;
+}
+
+#canvas {
+  position: absolute;
+  left: 0px;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+
+#player {
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  width: 300px;
+  left: -300px;
+  margin: 0px;
+  padding: 0;
+  color: #ddd;
+  background: rgba(100, 100, 100, 0.3);
+}
+
+.player-controls {
+  line-height: 30px;
+  text-align: center;
+  padding-top: 3px;
+}
+
+.player-controls>li {
+  display: inline-block;
+  width: 22%;
+  cursor: pointer;
+  -webkit-transition: text-shadow 0.5s, color 0.2s;
+  -moz-transition:    text-shadow 0.5s, color 0.2s;
+  -o-transition:      text-shadow 0.5s, color 0.2s;
+  -ms-transition:     text-shadow 0.5s, color 0.2s;
+  transition:         text-shadow 0.5s, color 0.2s;
+}
+
+.player-controls>li:hover {
+  color: #f3f3f3;
+  text-shadow: 0px 0px 20px rgba(255, 255, 255, 0.8);
+}
+
+.player-progress-container {
+  margin-top: 3px;
+  height: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 280px;
+}
+
+.player-progress-bar {
+  position: absolute;
+  height: 8px;
+  background: rgba(200, 200, 200, 0.15);
+}
+
+.player-progress-text {
+  color: #ddd;
+  position: absolute;
+  right: 15px;
+  font-size: 9px;
+  cursor: default;
+  margin-top: -1px;
+}
+
+
+.player-playlist-container {
+  line-height: 21px;
+  text-indent: 10px;
+  font-size: 11px;
+  display: block;
+}
+
+.player-playlist>li {
+  cursor: pointer;
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-transition: text-shadow 0.5s, background 0.2s;
+  -moz-transition:    text-shadow 0.5s, background 0.2s;
+  -o-transition:      text-shadow 0.5s, background 0.2s;
+  -ms-transition:     text-shadow 0.5s, background 0.2s;
+  transition:         text-shadow 0.5s, background 0.2s;
+}
+
+.player-playlist>li:hover {
+  color: #fff;
+  text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.7);
+  background-color: rgba(0, 0, 0, 0.55);
+}
+
+.player-current-track {
+  background-color: rgba(200, 200, 200, 0.2) !important;
+}
+
+.hover {
+  background-color: rgba(200, 200, 200, 0.2) !important;
+}
+
+#about {
+  position: absolute;
+  right: 20px;
+  bottom: 10px;
+  font-size: 11px;
+  line-height: 17px;
+  color: #aaa;
+  cursor: default;
+  text-align: right;
+}
