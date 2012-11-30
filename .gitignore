@@ -1,7 +1,7 @@
 *.pyc
 rest_server/data/db/*
 rest_server/src/static/melodies/
-rest_server/src/static/pitches
+rest_server/src/static/pitches/
 ga_server/static/melodies/
 ga_server/static/*.mid
 visualizer/
