@@ -5,7 +5,6 @@ import math
 import music21
 import random
 
-
 def create_population(artist, song, num_indi, num_traits, size, nodes):
     root = 'http://localhost:8000/q/spawn_pop/'
     params = root +'/'.join([artist, song, str(num_indi), str(num_traits), str(size), str(nodes)])

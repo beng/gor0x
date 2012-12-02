@@ -1,4 +1,3 @@
-import web
 from pymongo import Connection
 from bson.json_util import *
 
