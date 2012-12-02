@@ -29,14 +29,14 @@ $(function() {
         PATTERN = [];
         // NOTES = [];
 
-        $('div#sortable-trait > div').each(function(index) {
+        $('div#n_start > div').each(function(index) {
             PATTERN.push($(this).attr('id'));
             // NOTES.push($(this).attr('id'));
         });
         
         var ed = euclidean_distance(original_notes, PATTERN);
         $("#current_score").html('Current Score: <small>' + ed + '</small>');
-
+        
         playPattern();
     });
 
@@ -79,11 +79,9 @@ $(function() {
 
 function euclidean_distance(song1, song2) {
     var score = 0;
-
     for(var i=0; i < song1.length; i++) {
         score += Math.pow((MIDI.keyToNote[song1[i]] - MIDI.keyToNote[song2[i]]), 2);
     }
-
     return Math.sqrt(score);
 }
 
