@@ -89,11 +89,12 @@ class Fitness:
 
         for i in individual:
             current_gen = i['generation']
-            if i['note'][0] in note_colors.keys():
-                if '-' in i['note']:
-                    i['note'] = i['note'].replace('-', 'b')
-                color = note_colors[i['note'][0]]                
-                fake_individual.append([i['note'],color])
+            #if i['note'][0] in note_colors.keys():
+            if '-' in i['note']:
+                i['note'] = i['note'].replace('-', 'b')
+            #color = note_colors[i['note'][0]]                
+            #fake_individual.append([i['note'],color])
+            fake_individual.append(i['note'])
             artist = i['artist']
             song = i['song']
         

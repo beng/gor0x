@@ -3,7 +3,11 @@ SPACING = 300,
 LISTEN=true;
 
 $(function() {
-    // NOTES = ['E2','E2','E2','E2'];
+    original_notes = [];
+
+    $(".orig_notes").each(function(index) {
+        original_notes.push($(this).attr('id'));
+    });
     
     colors = {
             'A': '#'+(Math.random()*0xFFFFFF<<0).toString(16),
@@ -14,28 +18,12 @@ $(function() {
             'F': '#'+(Math.random()*0xFFFFFF<<0).toString(16),
             'G': '#'+(Math.random()*0xFFFFFF<<0).toString(16)};
 
-    // $.get('/fitness', function(){console.log('hey');});
-
-    // $.each(NOTES, function(idx) {
-    //     for(var k in colors) {
-    //         if(NOTES[idx][0] == k){
-    //             $('#sortable-trait').append('<div id='+NOTES[idx]+' style="background-color:'+colors[k]+';border:2px solid black;">'+NOTES[idx]+'</div>')
-    //         }
-    //     }
-    // });
+    $('div#n_start > div').each(function(index) {       
+        $(this).css({ 'background-color': colors[$(this).attr('id')[0]]});
+    });
 
     $( "#sortable-trait" ).sortable();
     $( "#sortable-trait" ).disableSelection();
-
-    // $("#play").click(function() {        
-    //     var audio = new Array();
-    //     $("div#sortable-trait > div").each(function(index){            
-    //         var note = Note.fromLatin($(this).attr('id'));
-    //         console.log(note);
-    //         audio.push({name: note, duration: 1});
-    //     });
-    //     var app = new SchedulerPlayAudio(audio);
-    // });
 
     $('#listen').click(function(){
         PATTERN = [];
@@ -46,7 +34,9 @@ $(function() {
             // NOTES.push($(this).attr('id'));
         });
         
-        
+        var ed = euclidean_distance(original_notes, PATTERN);
+        $("#current_score").html('Current Score: <small>' + ed + '</small>');
+
         playPattern();
     });
 
@@ -74,9 +64,7 @@ $(function() {
                     console.log(indi_id);
                 }
             });
-        })//.promise().done(function() {
-          //  $.post("/fitness/" + indi_id);
-        //});
+        })
     });
 
     $("#love").click(function() {
@@ -88,6 +76,16 @@ $(function() {
     });
 
 });
+
+function euclidean_distance(song1, song2) {
+    var score = 0;
+
+    for(var i=0; i < song1.length; i++) {
+        score += Math.pow((MIDI.keyToNote[song1[i]] - MIDI.keyToNote[song2[i]]), 2);
+    }
+
+    return Math.sqrt(score);
+}
 
 function playPattern() { // playback a pattern
     //var next = Math.random() * NOTES.length >> 0,
