@@ -1,6 +1,0 @@
-status: 200
-date: Thu, 06 Sep 2012 19:08:48 GMT
-content-location: http://localhost:8080/markov/100/5/Vivaldi/winter_allegro
-server: localhost
-
-[u'B-5', u'B-4', u'B-4', u'E-4', u'E-4', u'E-5', u'E-5', u'E-5', u'C#5', u'C#5', u'C#5', u'C#5', u'C#5', u'C#5', u'C#5', u'G5', u'E5', u'E5', u'G5', u'G5', u'G5', u'G5', u'C#5', u'C#5', u'C#5']
