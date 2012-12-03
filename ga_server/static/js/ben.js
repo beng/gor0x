@@ -2,13 +2,57 @@ SPEED = 200,
 SPACING = 300,
 LISTEN=true;
 
+
+function euclidean_distance(song1, song2) {
+    var score = 0;
+    for(var i=0; i < song1.length; i++) {        
+        score += Math.sqrt(Math.pow((song1[i][1] - song2[i][1]), 2));
+    }
+    return score;
+}
+
+function playPattern() { // playback a pattern
+    //var next = Math.random() * NOTES.length >> 0,
+    var i = 0;
+    //PATTERN[PATTERN.length] = next;
+    
+    (function play() { // recursive loop to play pattern
+        setTimeout( function() {
+            console.log("pattern i :: "+PATTERN[i]);
+
+            playSingle( PATTERN[i]);
+
+            i++;
+
+            if( i < PATTERN.length ) {
+                play();
+            } else {
+                setTimeout( function() { LISTEN = true; }, SPEED + SPACING );
+            }
+        },
+        SPEED + SPACING)
+    })(); // end recursion
+}
+
+function playSingle(note) { // play a color/note
+    MIDI.loadPlugin(function() {
+        default_bg = $('#'+note).css('background-color');
+        $('#'+note).css('background-color', 'white');
+        MIDI.noteOn(0, MIDI.keyToNote[note], 127, 0);
+        setTimeout(function() { // turn off color
+            MIDI.noteOff(0, MIDI.keyToNote[note], 0);
+            $('#'+note).css('background-color', default_bg);
+        }, SPEED);
+    });
+}
+
 $(function() {
     original_notes = [];
 
-    $(".orig_notes").each(function(index) {
-        original_notes.push($(this).attr('id'));
-    });
-    
+    $("div#orig_notes > div").each(function(index) {        
+        original_notes.push([$(this).attr('id'), $(this).attr('class')]);
+    });    
+
     colors = {
             'A': '#'+(Math.random()*0xFFFFFF<<0).toString(16),
             'B': '#'+(Math.random()*0xFFFFFF<<0).toString(16),
@@ -18,7 +62,7 @@ $(function() {
             'F': '#'+(Math.random()*0xFFFFFF<<0).toString(16),
             'G': '#'+(Math.random()*0xFFFFFF<<0).toString(16)};
 
-    $('div#n_start > div').each(function(index) {       
+    $('div#sortable-trait > div').each(function(index) {
         $(this).css({ 'background-color': colors[$(this).attr('id')[0]]});
     });
 
@@ -28,13 +72,15 @@ $(function() {
     $('#listen').click(function(){
         PATTERN = [];
         // NOTES = [];
+        var adjusted_order = [];
 
-        $('div#n_start > div').each(function(index) {
+        $('div#sortable-trait > div').each(function(index) {
+            adjusted_order.push([$(this).attr('id'), $(this).attr('class')])
             PATTERN.push($(this).attr('id'));
             // NOTES.push($(this).attr('id'));
         });
         
-        var ed = euclidean_distance(original_notes, PATTERN);
+        var ed = euclidean_distance(original_notes, adjusted_order);
         $("#current_score").html('Current Score: <small>' + ed + '</small>');
         
         playPattern();
@@ -76,46 +122,3 @@ $(function() {
     });
 
 });
-
-function euclidean_distance(song1, song2) {
-    var score = 0;
-    for(var i=0; i < song1.length; i++) {
-        score += Math.pow((MIDI.keyToNote[song1[i]] - MIDI.keyToNote[song2[i]]), 2);
-    }
-    return Math.sqrt(score);
-}
-
-function playPattern() { // playback a pattern
-    //var next = Math.random() * NOTES.length >> 0,
-    var i = 0;
-    //PATTERN[PATTERN.length] = next;
-    
-    (function play() { // recursive loop to play pattern
-        setTimeout( function() {
-            console.log("pattern i :: "+PATTERN[i]);
-
-            playSingle( PATTERN[i]);
-
-            i++;
-
-            if( i < PATTERN.length ) {
-                play();
-            } else {
-                setTimeout( function() { LISTEN = true; }, SPEED + SPACING );
-            }
-        },
-        SPEED + SPACING)
-    })(); // end recursion
-}
-
-function playSingle(note) { // play a color/note
-    MIDI.loadPlugin(function() {
-        default_bg = $('#'+note).css('background-color');
-        $('#'+note).css('background-color', 'white');
-        MIDI.noteOn(0, MIDI.keyToNote[note], 127, 0);
-        setTimeout(function() { // turn off color
-            MIDI.noteOff(0, MIDI.keyToNote[note], 0);
-            $('#'+note).css('background-color', default_bg);
-        }, SPEED);
-    });
-}

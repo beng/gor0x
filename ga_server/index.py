@@ -87,6 +87,7 @@ class Fitness:
             'F': 'purple',
             'G': 'grey',}
 
+        idx = 0
         for i in individual:
             current_gen = i['generation']
             #if i['note'][0] in note_colors.keys():
@@ -94,9 +95,10 @@ class Fitness:
                 i['note'] = i['note'].replace('-', 'b')
             #color = note_colors[i['note'][0]]                
             #fake_individual.append([i['note'],color])
-            fake_individual.append(i['note'])
+            fake_individual.append([i['note'], idx])
             artist = i['artist']
             song = i['song']
+            idx += 1
         
         # song_name = indi_id+"_song.mid" # don't cast indi_id to int because cant concat int and string
         max_gen = int(model.params_max_gen()['max_gen'])
