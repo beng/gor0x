@@ -5,7 +5,9 @@ LISTEN=true;
 
 function euclidean_distance(song1, song2) {
     var score = 0;
-    for(var i=0; i < song1.length; i++) {        
+    for(var i=0; i < song1.length; i++) {
+        console.log(song1[i][1]);
+        console.log(song2[i][1]);
         score += Math.sqrt(Math.pow((song1[i][1] - song2[i][1]), 2));
     }
     return score;
@@ -81,7 +83,7 @@ $(function() {
         });
         
         var ed = euclidean_distance(original_notes, adjusted_order);
-        $("#current_score").html('Current Score: <small>' + ed + '</small>');
+        $("#current_score").html('Current Score: <small>' + ed + '/100</small>');
         
         playPattern();
     });

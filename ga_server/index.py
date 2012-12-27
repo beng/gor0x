@@ -22,6 +22,7 @@ class Index:
         br = web.Browser()
         br.open('http://localhost:8000/q/song') # make dynamic later
         songs = json.loads(br.get_text())
+        print songs
         
         return render.index(title, songs)
 
