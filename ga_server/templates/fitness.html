@@ -1,4 +1,4 @@
-$def with(title, indi_id, individual, artist, song, max_gen, current_gen) 
+$def with(title, indi_id, individual, artist, song, max_gen, current_gen, user_settings) 
 $var title:$title
 
 <div id="content">
@@ -20,9 +20,13 @@ $var title:$title
 
     <div id="stats" class="well span4" style="background: rgba(100, 100, 100, 0.3);color: #ddd;">
         <legend style="color:rgba(236, 221, 200, 0.32);">Stats</legend>
+        <h4>Mutation Rate: <small>$user_settings['rate']</small></h4>
+        <h4>Markov Chain Size: <small>$user_settings['mc_size']</small></h4>
+        <h4>Markov Chain Node: <small>$user_settings['mc_nodes']</small></h4>  
+        <hr>
         <h4>Current Individual: <small>$indi_id</small></h4>
         <h4>Current Generation: <small>$current_gen/$max_gen</small></h4>
-        <h4 id='current_score'>Current Score: <small>0/100</small></h4>
+        <h4 id='current_score'>Current Score: <small>0/100</small></h4>        
     </div>
 
     <div id="sortable-trait" class="well pagination-centered span4" style="background: rgba(100, 100, 100, 0.3);color: #ddd;">    
@@ -31,8 +35,6 @@ $var title:$title
         <!-- <div id='n_start'> -->
         <div id="$note[0]" class="$note[1]" style="border:2px solid black;">$note[0]</div>
     </div>
-    </div>
-
   </div>
 </div>
 </div>

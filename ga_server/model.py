@@ -26,6 +26,9 @@ def params_max_gen():
 def params_num_indi():
     return params.find_one({"num_indi": {"$type": 16}})
 
+# def params_mutation_rate():
+    # return params.find_one({"mutation_rate": {"$type": 1}})    
+
 ########################################################
 # Population Collection
 ########################################################

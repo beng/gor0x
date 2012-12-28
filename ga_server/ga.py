@@ -5,25 +5,32 @@ import math
 import music21
 import random
 
-def create_population(artist, song, num_indi, num_traits, size, nodes):
+USER_SETTINGS = {'size': 0, 'nodes': 0, 'rate': 0.0, 'artist': '', 'song': ''}
+
+def create_population(artist, song, num_indi, num_traits, size, nodes, mrate):
+    USER_SETTINGS['mc_size'] = int(size)
+    USER_SETTINGS['mc_nodes'] = int(nodes)
+    USER_SETTINGS['rate'] = float(mrate)
+
     root = 'http://localhost:8000/q/spawn_pop/'
     params = root +'/'.join([artist, song, str(num_indi), str(num_traits), str(size), str(nodes)])
     br = web.Browser()
     br.open(params)
+
     population = json.loads(br.get_text())
     
     return population
 
-def euclidean_distance(song1, song2):
-    """The songs are lists of notes converted to their midi value
-    @TODO clean this up. it's too messy"""
-    try:
-        score = 0
-        for i in range(len(song1)):
-            score += math.sqrt((music21.pitch.Pitch(song1[i]).midi - int(music21.pitch.Pitch(song2[i]).midi)) ** 2)
-        return score
-    except ValueError:
-        raise 'Songs must be the same length!'
+# def euclidean_distance(song1, song2):
+#     """The songs are lists of notes converted to their midi value
+#     @TODO clean this up. it's too messy"""
+#     try:
+#         score = 0
+#         for i in range(len(song1)):
+#             score += math.sqrt((music21.pitch.Pitch(song1[i]).midi - int(music21.pitch.Pitch(song2[i]).midi)) ** 2)
+#         return score
+#     except ValueError:
+#         raise 'Songs must be the same length!'
 
 def fate(indi_id):
     """Use the individual that was just evaluated to determine
@@ -58,10 +65,10 @@ def select(current_generation, current_indi_id):
     @TODO redo this entire method before you get shot
     @TODO redo this entire method before you get shot
     """
-    print 'in selection'
+    print 'in selection'    
     current_indi_id = int(current_indi_id)
     current_generation = int(current_generation)
-    num_rounds = 2
+    num_rounds = int(model.params_num_indi()['num_indi'])
     k = 2
     winner = []
     population = model.pop_population_by_generation(current_generation)
@@ -73,18 +80,19 @@ def select(current_generation, current_indi_id):
     max_indi = int(model.pop_max_indi(current_generation)[0]['indi_id'])
 
     for i in range(model.params_num_indi()['num_indi']):
+    # for i in range(num_rounds):
         # select random winners to be parent
         p1 = random.choice(winner)            
         p2 = random.choice(winner)
         _p1 = []
         _p2 = []
-        artist = ''
-        song = ''
+        # artist = ''
+        # song = ''
 
         # find each parents traits
         for item in model.pop_find_individual(int(p1['indi_id'])):
-            artist = item['artist']
-            song = item['song']
+            USER_SETTINGS['artist'] = item['artist']
+            USER_SETTINGS['song'] = item['song']
             _p1.append(item['user_note'])
 
         for item in model.pop_find_individual(int(p2['indi_id'])):
@@ -92,15 +100,23 @@ def select(current_generation, current_indi_id):
 
         # create child among parents
         child1, child2 = crossover(_p1,_p2)
-        
+        print 'p1 : ', p1
+        print 'p2 : ', p2
+        print "child 1 : ", child1
+        print "child 2 : ", child2
+        # perform mutation
+        child1 = mutate(child1)
+        child2 = mutate(child2)
+
         # save child
         t_id = 0
         # clean the fuck up
         for i in child1:
+            # i = mutate(i)
             print "max indi loop c1 ", max_indi+1
             information = {
-                "artist": artist,
-                "song": song,
+                "artist": USER_SETTINGS['artist'],
+                "song": USER_SETTINGS['song'],
                 "indi_id": max_indi+1, 
                 "trait_id":t_id, 
                 "generation": current_generation+1,
@@ -112,10 +128,11 @@ def select(current_generation, current_indi_id):
             model.pop_save_individual(information)
         t_id = 0
         for i in child2:
+            # i = mutate(i)
             print "max indi loop c2", max_indi+2
             information = {
-                "artist": artist,
-                "song": song,
+                "artist": USER_SETTINGS['artist'],
+                "song": USER_SETTINGS['song'],
                 "indi_id": max_indi+2, 
                 "trait_id":t_id, 
                 "generation": current_generation+1,
@@ -128,6 +145,78 @@ def select(current_generation, current_indi_id):
         max_indi += 2
 
     raise web.seeother('/fitness/' + str(current_indi_id+1))
+# def mutate(individual):
+#     """
+#     if mutation rate > random float
+#         mutate random subset of individual
+#     """
+#     # random float
+#     rnd_rate = random.uniform(0,1)
+#     if rnd_rate < USER_SETTINGS['rate']:
+#         print 'PERFORMING MUTATION!!!!!'
+
+#         # generate new corpus using the same influencer
+#         br = web.Browser()
+#         uri = '/'.join(str(v) for v in [USER_SETTINGS['artist'], USER_SETTINGS['song'], 1, 1, USER_SETTINGS['mc_size'], USER_SETTINGS['mc_nodes']])
+#         br.open('http://localhost:8000/q/spawn_pop/'+uri)
+
+#         # replace old notes with notes from new corpus
+#         new_corpus = json.loads(br.get_text())[0]['note']
+#         return random.choice(new_corpus)
+#     else:
+#         return individual
+
+def mutate(individual):
+    """
+    if mutation rate > random float
+        mutate random subset of individual
+    """
+    # USER_SETTINGS['mc_size'] = 2000
+    # USER_SETTINGS['mc_nodes'] = 4
+    # USER_SETTINGS['rate'] = .01
+    # USER_SETTINGS['artist'] = 'Biggie'
+    # USER_SETTINGS['song'] = 'top100_Big_Poppa'
+
+    # random float
+    print 'MUTATE INDIVIDUAL : ', individual
+    rnd_rate = random.uniform(0,1)
+    if rnd_rate < USER_SETTINGS['rate']:
+        print 'PERFORMING MUTATION!!!!!'
+
+        # starting point for random subset
+        split_point = random.randint(1,len(individual)-1)
+
+        # size of subset
+        # num_traits_to_replace = random.randrange(split_point, len(individual)-1)
+        
+        # starting and stopping points
+        start,stop = random_sampling(0, len(individual), split_point)
+
+        # generate new corpus using the same influencer
+        br = web.Browser()
+        uri = '/'.join(str(v) for v in [USER_SETTINGS['artist'], USER_SETTINGS['song'], 1, split_point, USER_SETTINGS['mc_size'], USER_SETTINGS['mc_nodes']])
+        br.open('http://localhost:8000/q/spawn_pop/'+uri)
+
+        # replace old notes with notes from new corpus
+        new_corpus = json.loads(br.get_text())[0]['note']
+        # new_corpus = [s.encode('utf-8') for s in new_corpus]
+        print 'pre indi:', individual
+        individual[start:stop] = new_corpus[start:stop]
+        print 'post indi:', individual
+        return individual
+    else:
+        return individual
+
+def random_sampling(min, max, nt):
+    """Return a starting index and a stopping index for a random
+    consecutive sampling from a population"""
+
+    start_idx = random.randrange(min, max)
+    stop_idx = start_idx + nt
+
+    if stop_idx > max:
+        return random_sampling(min, max, nt)
+    return start_idx, stop_idx
 
 def tournament(k, population):
     """Tournament Selection
@@ -141,10 +230,12 @@ def tournament(k, population):
     # find k best individuals in population
     pool = []
     for i in range(k):
-        individual = random.choice(population)
-        print "INDIVIDUAL ", individual
-        if individual not in pool:
-            pool.append(individual)
+        while True:
+            individual = random.choice(population)
+            print "INDIVIDUAL ", individual
+            if individual not in pool:
+                pool.append(individual)
+                break
 
     # select individual with the highest fitness score
     winner = sorted(pool, key=lambda x: -x['fitness'])[0]

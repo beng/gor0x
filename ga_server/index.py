@@ -12,6 +12,7 @@ urls = (
 render = web.template.render('templates/', base='layout')
 app = web.application(urls, globals())
 title = 'GA Server'
+USER_SETTINGS = {'mc_size': 0, 'mc_nodes': 0, 'rate': 0.0}
 
 class Index:
     def GET(self):
@@ -42,10 +43,14 @@ class Index:
         size = pd.mc_size
         nodes = pd.mc_nodes
 
+        USER_SETTINGS['mc_size'] = int(size)
+        USER_SETTINGS['mc_nodes'] = int(nodes)
+        USER_SETTINGS['rate'] = float(pd.mrate)
+
         model.params_save({"max_gen":int(num_gen)})
         model.params_save({"num_indi": int(num_indi)})
 
-        population = ga.create_population(artist, song, num_indi, num_traits, size, nodes)
+        population = ga.create_population(artist, song, num_indi, num_traits, size, nodes, USER_SETTINGS['rate'])
         
         for indi in population:
             for nt in range(int(num_traits)):
@@ -72,6 +77,7 @@ class Fitness:
     means the user liked what the computer presented."""
 
     def GET(self, indi_id):
+        print 'MRATE :: ',USER_SETTINGS
         individual = model.pop_find_individual(int(indi_id))
         # converts from unicode to dictionary
         fake_individual = []
@@ -79,14 +85,14 @@ class Fitness:
         song = ''
         current_gen = ''
 
-        note_colors = {
-            'A': 'red',
-            'B': 'yellow',
-            'C': 'orange',
-            'D': 'green',
-            'E': 'blue',
-            'F': 'purple',
-            'G': 'grey',}
+        # note_colors = {
+        #     'A': 'red',
+        #     'B': 'yellow',
+        #     'C': 'orange',
+        #     'D': 'green',
+        #     'E': 'blue',
+        #     'F': 'purple',
+        #     'G': 'grey',}
 
         idx = 0
         for i in individual:
@@ -104,7 +110,7 @@ class Fitness:
         # song_name = indi_id+"_song.mid" # don't cast indi_id to int because cant concat int and string
         max_gen = int(model.params_max_gen()['max_gen'])
         
-        return render.fitness(title, indi_id, fake_individual, artist, song, max_gen, current_gen)
+        return render.fitness(title, indi_id, fake_individual, artist, song, max_gen, current_gen, USER_SETTINGS)
     
     def POST(self, indi_id):
         """
