@@ -1,5 +1,9 @@
+###Install
+To install the necessary libraries run `setup.sh`
+
+
 ###Disclaimer
-This is extremely unstable right now. Most methods don't do any error checking and assume the user will supply the correct data. This will be unusuable to most people for the time being -- the prototype is still in its infancy stage. 
+This is extremely unstable right now. Most methods don't do any error checking and assume the user will supply the correct data. This will be unusuable to most people for the time being -- the prototype is still in its infancy stage.
 
 ---
 
