@@ -26,8 +26,8 @@ class GA(object):
     def selection(self):
         return Selection(self.population)
 
-    def mutation(self):
-        return Mutation(self)
+    def mutation(self, individual):
+        return Mutation(individual)
 
     @property
     def statistics(self):
@@ -39,13 +39,22 @@ class GA(object):
 
 
 class Individual(GA):
+    def __init__(self, pop, *args, **kwargs):
+        super(Individual, self).__init__(pop, *args, **kwargs)
+        self._fitness = 0
+
     @property
     def id(self):
         return self.pop['id']
 
     @property
     def fitness(self):
-        return self.pop['fitness']
+        return self._fitness
+        # return self.pop['fitness']
+
+    @fitness.setter
+    def fitness(self, score):
+        self._fitness = score
 
     @property
     def genotype(self):
@@ -76,16 +85,15 @@ class Statistics(GA):
 
 
 class Mutation(GA):
-    def mutate(self, default=.3):
+    def mutate(self, individual, traits=None, default=.3):
         rate = uniform(0, 1)
 
         if default > rate:
             return self.pop
 
-        split = randint(1, len(self.pop.dna) - 1)
-        start, stop = random_sampling(0, len(self.pop.dna), split)
-        self.pop.dna[start:stop] = 'Z'  # replace with newly generated corpus
-
+        split = randint(1, len(individual.genotype) - 1)
+        start, stop = random_sampling(0, len(individual.genotype), split)
+        individual.genotype[start:stop] = traits
         return self.pop
 
 
@@ -100,16 +108,13 @@ class Selection(GA):
         3. return the individuals with the highest fitness value
         """
         subset = [choice(self.pop) for indi in range(k)]
-
         return sorted(subset, key=lambda x: x.fitness, reverse=True)
 
 
 class Crossover(GA):
-    def single(self, other):
-        split = randint(1, len(self.pop.dna))
-        p1, p2 = self.pop.dna, other.dna
-
-        return p1[:split] + p2[split:], p2[:split] + p1[split:]
+    def single(self, p1, p2):
+        split = randint(1, len(p1.genotype))
+        return p1.genotype[:split] + p2.genotype[split:], p2.genotype[:split] + p1.genotype[split:]
 
     def two_point(self, other):
         return self, other
