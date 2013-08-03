@@ -41,20 +41,15 @@ class GA(object):
 class Individual(GA):
     def __init__(self, pop, *args, **kwargs):
         super(Individual, self).__init__(pop, *args, **kwargs)
-        self._fitness = 0
 
     @property
     def id(self):
         return self.pop['id']
 
-    @property
-    def fitness(self):
-        return self._fitness
-        # return self.pop['fitness']
-
-    @fitness.setter
     def fitness(self, score):
-        self._fitness = score
+        if not self.score:
+            self.score = score
+        return self.score
 
     @property
     def genotype(self):
