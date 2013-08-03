@@ -24,7 +24,7 @@ def event_stream():
         kwargs = {
             'id': random.randint(1, 100),
             'fitness': fitness,
-            'gen_score': fitness * 2 / .5
+            'gen_score': random.randint(0, 100)
         }
         gevent.sleep(2)
         yield compose_msg(**kwargs)
