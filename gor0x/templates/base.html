@@ -1,0 +1,37 @@
+<html lang="en">
+	<head>
+		{% block head %}
+		<meta charset="utf-8" />
+
+
+		<title>{% block title %} base {% endblock %}</title>
+		{% assets 'css_all' %}
+			<link rel='stylesheet' href="{{ ASSET_URL }}"/>
+		{% endassets %}
+
+		{% assets 'js_all' %}
+			<script type="text/javascript" src="{{ ASSET_URL }}">
+			</script>
+		{% endassets %}
+        {% endblock %}
+	</head>
+
+	<body>
+		<div>
+			<header>
+				<h1>GA</h1>
+			</header>
+			<nav>
+				<p>
+					<a href="/">sup</a>
+				</p>
+			</nav>
+
+			<div id="content">
+				{% block content %}
+				{% endblock %}
+			</div>
+
+		</div>
+	</body>
+</html>
