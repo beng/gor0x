@@ -41,10 +41,10 @@ def create_app(db_uri='any'):
     assets.init_app(app)
 
     # assets registration
-    css = Bundle('css/base.css')
-    assets.register('css_all', css)
+    # css = Bundle('css/base.css')
+    # assets.register('css_all', css)
 
-    js = Bundle('js/sse.js')
+    js = Bundle('js/sse.js', 'js/jquery.knob.js', 'js/control_panel.js')
     assets.register('js_all', js)
 
     return app
