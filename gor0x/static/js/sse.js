@@ -12,8 +12,6 @@ source.addEventListener('message', function(e) {
     IndividualStats.prototype.id = individual_stats.id;
     IndividualStats.prototype.fitness = individual_stats.fitness;
     IndividualStats.prototype.generation_score = individual_stats.gen_score;
-    // document.body.innerHTML += IndividualStats.generation_score + '<br>';
-    // document.getElementById('current_score').no
 }, false);
 
 source.addEventListener('open', function(e) {

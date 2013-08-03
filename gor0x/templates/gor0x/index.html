@@ -6,38 +6,54 @@
 
 {% block content %}
 <div class="row">
-    <div id="init-settings" class="span12">
 
-         <div class="well span3">
+    <div id="init-settings" class="span9">
+        <div class="span9">
+            <h2>Initialization Settings</h2>
+        </div>
+
+         <div class="well span2">
             <legend>Number of Generations</legend>
-            <input id='num_gen' class="knob" data-angleOffset=-125 data-angleArc=250 data-fgColor="#66EE66" value="10">
+            <input id='num_gen' class="knob" data-width="100" data-angleOffset=-125 data-angleArc=250 data-fgColor="#000000" value="10">
         </div>
 
-         <div class="well span3">
+         <div class="well span2">
             <legend>Population Size</legend>
-            <input id='pop_size' class="knob" data-angleOffset=-125 data-angleArc=250 data-fgColor="#66EE66" value="10">
+            <input id='pop_size' class="knob" data-width="100" data-angleOffset=-125 data-angleArc=250 data-fgColor="#000000" value="10">
         </div>
 
-         <div class="well span3">
+         <div class="well span2">
             <legend>Number of Traits</legend>
-            <input id='num_traits' class="knob" data-angleOffset=-125 data-angleArc=250 data-fgColor="#66EE66" value="10">
+            <input id='num_traits' class="knob" data-width="100" data-angleOffset=-125 data-angleArc=250 data-fgColor="#000000" value="10">
         </div>
+    </div>
 
-        <div class="well span3">
-            <legend>Markov Chain Size</legend>
-            <input id='mc_size' class="knob" data-angleOffset=-125 data-angleArc=250 data-fgColor="#66EE66" value="0">
-        </div>
-
-        <div class="well span3">
-            <legend>Markov Chain Nodes</legend>
-            <input id='mc_size' class="knob" data-angleOffset=-125 data-angleArc=250 data-fgColor="#66EE66" value="0">
+    <div id="analytics" class="span3">
+        <div class="span3">
+            <h2>Analytics</h2>
         </div>
 
         <div class="well span3">
             <legend>Current Score</legend>
-            <input id='current_score' class="knob current_score" data-angleOffset=-125 data-angleArc=250 data-fgColor="#66EE66" value="10">
+            <input id='current_score' class="knob current_score" data-readOnly=true data-width="100" data-angleOffset=-125 data-angleArc=250 data-fgColor="#000000" value="10">
+        </div>
+
+        <div class="well span3">
+            <legend>Best Individual</legend>
+            <input id='current_score' class="knob best_indi" data-width="100" data-readOnly=true data-angleOffset=-125 data-angleArc=250 data-fgColor="#000000" value="10">
         </div>
     </div>
+
+    <div id="ga-visualization" class="span9">
+        <div class="span12">
+            <h2>GA Visualization</h2>
+        </div>
+
+        <div class="well span9">
+            <h1>Howdy</h1>
+        </div>
+    </div>
+
 </div>
 
 {% endblock %}
