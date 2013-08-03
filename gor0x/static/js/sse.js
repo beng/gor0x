@@ -1,8 +1,17 @@
 var source = new EventSource('/event_source');
 
+function IndividualStats(div_id) {
+    this.div_id = div_id;
+};
+
 source.addEventListener('message', function(e) {
-    var data = JSON.parse(e.data);
-    document.body.innerHTML += data.id + " : " + data.fitness + '<br>';
+    // TODO: push IndividualStats to HTML
+    var individual_stats = JSON.parse(e.data);
+    var div_id = document.getElementById("ga-stats");
+    var is = new IndividualStats(div_id);
+    IndividualStats.prototype.id = individual_stats.id;
+    IndividualStats.prototype.fitness = individual_stats.fitness;
+    IndividualStats.prototype.generation_score = individual_stats.gen_score;
 }, false);
 
 source.addEventListener('open', function(e) {
