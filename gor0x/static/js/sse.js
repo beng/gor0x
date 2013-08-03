@@ -1,9 +1,8 @@
 var source = new EventSource('/event_source');
 
 source.addEventListener('message', function(e) {
-    console.log(e);
     var data = JSON.parse(e.data);
-    console.log(data.id, data.fitness);
+    document.body.innerHTML += data.id + " : " + data.fitness + '<br>';
 }, false);
 
 source.addEventListener('open', function(e) {
