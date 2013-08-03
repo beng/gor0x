@@ -20,9 +20,11 @@ def compose_msg(**kwargs):
 
 def event_stream():
     while True:
+        fitness = random.randint(1, 100)
         kwargs = {
             'id': random.randint(1, 100),
-            'fitness': random.randint(1, 100)
+            'fitness': fitness,
+            'gen_score': fitness * 2 / .5
         }
         gevent.sleep(2)
         yield compose_msg(**kwargs)
